@@ -1,1 +1,97 @@
-Hellow World
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>AR Cooking</title>
+  <meta name="description" content="Website for Team 4 of VR/AR Capstone 20sp">  <meta charset="UTF-8">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="w3.css">
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+  <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+</head>
+
+<body>
+  <script src="script.js" type="text/javascript"></script>
+  <div id="nav-placeholder">
+    <!-- Navbar (sit on top) -->
+    <div class="w3-top">
+      <div class="w3-bar" id="myNavbar">
+        <a class="w3-bar-item w3-button w3-hover-black w3-hide-medium w3-hide-large w3-right" href="javascript:void(0);" onclick="toggleFunction()" title="Toggle Navigation Menu">
+          <i class="fa fa-bars"></i>
+        </a>
+        <a href="index.html" class="w3-bar-item w3-button">HOME</a>
+        <a href="index.html#announcements" class="w3-bar-item w3-button w3-hide-small"><i class="fa fa-bullhorn"></i>Blog</a>
+        <a href="index.html#about" class="w3-bar-item w3-button w3-hide-small"><i class="fa fa-question-circle"></i>Members</a>
+        <!-- <a href="index.html#join" class="w3-bar-item w3-button w3-hide-small"><i class="fa fa-users"></i> JOIN</a>
+        <a href="index.html#contact" class="w3-bar-item w3-button w3-hide-small"><i class="fa fa-address-card"></i> CONTACT</a> -->
+
+        <!-- <div class="dropdown w3-hide-small">
+          <button class="dropbtn">MORE <i class="fas fa-caret-down"></i>
+          </button>
+          <div class="dropdown-content">
+            <a href="officers.html">Team Members</a>
+          </div>
+        </div> -->
+  </div>
+
+  <!-- Navbar on small screens -->
+  <div id="navDemo" class="w3-bar-block w3-white w3-hide w3-hide-large w3-hide-medium">
+    <a href="index.html#announcements" class="w3-bar-item w3-button" onclick="toggleFunction()">Blog</a>
+    <a href="index.html#about" class="w3-bar-item w3-button" onclick="toggleFunction()">Members</a>
+    <!-- <a href="index.html#join" class="w3-bar-item w3-button" onclick="toggleFunction()">JOIN</a>
+    <a href="index.html#contact" class="w3-bar-item w3-button" onclick="toggleFunction()">CONTACT</a>
+    <a href="officers.html" class="w3-bar-item w3-button" onclick="toggleFunction()">MEET THE OFFICERS</a> -->
+  </div>
+</div>
+
+  </div>
+
+  <!-- First Parallax Image with Logo Text -->
+  <div class="bgimg-1 w3-display-container w3-opacity-min" id="home">
+    <div class="w3-display-middle" style="white-space:nowrap;">
+      <span class="w3-center w3-padding-large w3-black w3-xlarge w3-wide w3-animate-opacity">Cooking With AR</span>
+    </div>
+  </div>
+
+  <!-- Container (Announcements Section) -->
+  <div class="w3-content w3-container w3-padding-64" id="announcements">
+    <h3 class="w3-center">Blog</h3>
+    <div id="text">
+
+      <p>
+        Week 1 Blog
+      </p>
+  </div>
+
+  <!-- Parallax Image with about Text -->
+  <div class="bgimg-4 w3-display-container w3-opacity-min">
+    <div class="w3-display-middle">
+      <span class="w3-xxlarge w3-text-white w3-wide">The Members</span>
+    </div>
+  </div>
+
+  <!-- Container (About Section) -->
+  <div class="w3-content w3-container w3-padding-64" id="about">
+    <h3 class="w3-center">Group Members</h3>
+    <ul>
+      <li>Yuansi Li</li>
+      <li>Xiao Liang</li>
+      <li>Travis Clement</li>
+      <li>Tim Nguyen</li>
+    </ul>
+    <br />
+
+  <!-- Second Parallax Image with JOIN Text
+  <div class="bgimg-2 w3-display-container w3-opacity-min">
+    <div class="w3-display-middle">
+      <span class="w3-xxlarge w3-text-white w3-wide">JOIN</span>
+    </div>
+  </div> -->
+
+</body>
+
+</html>
