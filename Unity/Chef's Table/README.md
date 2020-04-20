@@ -4,11 +4,11 @@
 
 You will need to add package TextMesh Pro in Unity
 
-Classes:
-ApplicationState: keeping and updating all ingredients & utensils info
-Ingredient: name
-Utensil: name, Occupied or not
-MainScheduler: managing process and steps
+Classes:</br>
+ApplicationState: keeping and updating all ingredients & utensils info</br>
+Ingredient: name and position</br>
+Utensil: name, position, Occupied or not</br>
+MainScheduler: managing process and steps</br>
 Step: a step in the recipe, has timer and set of ingredients and utensils
 
 ## Project
