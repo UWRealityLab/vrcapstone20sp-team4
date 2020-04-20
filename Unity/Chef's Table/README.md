@@ -1,5 +1,9 @@
 ﻿# Magic Leap Unity Project
 
+# To group members
+
+You will need to add package TextMesh Pro in Unity
+
 ## Project
 
 Chef's Table!
