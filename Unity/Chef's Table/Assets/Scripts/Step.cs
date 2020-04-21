@@ -1,11 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+
 using UnityEngine;
 
 public class Step 
 {
     private string identifier;
-    private Time timer;
+    private float timer;
     private bool completed;
     private bool actionRequiredToProceed; // need users' input to be marked completed
     private HashSet<string> utensilSet;
@@ -13,7 +14,7 @@ public class Step
 
 
 
-    public Step(string identifier, Time timer, bool actionRequired, HashSet<string> utensils, HashSet<string> ingredients)
+    public Step(string identifier, float timer, bool actionRequired, HashSet<string> utensils, HashSet<string> ingredients)
     {
         this.identifier = identifier;
         this.completed = false;
@@ -28,7 +29,7 @@ public class Step
         return identifier;
     }
 
-    public Time getTime()
+    public float getTime()
     {
         return timer;
     }
