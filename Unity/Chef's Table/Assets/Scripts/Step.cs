@@ -34,6 +34,11 @@ public class Step
         return timer;
     }
 
+    public void setTimer(float t)
+    {
+        timer = t;
+    }
+
     public bool isCompleted()
     {
         return completed;

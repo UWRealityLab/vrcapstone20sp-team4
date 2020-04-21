@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using System;
 using UnityEngine;
 
 public class HeadLockInterface : MonoBehaviour
@@ -11,8 +10,12 @@ public class HeadLockInterface : MonoBehaviour
     public TextMeshProUGUI tmp;
     private string currentKey = "";
     private float timer = 0.0f;
+    GameObject scheduler;
+    MainScheduler schedulerScript;
     void Start()
     {
+        scheduler = GameObject.Find("Scheduler");
+        schedulerScript = scheduler.GetComponent<MainScheduler>();
     }
 
     // Update is called once per frame
@@ -23,14 +26,11 @@ public class HeadLockInterface : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.A)) currentKey = "A";
         if (Input.GetKeyDown(KeyCode.S)) currentKey = "S";
         if (Input.GetKeyDown(KeyCode.D)) currentKey = "D";
-        tmp.text = "Last Command: " + currentKey + "current time: " + GetTimeSpanWithSec(timer);
+        
+        tmp.text = "Last Command: " + currentKey + " " + schedulerScript.info();
 
     }
 
-    public string GetTimeSpanWithSec(float seconds)
-    {
-        TimeSpan interval = TimeSpan.FromSeconds(seconds);
-        return interval.ToString();
-    }
+
 
 }
