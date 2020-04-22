@@ -1,13 +1,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.MagicLeap;
+using System.Collections;
 
 namespace MagicLeap
 {
     // Component used to interact with objects that is tagged with "Interactable"
     // using hands.
-    public class HandTracking : MonoBehaviour
+    public class HandTrack : MonoBehaviour
     {
+        private static bool RAYCAST_ENABLED = true;
+
         //#pragma warning disable 414
         [SerializeField, Tooltip("The hand to visualize.")]
         private MLHandTracking.HandType _handType = MLHandTracking.HandType.Left;
@@ -44,16 +47,22 @@ namespace MagicLeap
         // Calls Start on MLHandTrackingStarterKit and initializes the lists of hand transforms.
         void Start()
         {
-            MLResult _result = MLHandTracking.Start();
+            MLHandTracking.Start();
+            if (RAYCAST_ENABLED) {
+                MLRaycast.Start();
+            }
             Initialize();
         }
 
         // Clean up.
         void OnDestroy()
         {
-            if (MLHandTracking.IsStarted)
-            {
+            if (MLHandTracking.IsStarted) {
                 MLHandTracking.Stop();
+            }
+
+            if (MLRaycast.IsStarted) {
+                MLRaycast.Stop();
             }
         }
 
@@ -82,6 +91,7 @@ namespace MagicLeap
         /// Update the keypoint positions.
         void Update()
         {
+            // handtracking and moving objects
             if (MLHandTracking.IsStarted)
             {
                 transform.position = Hand.Index.KeyPoints[2].Position;
@@ -98,7 +108,8 @@ namespace MagicLeap
                     pose = HandPoses.Pinch;
                     if (canIGrab) {
                         selectedGameObject.transform.position = transform.position;
-                        gameObject.GetComponent<SphereCollider>().radius = 0.1f;
+                        // This is so that the object wont leave our hand while we're dragging it.
+                        gameObject.GetComponent<SphereCollider>().radius = 0.2f;
                     }
                     return;
                 }
@@ -121,6 +132,20 @@ namespace MagicLeap
                 // Wrist
                 _wrist.position = Hand.Wrist.KeyPoints[0].Position;
                 _wrist.gameObject.SetActive(Hand.IsVisible);
+            }
+
+            // raycasting
+            if (MLRaycast.IsStarted) {
+                MLRaycast.QueryParams _raycastParams = new MLRaycast.QueryParams {
+                    // update the parameters with the index finger's direction
+                    // What about when index finder's tip is not detected or when it's hiddenn.
+                    Position = _indexFinger.position,
+                    Direction = _indexFinger.position - Hand.Index.KeyPoints[1].Position,
+                    UpVector = _indexFinger.up,
+                    Width = 1,
+                    Height = 1
+                };
+                MLRaycast.Raycast(_raycastParams, HandleOnReceiveRaycast);
             }
         }
 
@@ -166,5 +191,12 @@ namespace MagicLeap
             return false;
         }
 
+        // Callback function for raycasting.
+        // 'point' is the hit point.
+        void HandleOnReceiveRaycast(MLRaycast.ResultState state, UnityEngine.Vector3 point, UnityEngine.Vector3 normal, float confidence) {
+            if (state == MLRaycast.ResultState.HitObserved) {
+                // do something in here. This is a callback function.
+            }
+        }
     }
 }
