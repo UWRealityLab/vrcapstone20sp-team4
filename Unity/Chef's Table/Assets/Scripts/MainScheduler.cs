@@ -10,6 +10,10 @@ public class MainScheduler : MonoBehaviour
 
     private List<List<Step>> tutorial = new List<List<Step>>();
     private int stepIndex = 0;
+    
+    // TODO:
+    // 1. store another copy of steps in case need to restore
+
 
     // initialize the scheduler with hardcoded tutorial
     void hardcodeInit()
