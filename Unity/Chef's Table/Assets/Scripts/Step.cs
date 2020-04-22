@@ -48,6 +48,11 @@ public class Step
     {
         return actionRequiredToProceed;
     }
+    
+    public void setActionRequired(bool actionRequired)
+    {
+        actionRequiredToProceed = actionRequired;
+    }
 
     public HashSet<string> getUtensilsSet()
     {
