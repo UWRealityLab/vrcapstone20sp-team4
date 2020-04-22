@@ -7,7 +7,7 @@ namespace MagicLeap
 {
     // Component used to interact with objects that is tagged with "Interactable"
     // using hands.
-    public class HandTrack : MonoBehaviour
+    public class HandTracking : MonoBehaviour
     {
         private static bool RAYCAST_ENABLED = true;
 
