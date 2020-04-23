@@ -24,7 +24,16 @@ public class HeadLockInterface : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.A)) currentKey = "A";
         if (Input.GetKeyDown(KeyCode.S)) currentKey = "S";
         if (Input.GetKeyDown(KeyCode.D)) currentKey = "D";
-        Debug.Log(schedulerScript.info());
+        if (Input.GetKeyDown(KeyCode.Alpha1)) schedulerScript.replay("step1", false);
+        if (Input.GetKeyDown(KeyCode.Alpha2)) schedulerScript.replay("step1", true);
+        if (Input.GetKeyDown(KeyCode.Alpha3)) schedulerScript.replay("step2", false);
+        if (Input.GetKeyDown(KeyCode.Alpha4)) schedulerScript.replay("step2", true);
+        if (Input.GetKeyDown(KeyCode.Alpha5)) schedulerScript.replay("step3", false);
+        if (Input.GetKeyDown(KeyCode.Alpha6)) schedulerScript.replay("step3", true);
+        //Debug.Log(schedulerScript.info());
+        // simulate consent
+        if (Input.GetKeyDown(KeyCode.C)) schedulerScript.consentProceed();
+
         tmp.text = "Last Command: " + currentKey + " " + schedulerScript.info();
 
     }
