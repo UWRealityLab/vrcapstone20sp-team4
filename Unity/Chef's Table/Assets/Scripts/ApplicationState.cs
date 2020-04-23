@@ -7,8 +7,8 @@ using UnityEngine;
 public class ApplicationState : MonoBehaviour
 {
     
-    Dictionary<string, Utensil> name2Utensil; 
-    Dictionary<string, Ingredient> name2Ingredient;
+    public Dictionary<string, Utensil> name2Utensil; 
+    public Dictionary<string, Ingredient> name2Ingredient;
     // in the future, we might need 
     // list of all current animation
     // more...

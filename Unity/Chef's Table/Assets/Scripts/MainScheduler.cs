@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Timers;
+using System.Xml;
 using System;
 using UnityEngine;
 
@@ -13,8 +13,16 @@ public class MainScheduler : MonoBehaviour
     private Dictionary<string, int> indexTable = new Dictionary<string, int>();
     private int stepIndex = 0;
     
-    // TODO:
-    // 1. store another copy of steps in case need to restore
+    void xmlInit()
+    {
+        XmlDocument doc = new XmlDocument();
+        doc.Load("../Resources/Tutorials/tutorial1.xml");
+        XmlNodeList ingredientList = doc.DocumentElement.GetElementsByTagName("ingredient");
+        for (int i = 0; i < ingredientList.Count; i++)
+        {
+
+        }
+    }
 
 
     // initialize the scheduler with hardcoded tutorial
