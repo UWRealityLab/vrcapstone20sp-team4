@@ -27,7 +27,6 @@ namespace MagicLeap
 
         public enum HandPoses { Ok, Finger, Thumb, OpenHand, Pinch, NoPose };
         public HandPoses pose = HandPoses.NoPose;
-        public GameObject objectToPlace; // Object to place when thumb pose is detected.
 
         private MLHandTracking.Hand Hand
         {
@@ -95,15 +94,6 @@ namespace MagicLeap
             if (MLHandTracking.IsStarted)
             {
                 transform.position = Hand.Index.KeyPoints[2].Position;
-                if (GetGesture(Hand, MLHandTracking.HandKeyPose.Thumb)) {
-                    pose = HandPoses.Thumb;
-                    if (canIPlace == true) {
-                        GameObject placedOject = Instantiate(objectToPlace, Hand.Index.KeyPoints[2].Position, transform.rotation);
-                        canIPlace = false;
-                    }
-                    return;
-                }
-
                 if (GetGesture(Hand, MLHandTracking.HandKeyPose.Pinch)) {
                     pose = HandPoses.Pinch;
                     if (canIGrab) {
