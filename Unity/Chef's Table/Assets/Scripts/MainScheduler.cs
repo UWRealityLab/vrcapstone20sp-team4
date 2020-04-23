@@ -46,7 +46,7 @@ public class MainScheduler : MonoBehaviour
         List<Step> list1 = new List<Step>();
         list1.Add(s1);
         List<int> mem1 = new List<int>();
-        mem.Add(10); // magnitude of the timer and sign for boolean
+        mem1.Add(10); // magnitude of the timer and sign for boolean
         memory.Add(mem1);
         tutorial.Add(list1);
         indexTable.Add(s1.getIdentifier(), 21);
@@ -57,11 +57,11 @@ public class MainScheduler : MonoBehaviour
         HashSet<string> ingredients2 = new HashSet<string>();
         ingredients2.Add("rice");
         ingredients2.Add("steak");
-        Step s2 = new Step("step2", 10, false, utensils2, ingredients2);
+        Step s2 = new Step("step3", 10, false, utensils2, ingredients2);
         List<Step> list2 = new List<Step>();
         list2.Add(s2);
         List<int> mem2 = new List<int>();
-        mem.Add(-10); // magnitude of the timer and sign for boolean
+        mem2.Add(-10); // magnitude of the timer and sign for boolean
         memory.Add(mem2);
         tutorial.Add(list2);
         indexTable.Add(s2.getIdentifier(), 31);
@@ -83,8 +83,7 @@ public class MainScheduler : MonoBehaviour
             stepIndex = stepIndex + 1 < tutorial.Count ? stepIndex + 1 : stepIndex;
             
         }
-        Debug.Log(checkCompletion(curr));
-        Debug.Log(stepIndex);
+
     }
 
     // check for a slot in interval, if all steps are confirmed finished
