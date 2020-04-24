@@ -131,7 +131,7 @@
         <div class="section pb-3 bg-white" id="section-about" data-aos="fade-up">
           <div class="container">
             <div class="row align-items-center justify-content-center">
-              <div class="col-md-12 col-lg-8 section-heading">
+              <div class="col-md-12 col-lg-8 section-heading" style="text-align: justify;">
                 <h2 class="heading mb-5">Blog</h2>
                 <p class="sub-heading mb-5">Weekly Blog Posts</p>  
                 <h3>Week 1</h3>
@@ -155,6 +155,24 @@
                 <h4>Blocking Issues</h4>
                 <p>All of the blocking issues at this time come from the fact that we need to talk to Joerg about the feasibility of a couple of our features. We want to start looking into whether our stretch goals are actually achievable with the Magic Leap system. These include object tracking, content persistence and social media integration.</p>
 
+                <h3>Week 4</h3>
+                <h4>What We Did</h4>
+                <p>This week we started deploying the components that are the initial building blocks for our augmented reality cooking application. Xiao started working on designing the backend system that includes objects and classes such as ApplicationState that keeps track of all the information about the application, Ingredients and Utensils for keeping track of information about the utensils in the kitchen and ingredients used for the recipe. There’s also a main scheduler that manages the state of the application and acts as a controller in a Model View Controller design. A Step class was also added to represent a step in the cooking process. This class has a timer and list of ingredients and utensils. Trung worked on a script that allows interactions with the AR objects using Magic Leap’s hand tracking. Users are able to pick up and move 3d objects around. We also experimented with raycasting with users’ fingers. We wrote a script that uses MLRaycast and MLHandTracking to cast a ray from the user’s index finger. We thought that this would be very useful later on when we start deploying user interfaces for our app. One option is to have the user able to interact with a distant interface using their finger. For this week, Yuansi  worked on the initial design of the application’s interface as well as sketching out the 3D animations for our animated instructions. We also looked into how to import animations from Maya into Unity. Travis worked on a script that can be used to scan the physical objects and the room to collect meshing, using Magic Leap’s controller. This can be used to define where in the environment can we place digital objects and our interfaces as well as mapping the physical objects like utensils or a microwave.</p>
+                <div style="text-align: center; margin-bottom: 10px;">
+                  <div style="margin-bottom: 10px;">
+                    <img style="margin-bottom: 10px;" src='images/raycasting.png' alt='missing' width="355" height="270" />
+                    <figcaption>Raycasting from finger</figcaption>
+                  </div>  
+                  <div>
+                    <video width="355" height="270" autoplay muted loop>
+                      <source src="images/cutting_animation.mov" PLUGINSPAGE="http://www.apple.com/quicktime/">
+                    </video>
+                    <figcaption>Cutting animation</figcaption>
+                  </div>  
+                </div>
+                <h4>Plan For Next Week</h4>
+                <p>In addition we talked about each specific step in our cooking recipe and what each step is supposed to do. We also brainstormed on what 3D models and animations we need for each step.</p> 
+                <p>For the rest of this week and next week, we plan to start doing 3D animations so we can have a basic cooking application where users can go through all the main cooking steps. This includes repeating a previous step, skipping one step. We also want to deploy a basic user interface so that the user can give instructions to the system.</p>
               </div>
             </div>
           </div>
