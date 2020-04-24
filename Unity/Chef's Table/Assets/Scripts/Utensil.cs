@@ -8,6 +8,13 @@ public class Utensil
     private bool isOccupied;
     private Vector3 postion;
 
+    public Utensil(string name)
+    {
+        this.name = name;
+        this.isOccupied = false;
+        this.postion = new Vector3(0, 0, 0);
+    }
+
     public void setState(bool state)
     {
         isOccupied = state;

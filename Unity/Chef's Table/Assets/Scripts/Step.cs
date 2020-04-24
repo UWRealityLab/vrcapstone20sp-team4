@@ -5,18 +5,18 @@ using UnityEngine;
 
 public class Step 
 {
-    private string identifier;
+    private string name;
     private float timer;
     private bool completed;
     private bool actionRequiredToProceed; // need users' input to be marked completed
-    private HashSet<string> utensilSet;
-    private HashSet<string> ingredientSet;
+    private List<string> utensilSet;
+    private List<string> ingredientSet;
 
 
 
-    public Step(string identifier, float timer, bool actionRequired, HashSet<string> utensils, HashSet<string> ingredients)
+    public Step(string name, float timer, bool actionRequired, List<string> utensils, List<string> ingredients)
     {
-        this.identifier = identifier;
+        this.name = name;
         this.completed = false;
         this.timer = timer;
         this.actionRequiredToProceed = actionRequired;
@@ -24,9 +24,9 @@ public class Step
         this.ingredientSet = ingredients;
     }
 
-    public string getIdentifier()
+    public string getName()
     {
-        return identifier;
+        return name;
     }
 
     public float getTime()
@@ -54,12 +54,12 @@ public class Step
         actionRequiredToProceed = actionRequired;
     }
 
-    public HashSet<string> getUtensilsSet()
+    public List<string> getUtensilsSet()
     {
         return utensilSet;
     }
 
-    public HashSet<string> getIngredientsSet()
+    public List<string> getIngredientsSet()
     {
         return ingredientSet;
     }
