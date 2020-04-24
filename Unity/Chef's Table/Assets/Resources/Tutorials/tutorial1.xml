@@ -22,37 +22,37 @@
         <utensil name="foil"/>
     </utensils>
     <step name="1">
-        <substep seqNum="11" name="step1-1" timer="" ingredients="oil" utensils="pan,tablespoons" description="In a skillet/pan, heat 2 tablespoons of the oil over medium-high heat"/>
+        <substep seqNum="11" name="step1-1" timer="0" ingredients="oil" utensils="pan,tablespoon" confirmNeeded="1" description="In a skillet/pan, heat 2 tablespoons of the oil over medium-high heat"/>
     </step>
     <step name="2">
-        <substep seqNum="21" name="step2-1" timer="" ingredients="hash brown potatoes" utensils="" description="Add frozen hash brown potatoes in an even layer; press down lightly."/>
+        <substep seqNum="21" name="step2-1" timer="0" ingredients="hash brown potatoes" utensils="" confirmNeeded="1" description="Add frozen hash brown potatoes in an even layer; press down lightly."/>
     </step>
     <step name="3">
-        <substep seqNum="31" name="step3-1" timer="420" ingredients="hash brown potatoes" utensils="pan" description="Cook potatoes 7 minutes without moving"/>
+        <substep seqNum="31" name="step3-1" timer="420" ingredients="hash brown potatoes" utensils="pan" confirmNeeded="0" description="Cook potatoes 7 minutes without moving"/>
     </step>
     <step name="4">
-        <substep seqNum="41" name="step4-1" timer="" ingredients="oil" utensils="tablespoon" description="Drizzle with remaining 1 tablespoon oil; turn."/>
+        <substep seqNum="41" name="step4-1" timer="0" ingredients="oil" utensils="tablespoon" confirmNeeded="1" description="Drizzle with remaining 1 tablespoon oil; turn."/>
     </step>
     <step name="5">
-        <substep seqNum="51" name="step5-1" timer="420" ingredients="" utensils="" description="Cook 6 to 8 minutes longer or until browned on both sides and hot throughout."/>
+        <substep seqNum="51" name="step5-1" timer="420" ingredients="" utensils="" confirmNeeded="0" description="Cook 6 to 8 minutes longer or until browned on both sides and hot throughout."/>
     </step>
     <step name="6">
-        <substep seqNum="61" name="step6-1" timer="" ingredients="" utensils="pan,foil,medium bowl" description="Transfer to a medium bowl; cover with foil to keep warm. Wipe out the skillet."/>
+        <substep seqNum="61" name="step6-1" timer="0" ingredients="" utensils="pan,foil,medium bowl" confirmNeeded="1" description="Transfer to a medium bowl; cover with foil to keep warm. Wipe out the skillet."/>
     </step>
     <step name="7">
-        <substep seqNum="71" name="step7-1" timer="" ingredients="egg,salt,pepper" utensils="large bowl" description="In a large bowl, beat eggs, salt and pepper until well blended."/>
+        <substep seqNum="71" name="step7-1" timer="0" ingredients="egg,salt,pepper" utensils="large bowl" confirmNeeded="1" description="In a large bowl, beat eggs, salt and pepper until well blended."/>
     </step>
     <step name="8">
-        <substep seqNum="81" name="step8-1" timer="180" ingredients="sausage" utensils="pan" description="In the same skillet over medium-high heat, cook sausage 2 to 3 minutes, stirring frequently, until browned. "/>
+        <substep seqNum="81" name="step8-1" timer="180" ingredients="sausage" utensils="pan" confirmNeeded="0" description="In the same skillet over medium-high heat, cook sausage 2 to 3 minutes, stirring frequently, until browned. "/>
     </step>
     <step name="9">
-        <substep seqNum="91" name="step9-1" timer="180" ingredients="" utensils="pan" description="Stir in egg mixture; cook 2 to 3 minutes, stirring occasionally, until scrambled."/>
+        <substep seqNum="91" name="step9-1" timer="180" ingredients="" utensils="pan" confirmNeeded="0" description="Stir in egg mixture; cook 2 to 3 minutes, stirring occasionally, until scrambled."/>
     </step>
     <step name="10">
-        <substep seqNum="101" name="step10-1" timer="" ingredients="tortilla,cheese" utensils="" description="To assemble burritos, spoon a line of hash browns down the center of each tortilla. Top with cheese and egg mixture."/>
+        <substep seqNum="101" name="step10-1" timer="0" ingredients="tortilla,cheese" utensils="" confirmNeeded="1" description="To assemble burritos, spoon a line of hash browns down the center of each tortilla. Top with cheese and egg mixture."/>
     </step>
     <step name="11">
-        <substep seqNum="111" name="step11-1" timer="" ingredients="" utensils="" description="Roll up each tortilla tightly to secure filling. Serve immediately, or freeze."/>
+        <substep seqNum="111" name="step11-1" timer="0" ingredients="" utensils="" confirmNeeded="1" description="Roll up each tortilla tightly to secure filling. Serve immediately, or freeze."/>
     </step>
 
 </tutorial>
