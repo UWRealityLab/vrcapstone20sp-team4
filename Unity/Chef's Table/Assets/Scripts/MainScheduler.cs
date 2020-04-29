@@ -14,6 +14,7 @@ public class MainScheduler : MonoBehaviour
     private List<List<float>> memory = new List<List<float>>();
     private Dictionary<string, int> indexTable = new Dictionary<string, int>();
     private int stepIndex = 0;
+    private List<bool> timerStatus = new List<bool>(); // 0 for pause, 1 for start, 0 by default
     
     void xmlInit()
     {
@@ -84,65 +85,15 @@ public class MainScheduler : MonoBehaviour
             }
             tutorial.Add(substeps);
             memory.Add(substepsMem);
+            timerStatus.Add(false);
         }
     }
-
-
-    // initialize the scheduler with hardcoded tutorial
-    void hardcodeInit()
-    {
-        List<string> utensils = new List<string>();
-        utensils.Add("chopping boar");
-        utensils.Add("oven");
-        List<string> ingredients = new List<string>();
-        ingredients.Add("potato");
-        ingredients.Add("bread");
-        Step s = new Step("step1", 10, false, utensils, ingredients);
-        List<Step> list = new List<Step>();
-        list.Add(s);
-        List<float> mem = new List<float>();
-        mem.Add(-10); // magnitude of the timer and sign for boolean
-        memory.Add(mem);
-        tutorial.Add(list);
-        indexTable.Add(s.getName(), 11); // do not use zero indexing
-
-
-        List<string> utensils1 = new List<string>();
-        utensils1.Add("Pot1");
-        utensils1.Add("Microwave");
-        List<string> ingredients1 = new List<string>();
-        ingredients1.Add("tomato");
-        ingredients1.Add("bread");
-        Step s1 = new Step("step2", 10, true, utensils1, ingredients1);
-        List<Step> list1 = new List<Step>();
-        list1.Add(s1);
-        List<float> mem1 = new List<float>();
-        mem1.Add(10); // magnitude of the timer and sign for boolean
-        memory.Add(mem1);
-        tutorial.Add(list1);
-        indexTable.Add(s1.getName(), 21);
-
-        List<string> utensils2 = new List<string>();
-        utensils2.Add("Pot2");
-        utensils2.Add("oven");
-        List<string> ingredients2 = new List<string>();
-        ingredients2.Add("rice");
-        ingredients2.Add("steak");
-        Step s2 = new Step("step3", 10, false, utensils2, ingredients2);
-        List<Step> list2 = new List<Step>();
-        list2.Add(s2);
-        List<float> mem2 = new List<float>();
-        mem2.Add(-10); // magnitude of the timer and sign for boolean
-        memory.Add(mem2);
-        tutorial.Add(list2);
-        indexTable.Add(s2.getName(), 31);
-    }
+ 
 
     void Start()
     {
         applicationState = GameObject.Find("ApplicationState");
         applicationScript = applicationState.GetComponent<ApplicationState>();
-        //hardcodeInit();
         xmlInit();
     }
 
@@ -151,8 +102,7 @@ public class MainScheduler : MonoBehaviour
     {
         List<Step> curr = tutorial[stepIndex];
         curr.ForEach(timerUpdate);
-        if (checkCompletion(curr))
-        {
+        if (checkCompletion(curr)) {
             
             stepIndex = stepIndex + 1 < tutorial.Count ? stepIndex + 1 : stepIndex;
             
@@ -174,20 +124,39 @@ public class MainScheduler : MonoBehaviour
         return true;
     }
 
-   void timerUpdate(Step s)
+    // change timer status at the current step index for all substeps
+    // 0 for pause, 1 for start, 2 reset timer and pause
+   public void changeTimerStatus(int status)
     {
-        float t = s.getTime();
-        if (t > 0)
-        {
-            t -= Time.deltaTime;
-        } else
-        {
-            t = 0;
+        if (status != 0 && status != 1 && status != 2) return;
+        if (status == 2) {
+            List<Step> steps = tutorial[stepIndex];
+            List<float> mems = memory[stepIndex];
+            for (int i = 0; i < steps.Count; i++)
+            {
+                float time = Math.Abs(mems[i]);
+                steps[i].setTimer(time);
+            } 
         }
-        
-        s.setTimer(t);
+        timerStatus[stepIndex] = status == 1 ? true : false; 
     }
 
+   void timerUpdate(Step s)
+    {
+        if (timerStatus[stepIndex])
+        {
+            float t = s.getTime();
+            if (t > 0)
+            {
+                t -= Time.deltaTime;
+            }
+            t = Math.Max(t, 0);
+            s.setTimer(t);
+        }
+
+    }
+
+    // for visualizing timers
     string GetTimeSpanWithSec(float seconds)
     {
 
@@ -207,12 +176,13 @@ public class MainScheduler : MonoBehaviour
         return res;
     }
 
-    // for interface to call
+    // proceed to the next task in the list
     public void consentProceed()
     {
         List<Step> curr = tutorial[stepIndex];
         foreach (Step s in curr)
         {
+            s.setTimer(0);
             s.setActionRequired(false);
         }
     }
@@ -224,6 +194,11 @@ public class MainScheduler : MonoBehaviour
     // replayInterval: indicator for option2
     public bool replay(string target, bool replayInterval)
     {
+        // lock all timers
+        for (int i = 0; i < timerStatus.Count; i++)
+        {
+            timerStatus[i] = false;
+        }
         int index = indexTable[target];
         int bigIndex = index / 10 - 1;
         int smallIndex = index % 10 - 1;
@@ -235,7 +210,7 @@ public class MainScheduler : MonoBehaviour
             List<float> mems = memory[bigIndex];
             float temp = mems[smallIndex];
             float time = Math.Abs(temp);
-            bool actionRequired = temp > 0 ? true : false;
+            bool actionRequired = temp >= 0 ? true : false;
             steps[smallIndex].setTimer(time);
             steps[smallIndex].setActionRequired(actionRequired);
         } else
