@@ -37,9 +37,9 @@ public class HeadLockInterface : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha9)) schedulerScript.changeTimerStatus(2); // reset
         //Debug.Log(schedulerScript.info());
         // simulate consent
-        if (Input.GetKeyDown(KeyCode.C)) schedulerScript.consentProceed();
+        if (Input.GetKeyDown(KeyCode.C)) schedulerScript.toNextStep();
 
-        tmp.text = "Last Command: " + currentKey + " " + schedulerScript.info();
+        tmp.text = schedulerScript.getCurrentStepInfo()["timer"][0];
 
     }
 

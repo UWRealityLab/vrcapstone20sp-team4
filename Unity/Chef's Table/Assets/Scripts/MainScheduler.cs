@@ -16,6 +16,93 @@ public class MainScheduler : MonoBehaviour
     private int stepIndex = 0;
     private List<bool> timerStatus = new List<bool>(); // 0 for pause, 1 for start, 0 by default
     
+
+
+    // change timer status at the current step index for all substeps
+    // 0 for pause, 1 for start, 2 reset timer and pause
+    public void changeTimerStatus(int status)
+    {
+        if (status != 0 && status != 1 && status != 2) return;
+        if (status == 2)
+        {
+            List<Step> steps = tutorial[stepIndex];
+            List<float> mems = memory[stepIndex];
+            for (int i = 0; i < steps.Count; i++)
+            {
+                float time = mems[i];
+                steps[i].setTimer(time);
+            }
+        }
+        timerStatus[stepIndex] = status == 1 ? true : false;
+    }
+
+    // return a map of all info of the current step
+    public Dictionary<string, List<string>> getCurrentStepInfo()
+    {
+        Step s = tutorial[stepIndex][0]; // sequential for now, get the only substep in step
+        Dictionary<string, List<string>> dic = new Dictionary<string, List<string>>();
+        dic.Add("name", new List<string>() {s.getName()});
+        dic.Add("utensils", s.getUtensilsSet());
+        dic.Add("ingredients", s.getIngredientsSet());
+        dic.Add("description", new List<string>() {s.getDescription()});
+        dic.Add("timer", new List<string>() { GetTimeSpanWithSec(s.getTime()) });
+        return dic;
+    }
+
+    // proceed to the next task in the list
+    public void toNextStep()
+    {
+        List<Step> curr = tutorial[stepIndex];
+        foreach (Step s in curr)
+        {
+            s.setTimer(0);
+            s.setActionRequired(false);
+        }
+    }
+
+    // replay from a certain step
+    // 1. can select only a certain step
+    // 2. can replay all steps between previous and target
+    // target: name of the step
+    // replayInterval: indicator for option2
+    public bool replay(string target, bool replayInterval)
+    {
+        // lock all timers
+        for (int i = 0; i < timerStatus.Count; i++)
+        {
+            timerStatus[i] = false;
+        }
+        int index = indexTable[target];
+        int bigIndex = index / 10 - 1;
+        int smallIndex = index % 10 - 1;
+        if (bigIndex > stepIndex) return false;
+        // start going back
+        if (!replayInterval)
+        {
+            List<Step> steps = tutorial[bigIndex];
+            List<float> mems = memory[bigIndex];
+            float time = mems[smallIndex];
+            steps[smallIndex].setTimer(time);
+            steps[smallIndex].setActionRequired(true);
+        } else
+        {
+            for (int i = stepIndex; i >= bigIndex; i--)
+            {
+                List<Step> steps = tutorial[i];
+                List<float> mems = memory[i];
+                for (int j = 0; j < steps.Count; j++)
+                {
+                    float time = mems[j];
+                    steps[j].setTimer(time);
+                    steps[j].setActionRequired(true);
+                }
+            }
+        }
+        stepIndex = bigIndex;
+        return true;
+    }
+
+
     void xmlInit()
     {
         const string path = @"../Chef's Table/Assets/Resources/Tutorials/tutorial1.xml";
@@ -51,14 +138,12 @@ public class MainScheduler : MonoBehaviour
             int thisSeqNum = Int32.Parse(attributesCollection.GetNamedItem("seqNum").Value);
             string name = attributesCollection.GetNamedItem("name").Value;
             float timer = float.Parse(attributesCollection.GetNamedItem("timer").Value);
-            bool confirmNeeded = attributesCollection.GetNamedItem("confirmNeeded").Value == "1";
             string description = attributesCollection.GetNamedItem("description").Value;
             List<string> utensils = new List<string>(attributesCollection.GetNamedItem("utensils").Value.Split(','));
             List<string> ingredients = new List<string>(attributesCollection.GetNamedItem("ingredients").Value.Split(','));
-            Step substep = new Step(name, timer, confirmNeeded, utensils, ingredients);
+            Step substep = new Step(name, timer, true, utensils, ingredients, description);
             substeps.Add(substep);
-            float mem = confirmNeeded ? timer : -timer;
-            substepsMem.Add(mem);
+            substepsMem.Add(timer);
             indexTable.Add(name, thisSeqNum);
             while (i + 1 < substepList.Count)
             {
@@ -71,14 +156,12 @@ public class MainScheduler : MonoBehaviour
                 //Debug.Log(nextAttributesCollection.GetNamedItem("name").Value + "para");
                 string nextName = nextAttributesCollection.GetNamedItem("name").Value;
                 float nextTimer = float.Parse(nextAttributesCollection.GetNamedItem("timer").Value);
-                bool nextConfirmNeeded = nextAttributesCollection.GetNamedItem("confimrNeeded").Value == "1";
                 string nextDescription = nextAttributesCollection.GetNamedItem("description").Value;
                 List<string> nextUtensils = new List<string>(nextAttributesCollection.GetNamedItem("utensils").Value.Split(','));
                 List<string> nextIngredients = new List<string>(nextAttributesCollection.GetNamedItem("ingredients").Value.Split(','));
-                Step nextSubstep = new Step(nextName, nextTimer, nextConfirmNeeded, nextUtensils, nextIngredients);
+                Step nextSubstep = new Step(nextName, nextTimer, true, nextUtensils, nextIngredients, nextDescription);
                 substeps.Add(nextSubstep);
-                float nextMem = nextConfirmNeeded ? nextTimer : -nextTimer;
-                substepsMem.Add(nextMem);
+                substepsMem.Add(nextTimer);
                 indexTable.Add(nextName, nextSeqNum);
                 i++;
 
@@ -88,7 +171,7 @@ public class MainScheduler : MonoBehaviour
             timerStatus.Add(false);
         }
     }
- 
+
 
     void Start()
     {
@@ -102,10 +185,11 @@ public class MainScheduler : MonoBehaviour
     {
         List<Step> curr = tutorial[stepIndex];
         curr.ForEach(timerUpdate);
-        if (checkCompletion(curr)) {
-            
+        if (checkCompletion(curr))
+        {
+
             stepIndex = stepIndex + 1 < tutorial.Count ? stepIndex + 1 : stepIndex;
-            
+
         }
 
     }
@@ -113,7 +197,7 @@ public class MainScheduler : MonoBehaviour
     // check for a slot in interval, if all steps are confirmed finished
     bool checkCompletion(List<Step> curr)
     {
-        foreach(Step s in curr)
+        foreach (Step s in curr)
         {
             if (s.getTime() > 0 || s.actionRequired())
             {
@@ -124,24 +208,9 @@ public class MainScheduler : MonoBehaviour
         return true;
     }
 
-    // change timer status at the current step index for all substeps
-    // 0 for pause, 1 for start, 2 reset timer and pause
-   public void changeTimerStatus(int status)
-    {
-        if (status != 0 && status != 1 && status != 2) return;
-        if (status == 2) {
-            List<Step> steps = tutorial[stepIndex];
-            List<float> mems = memory[stepIndex];
-            for (int i = 0; i < steps.Count; i++)
-            {
-                float time = Math.Abs(mems[i]);
-                steps[i].setTimer(time);
-            } 
-        }
-        timerStatus[stepIndex] = status == 1 ? true : false; 
-    }
 
-   void timerUpdate(Step s)
+
+    void timerUpdate(Step s)
     {
         if (timerStatus[stepIndex])
         {
@@ -163,74 +232,4 @@ public class MainScheduler : MonoBehaviour
         TimeSpan interval = TimeSpan.FromSeconds(Math.Floor(seconds));
         return interval.ToString();
     }
-
-
-    public string info()
-    {
-        string res = "Step" + (stepIndex + 1);
-        List<Step> curr = tutorial[stepIndex];
-        foreach (Step s in curr)
-        {
-            res += s.getName() + " " + GetTimeSpanWithSec(s.getTime()) + " ";
-        }
-        return res;
-    }
-
-    // proceed to the next task in the list
-    public void consentProceed()
-    {
-        List<Step> curr = tutorial[stepIndex];
-        foreach (Step s in curr)
-        {
-            s.setTimer(0);
-            s.setActionRequired(false);
-        }
-    }
-
-    // replay from a certain step
-    // 1. can select only a certain step
-    // 2. can replay all steps between previous and target
-    // target: name of the step
-    // replayInterval: indicator for option2
-    public bool replay(string target, bool replayInterval)
-    {
-        // lock all timers
-        for (int i = 0; i < timerStatus.Count; i++)
-        {
-            timerStatus[i] = false;
-        }
-        int index = indexTable[target];
-        int bigIndex = index / 10 - 1;
-        int smallIndex = index % 10 - 1;
-        if (bigIndex > stepIndex) return false;
-        // start going back
-        if (!replayInterval)
-        {
-            List<Step> steps = tutorial[bigIndex];
-            List<float> mems = memory[bigIndex];
-            float temp = mems[smallIndex];
-            float time = Math.Abs(temp);
-            bool actionRequired = temp >= 0 ? true : false;
-            steps[smallIndex].setTimer(time);
-            steps[smallIndex].setActionRequired(actionRequired);
-        } else
-        {
-            for (int i = stepIndex; i >= bigIndex; i--)
-            {
-                List<Step> steps = tutorial[i];
-                List<float> mems = memory[i];
-                for (int j = 0; j < steps.Count; j++)
-                {
-                    float temp = mems[j];
-                    float time = Math.Abs(temp);
-                    bool actionRequired = temp >= 0 ? true : false;
-                    steps[j].setTimer(time);
-                    steps[j].setActionRequired(actionRequired);
-                }
-            }
-        }
-        stepIndex = bigIndex;
-        return true;
-    }
-
 }

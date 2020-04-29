@@ -11,10 +11,11 @@ public class Step
     private bool actionRequiredToProceed; // need users' input to be marked completed
     private List<string> utensilSet;
     private List<string> ingredientSet;
+    private string description;
 
 
 
-    public Step(string name, float timer, bool actionRequired, List<string> utensils, List<string> ingredients)
+    public Step(string name, float timer, bool actionRequired, List<string> utensils, List<string> ingredients, string description)
     {
         this.name = name;
         this.completed = false;
@@ -22,6 +23,7 @@ public class Step
         this.actionRequiredToProceed = actionRequired;
         this.utensilSet = utensils;
         this.ingredientSet = ingredients;
+        this.description = description;
     }
 
     public string getName()
@@ -36,7 +38,7 @@ public class Step
 
     public void setTimer(float t)
     {
-        timer = t;
+        this.timer = t;
     }
 
     public bool isCompleted()
@@ -51,7 +53,7 @@ public class Step
     
     public void setActionRequired(bool actionRequired)
     {
-        actionRequiredToProceed = actionRequired;
+        this.actionRequiredToProceed = actionRequired;
     }
 
     public List<string> getUtensilsSet()
@@ -64,6 +66,14 @@ public class Step
         return ingredientSet;
     }
 
-    // need to add timer callback function
+    public string getDescription()
+    {
+        return description;
+    }
+
+    public void setDescription(string description)
+    {
+        this.description = description;
+    }
 
 }
