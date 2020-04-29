@@ -60,6 +60,20 @@ public class MainScheduler : MonoBehaviour
         }
     }
 
+    // return names of all tasks in the tutorial
+    public List<string> getAllSteps()
+    {
+        List<string> nameList = new List<string>();
+        foreach (List<Step> l in tutorial)
+        {
+            foreach(Step s in l)
+            {
+                nameList.Add(s.getName());
+            }
+        }
+        return nameList;
+    }
+
     // replay from a certain step
     // 1. can select only a certain step
     // 2. can replay all steps between previous and target
