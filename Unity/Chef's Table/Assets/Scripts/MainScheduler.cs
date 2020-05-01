@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Xml;
 using System;
+using System.IO;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class MainScheduler : MonoBehaviour
 {
@@ -16,14 +16,15 @@ public class MainScheduler : MonoBehaviour
     private Dictionary<string, int> indexTable = new Dictionary<string, int>();
     private int stepIndex = 0;
     private List<bool> timerStatus = new List<bool>(); // 0 for pause, 1 for start, 0 by default
-    private List<GameObject> animations = new List<GameObject>();
-    private GameObject currAnimation = null;
-    private GameObject canvas;
-    
+    private Dictionary<string, string> allTutorials = new Dictionary<string, string>();
+    private bool tutorialStarts = false; // indicate if a user has choosen a tutorial
+
+
     // change timer status at the current step index for all substeps
     // 0 for pause, 1 for start, 2 reset timer and pause
     public void changeTimerStatus(int status)
     {
+        if (!tutorialStarts) return;
         if (status != 0 && status != 1 && status != 2) return;
         if (status == 2)
         {
@@ -41,12 +42,13 @@ public class MainScheduler : MonoBehaviour
     // return a map of all info of the current step
     public Dictionary<string, List<string>> getCurrentStepInfo()
     {
+        if (!tutorialStarts) return null;
         Step s = tutorial[stepIndex][0]; // sequential for now, get the only substep in step
         Dictionary<string, List<string>> dic = new Dictionary<string, List<string>>();
-        dic.Add("name", new List<string>() {s.getName()});
+        dic.Add("name", new List<string>() { s.getName() });
         dic.Add("utensils", s.getUtensilsSet());
         dic.Add("ingredients", s.getIngredientsSet());
-        dic.Add("description", new List<string>() {s.getDescription()});
+        dic.Add("description", new List<string>() { s.getDescription() });
         dic.Add("timer", new List<string>() { GetTimeSpanWithSec(s.getTime()) });
         return dic;
     }
@@ -54,6 +56,7 @@ public class MainScheduler : MonoBehaviour
     // proceed to the next task in the list
     public void toNextStep()
     {
+        if (!tutorialStarts) return;
         List<Step> curr = tutorial[stepIndex];
         foreach (Step s in curr)
         {
@@ -65,10 +68,11 @@ public class MainScheduler : MonoBehaviour
     // return names of all tasks in the tutorial
     public List<string> getAllSteps()
     {
+        if (!tutorialStarts) return null;
         List<string> nameList = new List<string>();
         foreach (List<Step> l in tutorial)
         {
-            foreach(Step s in l)
+            foreach (Step s in l)
             {
                 nameList.Add(s.getName());
             }
@@ -83,6 +87,7 @@ public class MainScheduler : MonoBehaviour
     // replayInterval: indicator for option2
     public bool replay(string target, bool replayInterval)
     {
+        if (!tutorialStarts) return false;
         // lock all timers
         for (int i = 0; i < timerStatus.Count; i++)
         {
@@ -100,7 +105,8 @@ public class MainScheduler : MonoBehaviour
             float time = mems[smallIndex];
             steps[smallIndex].setTimer(time);
             steps[smallIndex].setActionRequired(true);
-        } else
+        }
+        else
         {
             for (int i = stepIndex; i >= bigIndex; i--)
             {
@@ -118,10 +124,43 @@ public class MainScheduler : MonoBehaviour
         return true;
     }
 
-
-    void xmlInit()
+    void previewAllTutorial()
     {
-        const string path = @"../Chef's Table/Assets/Resources/Tutorials/tutorial1.xml";
+        const string directory = @"../Chef's Table/Assets/Resources/Tutorials/";
+        string[] files = Directory.GetFiles(directory);
+        XmlDocument doc = new XmlDocument();
+        foreach (string file in files)
+        {
+            if (file.Substring(file.Length - 4).Equals(".xml"))
+            {
+                doc.Load(file);
+                string name = doc.FirstChild.Attributes.GetNamedItem("name").Value;
+                allTutorials.Add(name, file);
+            }
+
+        }
+    }
+
+    public Dictionary<string, string> getAllTutorial()
+    {
+        return allTutorials;
+    }
+
+    public void startTutorial(string name)
+    {
+        if (!allTutorials.ContainsKey(name))
+        {
+            Debug.LogError("invalid path to recipe file");
+            return;
+        }
+        string path = allTutorials[name];
+        loadSelectedWithXml(path);
+        tutorialStarts = true;
+    }
+
+    void loadSelectedWithXml(string path)
+    {
+        // const string path = @"../Chef's Table/Assets/Resources/Tutorials/tutorial1.xml";
         XmlDocument doc = new XmlDocument();
         doc.Load(path);
         XmlNodeList ingredientList = doc.DocumentElement.GetElementsByTagName("ingredient");
@@ -188,45 +227,32 @@ public class MainScheduler : MonoBehaviour
         }
     }
 
+
     void Start()
     {
         applicationState = GameObject.Find("ApplicationState");
         applicationScript = applicationState.GetComponent<ApplicationState>();
-        xmlInit();
-        // for (int i = 1; i <= tutorial.Count; i++) {
-        for (int i = 1; i <= 7; i++) { // experimenting for now, that's why the 7, there should be tutorial.Count number of animations in Resources folder
-            GameObject obj = Resources.Load("Animations/Step" + i) as GameObject;
-            animations.Add(obj);
-        }
+        previewAllTutorial();
+        //const string path = @"../Chef's Table/Assets/Resources/Tutorials/tutorial1.xml";
+        //loadSelectedWithXml(path);
     }
 
     // Update is called once per frame
     void Update()
     {
-       //Debug.Log("tutorial Count: " + tutorial.Count);
-        List<Step> curr = tutorial[stepIndex];
-        curr.ForEach(timerUpdate);
-        if (checkCompletion(curr))
+        if (tutorialStarts)
         {
-            // stepIndex = stepIndex + 1 < tutorial.Count ? stepIndex + 1 : stepIndex;
-            stepIndex = stepIndex + 1;
-            if (stepIndex == tutorial.Count) {
-                updateText("Meal is ready!");
-            } else {
-                if (currAnimation != null) {
-                    Destroy(currAnimation);
-                }
-                curr = tutorial[stepIndex];
-                currAnimation = Instantiate(animations[stepIndex], GameObject.Find("AnimationSpawnLocation").transform.position, Quaternion.identity);
-                updateText(curr[0].getDescription()); // no sub steps for now
+            List<Step> curr = tutorial[stepIndex];
+            curr.ForEach(timerUpdate);
+            if (checkCompletion(curr))
+            {
+
+                stepIndex = stepIndex + 1 < tutorial.Count ? stepIndex + 1 : stepIndex;
+
             }
         }
-    }
 
-    // updates the text currently displayed on canvas
-    void updateText(string text) {
-        Text txt = GameObject.Find("MainInstructions").GetComponent<Text>();
-        txt.text = text;
+
     }
 
     // check for a slot in interval, if all steps are confirmed finished

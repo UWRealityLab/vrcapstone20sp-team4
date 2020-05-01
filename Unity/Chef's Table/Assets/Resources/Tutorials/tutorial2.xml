@@ -1,0 +1,34 @@
+<tutorial name="Fried rice">
+    <ingredients servings="1">
+        <ingredient name="rice" unit="oz" quantity="5"/>
+        <ingredient name="bacon" unit="" quantity="3"/>
+        <ingredient name="egg" unit="" quantity="2"/>
+        <ingredient name="papper" unit="teaspoon" quantity="1"/>
+        <ingredient name="salt" unit="teaspoon" quantity="1"/>
+        <ingredient name="soy sauce" unit="teaspoon" quantitiy="3"/>
+    </ingredients>
+    <utensils>
+        <utensil name="skillet"/>
+        <utensil name="rice cooker"/>
+        <utensil name="spatula"/>
+        <utensil name="bowl"/>
+        <utensil name="kitchen knife"/>
+        <utensil name="chopping board"/>
+    </utensils>
+    <step name="1">
+        <substep seqNum="11" name="cut bacon" timer="0" ingredients="bacon" utensils="kitchen knife,chopping board" description="cut bacon into small pieces"/>
+    </step>
+    <step name="2">
+        <substep seqNum="21" name="cook egg" timer="120" ingredients="oil,egg" utensils="skillet,spatula"  description="put oil, cook egg. Mix while cooking"/>
+    </step>
+    <step name="3">
+        <substep seqNum="31" name="cook bacon" timer="120" ingredients="bacon" utensils="skillet"  description="in the same skillet, cook bacon"/>
+    </step>
+    <step name="4">
+        <substep seqNum="41" name="cook rice" timer="0" ingredients="rice" utensils="rice cooker"  description="cook rice with a rice cooker"/>
+    </step>
+    <step name="5">
+        <substep seqNum="51" name="mix and serve" timer="0" ingredients="rice,bacon,egg,papper,salt,soy sauce" utensils="skillet,spatula"  description="mix and stir fried everything"/>
+    </step>
+
+</tutorial>
