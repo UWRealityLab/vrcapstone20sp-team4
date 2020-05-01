@@ -46,14 +46,14 @@ public class Control : MonoBehaviour {
    }
 
    private void Update() {
-       // Bumper button held down - toggle scanning if timer reaches max
-       if (GetTime() >= TIME_MESH_SCANNING_TOGGLE && BtnState == ButtonStates.Pressed) {
-           _held = true;  
-           _startTime = Time.time;
-           _meshing.ToggleMeshScanning();               
-       }
+    //    // Bumper button held down - toggle scanning if timer reaches max
+    //    if (GetTime() >= TIME_MESH_SCANNING_TOGGLE && BtnState == ButtonStates.Pressed) {
+    //        _held = true;  
+    //        _startTime = Time.time;
+    //        _meshing.ToggleMeshScanning();               
+    //    }
        // Bumper was just released - toggle visibility
-       else if (BtnState == ButtonStates.JustReleased) {
+       if (BtnState == ButtonStates.JustReleased) {
              BtnState = ButtonStates.Normal;
              _startTime = 0.0f;
              if (!_held) {
@@ -88,7 +88,7 @@ public class Control : MonoBehaviour {
        // Callback - Button Down
        if (button == MLInput.Controller.Button.Bumper) {
            // Start bumper timer
-            _startTime = Time.time;
+            // _startTime = Time.time;
            BtnState = ButtonStates.Pressed;
        }
    }

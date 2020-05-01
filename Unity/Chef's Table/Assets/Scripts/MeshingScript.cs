@@ -16,6 +16,9 @@ public class MeshingScript : MonoBehaviour {
    #endregion
 
    #region Unity Methods
+   private void Start() {
+       InvokeRepeating("ToggleMeshScanning", 30.0f, 30.0f);
+   }
    private void Update() {
        UpdateMeshMaterial();
    }
@@ -26,6 +29,7 @@ public class MeshingScript : MonoBehaviour {
        _visible = _visible ? false : true;
    }
    public void ToggleMeshScanning() {
+       Debug.Log("Toggle Mesh Scanning");
        Mapper.enabled = Mapper.enabled ? false : true;
    }
    #endregion
