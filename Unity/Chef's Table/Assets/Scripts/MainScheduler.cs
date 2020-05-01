@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Xml;
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MainScheduler : MonoBehaviour
 {
@@ -15,9 +16,10 @@ public class MainScheduler : MonoBehaviour
     private Dictionary<string, int> indexTable = new Dictionary<string, int>();
     private int stepIndex = 0;
     private List<bool> timerStatus = new List<bool>(); // 0 for pause, 1 for start, 0 by default
+    private List<GameObject> animations = new List<GameObject>();
+    private GameObject currAnimation = null;
+    private GameObject canvas;
     
-
-
     // change timer status at the current step index for all substeps
     // 0 for pause, 1 for start, 2 reset timer and pause
     public void changeTimerStatus(int status)
@@ -186,26 +188,45 @@ public class MainScheduler : MonoBehaviour
         }
     }
 
-
     void Start()
     {
         applicationState = GameObject.Find("ApplicationState");
         applicationScript = applicationState.GetComponent<ApplicationState>();
         xmlInit();
+        // for (int i = 1; i <= tutorial.Count; i++) {
+        for (int i = 1; i <= 7; i++) { // experimenting for now, that's why the 7, there should be tutorial.Count number of animations in Resources folder
+            GameObject obj = Resources.Load("Animations/Step" + i) as GameObject;
+            animations.Add(obj);
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
+       //Debug.Log("tutorial Count: " + tutorial.Count);
         List<Step> curr = tutorial[stepIndex];
         curr.ForEach(timerUpdate);
         if (checkCompletion(curr))
         {
-
-            stepIndex = stepIndex + 1 < tutorial.Count ? stepIndex + 1 : stepIndex;
-
+            // stepIndex = stepIndex + 1 < tutorial.Count ? stepIndex + 1 : stepIndex;
+            stepIndex = stepIndex + 1;
+            if (stepIndex == tutorial.Count) {
+                updateText("Meal is ready!");
+            } else {
+                if (currAnimation != null) {
+                    Destroy(currAnimation);
+                }
+                curr = tutorial[stepIndex];
+                currAnimation = Instantiate(animations[stepIndex], GameObject.Find("AnimationSpawnLocation").transform.position, Quaternion.identity);
+                updateText(curr[0].getDescription()); // no sub steps for now
+            }
         }
+    }
 
+    // updates the text currently displayed on canvas
+    void updateText(string text) {
+        Text txt = GameObject.Find("MainInstructions").GetComponent<Text>();
+        txt.text = text;
     }
 
     // check for a slot in interval, if all steps are confirmed finished

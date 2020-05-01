@@ -9,7 +9,7 @@ namespace MagicLeap
     // using hands.
     public class HandTracking : MonoBehaviour
     {
-        private static bool RAYCAST_ENABLED = true;
+        private static bool RAYCAST_ENABLED = false;
 
         //#pragma warning disable 414
         [SerializeField, Tooltip("The hand to visualize.")]
@@ -27,6 +27,9 @@ namespace MagicLeap
 
         public enum HandPoses { Ok, Finger, Thumb, OpenHand, Pinch, NoPose };
         public HandPoses pose = HandPoses.NoPose;
+
+        private Vector3? prevPosition = null;
+        public Transform  ctransform; // Camera's transform
 
         private MLHandTracking.Hand Hand
         {
@@ -83,6 +86,7 @@ namespace MagicLeap
         void OnTriggerExit(Collider other) {
             if (other.gameObject.tag == "Interactable") {
                 canIGrab = false;
+                prevPosition = null;
                 other.gameObject.GetComponent<Renderer>().material.color = Color.white;
             }
         }
@@ -93,7 +97,34 @@ namespace MagicLeap
             // handtracking and moving objects
             if (MLHandTracking.IsStarted)
             {
-                transform.position = Hand.Index.KeyPoints[2].Position;
+                transform.position = Hand.Thumb.KeyPoints[2].Position;
+                
+                if (GetGesture(Hand, MLHandTracking.HandKeyPose.C) || GetGesture(Hand, MLHandTracking.HandKeyPose.L)) {
+                    if (canIGrab) {
+                        Vector3 currPos = Hand.Thumb.KeyPoints[2].Position;
+                        if (prevPosition != null) {
+                            float smooth = 5.0f; // bad style 
+                            float rotationSpeed = 3600.0f; // bad style for now
+                            Vector3 rotationDirection = currPos - prevPosition.Value;
+                            Vector3 cameraRight = ctransform.right;
+                            rotationDirection = Vector3.Project(rotationDirection, cameraRight);
+                            float left = Vector3.Dot(rotationDirection.normalized, cameraRight.normalized);
+                            float magnitude = rotationDirection.magnitude * rotationSpeed;
+                            if (left == 1.0f) { // hand moving right
+                                magnitude *= -1;
+                                magnitude -= 5.0f; // fine-tuning
+                            }
+                            Quaternion prev = selectedGameObject.transform.rotation;
+                            Quaternion target = Quaternion.Euler(0, prev.eulerAngles.y + magnitude, 0);
+                            selectedGameObject.transform.rotation = 
+                            Quaternion.Slerp(selectedGameObject.transform.rotation, target,  Time.deltaTime * smooth);
+                        }
+                        prevPosition = currPos;
+                    }
+                    return;
+                }
+                prevPosition = null;
+               
                 if (GetGesture(Hand, MLHandTracking.HandKeyPose.Pinch)) {
                     pose = HandPoses.Pinch;
                     if (canIGrab) {

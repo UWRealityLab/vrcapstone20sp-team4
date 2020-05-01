@@ -693,7 +693,7 @@ PlayerSettings:
     m_ModelFolderPath: 
     m_PortalFolderPath: 
   luminCert:
-    m_CertPath: C:/Users/Husky Maker/Downloads/vrcap.cert
+    m_CertPath: C:/Users/maskd/Desktop/MLCert/privatekey/initialdevelopment.cert
     m_SignPackage: 1
   luminIsChannelApp: 0
   luminVersion:
