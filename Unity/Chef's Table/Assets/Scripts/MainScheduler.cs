@@ -39,7 +39,7 @@ public class MainScheduler : MonoBehaviour
         timerStatus[stepIndex] = status == 1 ? true : false;
     }
 
-    // return a map of all info of the current step
+    // return a map of all info of the current step, null if no tutorial is selected
     public Dictionary<string, List<string>> getCurrentStepInfo()
     {
         if (!tutorialStarts) return null;
@@ -66,6 +66,7 @@ public class MainScheduler : MonoBehaviour
     }
 
     // return names of all tasks in the tutorial
+    // null if no tutorial is selected
     public List<string> getAllSteps()
     {
         if (!tutorialStarts) return null;
@@ -124,6 +125,7 @@ public class MainScheduler : MonoBehaviour
         return true;
     }
 
+    // preview all the recipe, store in a map( name : path)
     void previewAllTutorial()
     {
         const string directory = @"../Chef's Table/Assets/Resources/Tutorials/";
@@ -141,11 +143,14 @@ public class MainScheduler : MonoBehaviour
         }
     }
 
+    // return map(name : path), users only want name
     public Dictionary<string, string> getAllTutorial()
     {
         return allTutorials;
     }
 
+    // for user interface to call when a user select a recipe
+    // name: name of the recipe
     public void startTutorial(string name)
     {
         if (!allTutorials.ContainsKey(name))
@@ -158,6 +163,7 @@ public class MainScheduler : MonoBehaviour
         tutorialStarts = true;
     }
 
+    // load program with a selected recipe
     void loadSelectedWithXml(string path)
     {
         // const string path = @"../Chef's Table/Assets/Resources/Tutorials/tutorial1.xml";

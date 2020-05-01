@@ -38,7 +38,7 @@ public class HeadLockInterface : MonoBehaviour
         //Debug.Log(schedulerScript.info());
         // simulate consent
         if (Input.GetKeyDown(KeyCode.C)) schedulerScript.toNextStep();
-        if (Input.GetKeyDown(KeyCode.S)) schedulerScript.startTutorial("breakfast burrito");
+        if (Input.GetKeyDown(KeyCode.S)) schedulerScript.startTutorial("breakfast burrito");  // hardcode, a user selects that he wants to cook burrito
         Dictionary<string, List<string>> info_dic = schedulerScript.getCurrentStepInfo();
         if (info_dic == null)
         {
