@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
+using TMPro;
 
 namespace MagicLeapTools
 {
@@ -17,7 +18,7 @@ namespace MagicLeapTools
     /// Receives interactions and input from a pointer.
     /// </summary>
     [RequireComponent(typeof(Collider))]
-    [RequireComponent(typeof(PursuitJoint))]
+    //[RequireComponent(typeof(PursuitJoint))]
     public sealed class PointerReceiver : InputReceiver
     {
 #if PLATFORM_LUMIN
@@ -61,6 +62,8 @@ namespace MagicLeapTools
         private Collision _currentCollision;
         private Pointer _draggingPointer;
 
+        private Vector3 originalPos;
+
         //Init:
         protected override void ResetInherited()
         {
@@ -92,6 +95,12 @@ namespace MagicLeapTools
             {
                 _rigidBody.isKinematic = true;
             }
+        }
+
+        private void OnTargetEnterHandler()
+        {
+            TextMeshPro text = GetComponentInChildren(typeof(TextMeshPro)) as TextMeshPro;
+            text.text = "TEXT CHANGED";
         }
 
         //Flow:
@@ -167,6 +176,18 @@ namespace MagicLeapTools
                     _selectingPointers.Remove(pointer);
                 }
             }
+            TextMeshProUGUI text = GetComponentInChildren(typeof(TextMeshProUGUI)) as TextMeshProUGUI;
+            text.color = Color.white;
+            transform.position = originalPos;
+        }
+
+        public override void TargetEnter(GameObject sender)
+        {
+            base.TargetEnter(sender);
+            TextMeshProUGUI text = GetComponentInChildren(typeof(TextMeshProUGUI)) as TextMeshProUGUI;
+            text.color = Color.red;
+            originalPos = transform.position;
+            transform.position = originalPos + new Vector3(0, 0, -0.08f); 
         }
 
         public override void Fire0DownReceived(GameObject sender)
