@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -20,7 +21,7 @@ public class InterfaceController : MonoBehaviour
     {
         scheduler = GameObject.Find("Scheduler");
         schedulerScript = scheduler.GetComponent<MainScheduler>();
-        Dictionary<string, string> allTutorials = schedulerScript.getAllTutorial();
+        Dictionary<string, List<string>> allTutorials = schedulerScript.getAllTutorial();
         List<string> recipe_names = new List<string>(allTutorials.Keys);
         Debug.Log(recipe_names.Count);
         for (int i = 0; i < recipe_names.Count; i++)
@@ -38,6 +39,8 @@ public class InterfaceController : MonoBehaviour
             // string captured = recipe_names[i];
             PointerReceiver pr = go.GetComponent<PointerReceiver>();
             pr.recipe_name = recipe_names[i];
+            Texture2D tex = loadImage(allTutorials[recipe_names[i]][1]);
+            go.GetComponent<RawImage>().texture = tex;
            // b.onClick.AddListener(() => handleOnBoardingClick(captured));
         }
     }
@@ -48,6 +51,29 @@ public class InterfaceController : MonoBehaviour
     //} 
 
     // Update is called once per frame
+
+    Texture2D loadImage(string pathToImage)
+    {
+        Texture2D tex = null;
+        byte[] fileData;
+        string completePath;
+        if (File.Exists(pathToImage + ".png"))
+        {
+            completePath = pathToImage + ".png";
+        } else if (File.Exists(pathToImage + ".jpg"))
+        {
+            completePath = pathToImage + ".jpg";
+        } else
+        {
+            Debug.LogError("Image file not found: " + pathToImage + " .jpg/.png");
+            return tex;
+        }
+        fileData = File.ReadAllBytes(completePath);
+        tex = new Texture2D(2, 2);
+        tex.LoadImage(fileData);
+        return tex;
+    }
+
     void Update()
     {
         
