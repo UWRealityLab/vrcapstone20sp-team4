@@ -19,6 +19,23 @@ public class MainScheduler : MonoBehaviour
     private Dictionary<string, string> allTutorials = new Dictionary<string, string>();
     private bool tutorialStarts = false; // indicate if a user has choosen a tutorial
 
+    public void addToTimer()
+    {
+        foreach (Step s in tutorial[stepIndex])
+        {
+            s.setTimer(s.getTime() + 60);
+        }
+    }
+
+    public void subtractFromTimer()
+    {
+        foreach (Step s in tutorial[stepIndex])
+        {
+            float current = s.getTime();
+            current = current > 60 ? current - 60 : 0;
+            s.setTimer(current);
+        }
+    }
 
     // change timer status at the current step index for all substeps
     // 0 for pause, 1 for start, 2 reset timer and pause
@@ -137,6 +154,10 @@ public class MainScheduler : MonoBehaviour
             {
                 doc.Load(file);
                 string name = doc.FirstChild.Attributes.GetNamedItem("name").Value;
+                //Debug.Log(file);
+                //Debug.Log(directory);
+               // string pathToImage = directory + "image/" +  file.Substring(directory.Length, file.Length - 4) + "_image";
+                //Debug.Log(pathToImage);
                 allTutorials.Add(name, file);
             }
 

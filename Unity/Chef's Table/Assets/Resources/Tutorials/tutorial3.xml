@@ -1,0 +1,14 @@
+<tutorial name="cup noodle">
+    <ingredients servings="1">
+        <ingredient name="cup noodle" unit="" quantity="1"/>
+    </ingredients>
+    <utensils>
+        <utensil name="kettle"/>
+    </utensils>
+    <step name="1">
+        <substep seqNum="11" name="boil water" timer="0" ingredients="" utensils="kettle" description="boil water"/>
+    </step>
+    <step name="2">
+        <substep seqNum="21" name="cook noodle" timer="180" ingredients="cup noodle" utensils=""  description="pour water into noodle"/>
+    </step>
+</tutorial>
