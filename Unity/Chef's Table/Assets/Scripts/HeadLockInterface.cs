@@ -43,7 +43,7 @@ public class HeadLockInterface : MonoBehaviour
         if (info_dic == null)
         {
             tmp.text = "";
-            Dictionary<string, string> allTutorials = schedulerScript.getAllTutorial();
+            Dictionary<string, List<string>> allTutorials = schedulerScript.getAllTutorial();
             List<string> recipe_names = new List<string>(allTutorials.Keys);
             foreach (string name in recipe_names)
             {

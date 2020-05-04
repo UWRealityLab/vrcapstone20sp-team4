@@ -39,6 +39,7 @@ namespace MagicLeapTools
         public bool matchWallWhileDragging;
         [Tooltip("If this transform's forward does not match the direction of it's content turn this on.")]
         public bool invertForward;
+        public string recipe_name;
 
         //Public Properties:
         public bool Dragging
@@ -200,6 +201,7 @@ namespace MagicLeapTools
             {
                 _selectingPointers.Add(pointer);
             }
+            Debug.Log(recipe_name);
         }
 
         public override void Fire0UpReceived(GameObject sender)

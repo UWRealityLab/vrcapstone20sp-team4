@@ -16,9 +16,26 @@ public class MainScheduler : MonoBehaviour
     private Dictionary<string, int> indexTable = new Dictionary<string, int>();
     private int stepIndex = 0;
     private List<bool> timerStatus = new List<bool>(); // 0 for pause, 1 for start, 0 by default
-    private Dictionary<string, string> allTutorials = new Dictionary<string, string>();
+    private Dictionary<string, List<string>> allTutorials = new Dictionary<string, List<string>>();
     private bool tutorialStarts = false; // indicate if a user has choosen a tutorial
 
+    public void addToTimer()
+    {
+        foreach (Step s in tutorial[stepIndex])
+        {
+            s.setTimer(s.getTime() + 60);
+        }
+    }
+
+    public void subtractFromTimer()
+    {
+        foreach (Step s in tutorial[stepIndex])
+        {
+            float current = s.getTime();
+            current = current > 60 ? current - 60 : 0;
+            s.setTimer(current);
+        }
+    }
 
     // change timer status at the current step index for all substeps
     // 0 for pause, 1 for start, 2 reset timer and pause
@@ -131,20 +148,29 @@ public class MainScheduler : MonoBehaviour
         const string directory = @"../Chef's Table/Assets/Resources/Tutorials/";
         string[] files = Directory.GetFiles(directory);
         XmlDocument doc = new XmlDocument();
+        int i = 1;
         foreach (string file in files)
         {
             if (file.Substring(file.Length - 4).Equals(".xml"))
             {
                 doc.Load(file);
+                
                 string name = doc.FirstChild.Attributes.GetNamedItem("name").Value;
-                allTutorials.Add(name, file);
+
+                string pathToImage = "../Chef's Table/Assets/Resources/Image/tutorial" + i  + "_image";
+                //Debug.Log(pathToImage);
+                List<string> temp = new List<string>();
+                temp.Add(file);
+                temp.Add(pathToImage);
+                allTutorials.Add(name, temp);
+                i++;
             }
 
         }
     }
 
     // return map(name : path), users only want name
-    public Dictionary<string, string> getAllTutorial()
+    public Dictionary<string, List<string>> getAllTutorial()
     {
         return allTutorials;
     }
@@ -158,7 +184,7 @@ public class MainScheduler : MonoBehaviour
             Debug.LogError("invalid path to recipe file");
             return;
         }
-        string path = allTutorials[name];
+        string path = allTutorials[name][0];
         loadSelectedWithXml(path);
         tutorialStarts = true;
     }
