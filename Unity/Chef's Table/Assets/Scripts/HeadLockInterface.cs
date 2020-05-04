@@ -38,22 +38,22 @@ public class HeadLockInterface : MonoBehaviour
         //Debug.Log(schedulerScript.info());
         // simulate consent
         if (Input.GetKeyDown(KeyCode.C)) schedulerScript.toNextStep();
-        if (Input.GetKeyDown(KeyCode.S)) schedulerScript.startTutorial("breakfast burrito");  // hardcode, a user selects that he wants to cook burrito
-        Dictionary<string, List<string>> info_dic = schedulerScript.getCurrentStepInfo();
-        if (info_dic == null)
-        {
-            tmp.text = "";
-            Dictionary<string, List<string>> allTutorials = schedulerScript.getAllTutorial();
-            List<string> recipe_names = new List<string>(allTutorials.Keys);
-            foreach (string name in recipe_names)
-            {
-                tmp.text += name + " ";
-            }
-        }
-        else
-        {
-            tmp.text = info_dic["timer"][0];
-        }
+        if (Input.GetKeyDown(KeyCode.S)) schedulerScript.startTutorial("fried rice");  // hardcode, a user selects that he wants to cook burrito
+        //Dictionary<string, List<string>> info_dic = schedulerScript.getCurrentStepInfo();
+        //if (info_dic == null)
+        //{
+        //    tmp.text = "";
+        //    Dictionary<string, List<string>> allTutorials = schedulerScript.getAllTutorial();
+        //    List<string> recipe_names = new List<string>(allTutorials.Keys);
+        //    foreach (string name in recipe_names)
+        //    {
+        //        tmp.text += name + " ";
+        //    }
+        //}
+        //else
+        //{
+        //    tmp.text = info_dic["timer"][0];
+        //}
 
 
     }

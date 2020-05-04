@@ -1,11 +1,11 @@
-<tutorial name="Fried rice">
+<tutorial name="fried rice">
     <ingredients servings="1">
         <ingredient name="rice" unit="oz" quantity="5"/>
         <ingredient name="bacon" unit="" quantity="3"/>
         <ingredient name="egg" unit="" quantity="2"/>
         <ingredient name="papper" unit="teaspoon" quantity="1"/>
         <ingredient name="salt" unit="teaspoon" quantity="1"/>
-        <ingredient name="soy sauce" unit="teaspoon" quantitiy="3"/>
+        <ingredient name="soy sauce" unit="teaspoon" quantity="3"/>
     </ingredients>
     <utensils>
         <utensil name="skillet"/>

@@ -14,16 +14,23 @@ public class InterfaceController : MonoBehaviour
     MainScheduler schedulerScript;
     void Start()
     {
-        Invoke("delayStart", 2.0f);
+        // loadAnimationTest();
+        scheduler = GameObject.Find("Scheduler");
+        schedulerScript = scheduler.GetComponent<MainScheduler>();
+        schedulerScript.previewAllTutorial();
+        Invoke("delayStart", 0.5f);
     }
 
     void delayStart()
     {
-        scheduler = GameObject.Find("Scheduler");
-        schedulerScript = scheduler.GetComponent<MainScheduler>();
+        
         Dictionary<string, List<string>> allTutorials = schedulerScript.getAllTutorial();
         List<string> recipe_names = new List<string>(allTutorials.Keys);
         Debug.Log(recipe_names.Count);
+        foreach(string s in recipe_names)
+        {
+            Debug.Log(s);
+        }
         for (int i = 0; i < recipe_names.Count; i++)
         {
             Vector3 offset1 = new Vector3(0.35f, 0, 0);
@@ -41,16 +48,13 @@ public class InterfaceController : MonoBehaviour
             pr.recipe_name = recipe_names[i];
             Texture2D tex = loadImage(allTutorials[recipe_names[i]][1]);
             go.GetComponent<RawImage>().texture = tex;
-           // b.onClick.AddListener(() => handleOnBoardingClick(captured));
         }
     }
 
-    //void handleOnBoardingClick(string recipeName)
-    //{
-    //    schedulerScript.startTutorial(recipeName);
-    //} 
-
-    // Update is called once per frame
+    void loadAnimationTest()
+    {
+        GameObject animation = (GameObject)Instantiate(Resources.Load("Animations/tutorial1/step8"), new Vector3(0, 0, 0), Quaternion.identity);
+    }
 
     Texture2D loadImage(string pathToImage)
     {

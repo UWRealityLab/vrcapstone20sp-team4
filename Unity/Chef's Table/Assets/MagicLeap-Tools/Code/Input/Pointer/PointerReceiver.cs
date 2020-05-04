@@ -201,6 +201,11 @@ namespace MagicLeapTools
             {
                 _selectingPointers.Add(pointer);
             }
+            GameObject sche = GameObject.Find("Scheduler");
+            MainScheduler ms = sche.GetComponent<MainScheduler>();
+            ms.startTutorial(recipe_name);
+            GameObject obinterface = GameObject.Find("OnBoardingInterface");
+            obinterface.SetActive(false);
             Debug.Log(recipe_name);
         }
 

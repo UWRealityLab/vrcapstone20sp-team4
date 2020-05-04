@@ -18,7 +18,10 @@ public class MainScheduler : MonoBehaviour
     private List<bool> timerStatus = new List<bool>(); // 0 for pause, 1 for start, 0 by default
     private Dictionary<string, List<string>> allTutorials = new Dictionary<string, List<string>>();
     private bool tutorialStarts = false; // indicate if a user has choosen a tutorial
-
+    private bool updateAnimation = true; // indicate if a new animation need to be played, change whenvever user move to a new step
+    private string SelectedRecipe;
+    public GameObject animationPlaySpace;
+    private GameObject Animation;
     public void addToTimer()
     {
         foreach (Step s in tutorial[stepIndex])
@@ -80,6 +83,7 @@ public class MainScheduler : MonoBehaviour
             s.setTimer(0);
             s.setActionRequired(false);
         }
+        updateAnimation = true;
     }
 
     // return names of all tasks in the tutorial
@@ -139,11 +143,12 @@ public class MainScheduler : MonoBehaviour
             }
         }
         stepIndex = bigIndex;
+        updateAnimation = true;
         return true;
     }
 
     // preview all the recipe, store in a map( name : path)
-    void previewAllTutorial()
+    public void previewAllTutorial()
     {
         const string directory = @"../Chef's Table/Assets/Resources/Tutorials/";
         string[] files = Directory.GetFiles(directory);
@@ -184,6 +189,7 @@ public class MainScheduler : MonoBehaviour
             Debug.LogError("invalid path to recipe file");
             return;
         }
+        SelectedRecipe = name;
         string path = allTutorials[name][0];
         loadSelectedWithXml(path);
         tutorialStarts = true;
@@ -200,6 +206,7 @@ public class MainScheduler : MonoBehaviour
         {
             XmlAttributeCollection attributesCollection = ingredientList[i].Attributes;
             string name = attributesCollection.GetNamedItem("name").Value;
+            Debug.Log(name);
             double quantity = Double.Parse(attributesCollection.GetNamedItem("quantity").Value);
             string unit = attributesCollection.GetNamedItem("unit").Value;
             Ingredient ing = new Ingredient(name, quantity, unit);
@@ -259,14 +266,29 @@ public class MainScheduler : MonoBehaviour
         }
     }
 
+    void handleAnimationUpdates()
+    {
+        if (updateAnimation)
+        {
+            updateAnimation = false;
+            int step_num = stepIndex + 1;
+            string pathToPrefab = "Animations/" + SelectedRecipe + "/step" + step_num;
+            Destroy(Animation);
+            UnityEngine.Object res_load = Resources.Load(pathToPrefab);
+            if (res_load == null)
+            {
+                res_load = Resources.Load("Animations/default");
+            }
+            Animation = (GameObject)Instantiate(res_load, animationPlaySpace.transform.position + new Vector3(0, 0.5f, 0), Quaternion.identity);
+
+        }
+    }
 
     void Start()
     {
         applicationState = GameObject.Find("ApplicationState");
         applicationScript = applicationState.GetComponent<ApplicationState>();
-        previewAllTutorial();
-        //const string path = @"../Chef's Table/Assets/Resources/Tutorials/tutorial1.xml";
-        //loadSelectedWithXml(path);
+        //previewAllTutorial();
     }
 
     // Update is called once per frame
@@ -282,6 +304,7 @@ public class MainScheduler : MonoBehaviour
                 stepIndex = stepIndex + 1 < tutorial.Count ? stepIndex + 1 : stepIndex;
 
             }
+            handleAnimationUpdates();
         }
 
 
