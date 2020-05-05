@@ -11,17 +11,25 @@ public class MainScheduler : MonoBehaviour
 
     GameObject applicationState;
     ApplicationState applicationScript;
+
+    // for bookkeeping and manipulation
     private List<List<Step>> tutorial = new List<List<Step>>();
     private List<List<float>> memory = new List<List<float>>();
     private Dictionary<string, int> indexTable = new Dictionary<string, int>();
     private int stepIndex = 0;
     private List<bool> timerStatus = new List<bool>(); // 0 for pause, 1 for start, 0 by default
-    private Dictionary<string, List<string>> allTutorials = new Dictionary<string, List<string>>();
+
+    // global states
     private bool tutorialStarts = false; // indicate if a user has choosen a tutorial
     private bool updateAnimation = true; // indicate if a new animation need to be played, change whenvever user move to a new step
     private string SelectedRecipe;
     public GameObject animationPlaySpace;
     private GameObject Animation;
+
+    // for UI to call
+    // recipe name to info map
+    // info map pathtoxml pathToImage, serving, list of ingredient, list of utensils
+    private Dictionary<string, Dictionary<string, List<string>>> allTutorials = new Dictionary<string, Dictionary<string, List<string>>>();
     public void addToTimer()
     {
         foreach (Step s in tutorial[stepIndex])
@@ -161,21 +169,40 @@ public class MainScheduler : MonoBehaviour
                 doc.Load(file);
                 
                 string name = doc.FirstChild.Attributes.GetNamedItem("name").Value;
-
-                string pathToImage = "../Chef's Table/Assets/Resources/Image/tutorial" + i  + "_image";
-                //Debug.Log(pathToImage);
-                List<string> temp = new List<string>();
-                temp.Add(file);
-                temp.Add(pathToImage);
-                allTutorials.Add(name, temp);
+                string pathToImage = "../Chef's Table/Assets/Resources/Image/tutorial" + i + "_image";
+                string servings = doc.GetElementsByTagName("ingredients")[0].Attributes.GetNamedItem("servings").Value;
+                List<string> ingredients = new List<string>();
+                List<string> utensils = new List<string>();
+                XmlNodeList ingList = doc.GetElementsByTagName("ingredient");
+                for (int j = 0; j < ingList.Count; j++)
+                {
+                    XmlAttributeCollection attributesCollection = ingList[j].Attributes;
+                    string ingName = attributesCollection.GetNamedItem("name").Value;
+                    ingredients.Add(ingName);
+                }
+                XmlNodeList utenList = doc.GetElementsByTagName("utensil");
+                for (int j = 0; j < ingList.Count; j++)
+                {
+                    XmlAttributeCollection attributesCollection = utenList[j].Attributes;
+                    string utenName = attributesCollection.GetNamedItem("name").Value;
+                    utensils.Add(utenName);
+                }
+                Dictionary<string, List<string>> currentRecipe = new Dictionary<string, List<string>>();
+                currentRecipe.Add("pathToXml", new List<string>(){ file });
+                currentRecipe.Add("pathToImage", new List<string>() { pathToImage });
+                currentRecipe.Add("servings", new List<string>() { servings });
+                currentRecipe.Add("ingredients", ingredients);
+                currentRecipe.Add("utensils", utensils);
+                allTutorials.Add(name, currentRecipe);
                 i++;
             }
 
         }
     }
 
+
     // return map(name : path), users only want name
-    public Dictionary<string, List<string>> getAllTutorial()
+    public Dictionary<string, Dictionary<string, List<string>>> getAllTutorialPreview()
     {
         return allTutorials;
     }
@@ -190,7 +217,7 @@ public class MainScheduler : MonoBehaviour
             return;
         }
         SelectedRecipe = name;
-        string path = allTutorials[name][0];
+        string path = allTutorials[name]["pathToXml"][0];
         loadSelectedWithXml(path);
         tutorialStarts = true;
     }
@@ -206,7 +233,6 @@ public class MainScheduler : MonoBehaviour
         {
             XmlAttributeCollection attributesCollection = ingredientList[i].Attributes;
             string name = attributesCollection.GetNamedItem("name").Value;
-            Debug.Log(name);
             double quantity = Double.Parse(attributesCollection.GetNamedItem("quantity").Value);
             string unit = attributesCollection.GetNamedItem("unit").Value;
             Ingredient ing = new Ingredient(name, quantity, unit);

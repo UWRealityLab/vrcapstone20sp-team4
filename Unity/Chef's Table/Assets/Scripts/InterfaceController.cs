@@ -12,6 +12,7 @@ public class InterfaceController : MonoBehaviour
     public GameObject recipePrefab;
     GameObject scheduler;
     MainScheduler schedulerScript;
+    Dictionary<string, Dictionary<string, List<string>>> allTutorials;
     void Start()
     {
         // loadAnimationTest();
@@ -24,7 +25,7 @@ public class InterfaceController : MonoBehaviour
     void delayStart()
     {
         
-        Dictionary<string, List<string>> allTutorials = schedulerScript.getAllTutorial();
+        allTutorials = schedulerScript.getAllTutorialPreview();
         List<string> recipe_names = new List<string>(allTutorials.Keys);
         Debug.Log(recipe_names.Count);
         foreach(string s in recipe_names)
@@ -46,7 +47,7 @@ public class InterfaceController : MonoBehaviour
             // string captured = recipe_names[i];
             PointerReceiver pr = go.GetComponent<PointerReceiver>();
             pr.recipe_name = recipe_names[i];
-            Texture2D tex = loadImage(allTutorials[recipe_names[i]][1]);
+            Texture2D tex = loadImage(allTutorials[recipe_names[i]]["pathToImage"][0]);
             go.GetComponent<RawImage>().texture = tex;
         }
     }
