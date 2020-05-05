@@ -177,18 +177,23 @@ namespace MagicLeapTools
                     _selectingPointers.Remove(pointer);
                 }
             }
-            TextMeshProUGUI text = GetComponentInChildren(typeof(TextMeshProUGUI)) as TextMeshProUGUI;
-            text.color = Color.white;
-            transform.position = originalPos;
+            
+            if (tag == "Button" || tag == "RecipeButton")
+            {
+                transform.position = originalPos;
+            }
         }
 
         public override void TargetEnter(GameObject sender)
         {
             base.TargetEnter(sender);
-            TextMeshProUGUI text = GetComponentInChildren(typeof(TextMeshProUGUI)) as TextMeshProUGUI;
-            text.color = Color.red;
-            originalPos = transform.position;
-            transform.position = originalPos + new Vector3(0, 0, -0.08f); 
+            if (tag == "Button" || tag == "RecipeButton") 
+            {
+                //TextMeshProUGUI text = GetComponentInChildren(typeof(TextMeshProUGUI)) as TextMeshProUGUI;
+                //text.color = Color.red;
+                originalPos = transform.position;
+                transform.position = originalPos + new Vector3(0, 0, -0.05f);
+            }
         }
 
         public override void Fire0DownReceived(GameObject sender)
@@ -201,12 +206,28 @@ namespace MagicLeapTools
             {
                 _selectingPointers.Add(pointer);
             }
-            GameObject sche = GameObject.Find("Scheduler");
-            MainScheduler ms = sche.GetComponent<MainScheduler>();
-            ms.startTutorial(recipe_name);
-            GameObject obinterface = GameObject.Find("OnBoardingInterface");
-            obinterface.SetActive(false);
-            Debug.Log(recipe_name);
+            if (tag == "RecipeButton")
+            {
+                InterfaceController controller = GameObject.Find("OnBoardingInterface").GetComponent<InterfaceController>();
+                controller.loadPreview(recipe_name);
+            } else if (tag == "Button")
+            {
+                GetComponent<Button>().onClick.Invoke();
+            }
+        }
+
+        public override void Fire1DownReceived(GameObject sender)
+        {
+            base.Fire1DownReceived(sender);
+            if (tag == "RecipeButton")
+            {
+                GameObject sche = GameObject.Find("Scheduler");
+                MainScheduler ms = sche.GetComponent<MainScheduler>();
+                ms.startTutorial(recipe_name);
+                GameObject obinterface = GameObject.Find("OnBoardingInterface");
+                obinterface.SetActive(false);
+                Debug.Log(recipe_name);
+            }
         }
 
         public override void Fire0UpReceived(GameObject sender)

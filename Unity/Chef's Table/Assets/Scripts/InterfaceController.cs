@@ -64,7 +64,7 @@ public class InterfaceController : MonoBehaviour
         scheduler = GameObject.Find("Scheduler");
         schedulerScript = scheduler.GetComponent<MainScheduler>();
         schedulerScript.previewAllTutorial();
-        preview = (GameObject)Instantiate(previewPrefab, this.transform.position + new Vector3(1.6f, 0, 0), this.transform.rotation);
+        preview = (GameObject)Instantiate(previewPrefab, this.transform.position + new Vector3(0.9f, 0, 0), this.transform.rotation);
         preview.SetActive(false);
         preview.transform.SetParent(this.transform, true);
         Invoke("delayStart", 0.5f);
@@ -83,14 +83,14 @@ public class InterfaceController : MonoBehaviour
         }
         for (int i = 0; i < recipe_names.Count; i++)
         {
-            Vector3 offset1 = new Vector3(0.35f, 0, 0);
-            Vector3 offset2 = new Vector3(0, 0.8f, 0);
+            Vector3 offset1 = new Vector3(0.15f, 0, 0);
+            Vector3 offset2 = new Vector3(0, 0.34f, 0);
             Vector3 pos = i % 2 == 0 ? this.transform.position - offset1 : this.transform.position + offset1;
             pos = pos - i / 2 * offset2;
             GameObject go = (GameObject)Instantiate(recipePrefab, pos, this.transform.rotation);
             go.tag = "RecipeButton";
             go.transform.SetParent(this.transform, true);
-            go.transform.localScale = new Vector3(1, 1, 1);
+            go.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
             TextMeshProUGUI[] tmp = go.GetComponentsInChildren<TextMeshProUGUI>();
             tmp[0].text = recipe_names[i];
             Button b = go.GetComponent<Button>();

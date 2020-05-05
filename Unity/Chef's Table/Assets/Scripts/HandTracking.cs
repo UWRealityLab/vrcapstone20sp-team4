@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.MagicLeap;
-using System.Collections;
+using MagicLeap.Core.StarterKit;
 
 namespace MagicLeap
 {
@@ -9,7 +9,6 @@ namespace MagicLeap
     // using hands.
     public class HandTracking : MonoBehaviour
     {
-        private static bool RAYCAST_ENABLED = false;
 
         //#pragma warning disable 414
         [SerializeField, Tooltip("The hand to visualize.")]
@@ -21,15 +20,16 @@ namespace MagicLeap
         private Transform _thumb = null;
         private Transform _wrist = null;
 
-        private bool canIPlace = false;
         private bool canIGrab = false;
         public GameObject selectedGameObject; // the gameObject being dragged or moved
 
-        public enum HandPoses { Ok, Finger, Thumb, OpenHand, Pinch, NoPose };
+        public enum HandPoses { Ok, Finger, Thumb, OpenHand, Pinch, NoPose, Point};
         public HandPoses pose = HandPoses.NoPose;
 
         private Vector3? prevPosition = null;
         public Transform  ctransform; // Camera's transform
+        public GameObject handInterface;
+        private GameObject raycast;
 
         private MLHandTracking.Hand Hand
         {
@@ -50,10 +50,8 @@ namespace MagicLeap
         void Start()
         {
             MLHandTracking.Start();
-            if (RAYCAST_ENABLED) {
-                MLRaycast.Start();
-            }
             Initialize();
+            raycast = GameObject.Find("HandPointer");
         }
 
         // Clean up.
@@ -61,10 +59,6 @@ namespace MagicLeap
         {
             if (MLHandTracking.IsStarted) {
                 MLHandTracking.Stop();
-            }
-
-            if (MLRaycast.IsStarted) {
-                MLRaycast.Stop();
             }
         }
 
@@ -99,6 +93,23 @@ namespace MagicLeap
             {
                 transform.position = Hand.Thumb.KeyPoints[2].Position;
                 
+                if (GetGesture(Hand, MLHandTracking.HandKeyPose.Thumb))
+                {
+                    if (!raycast.activeSelf)
+                    {
+                        raycast.SetActive(true);
+                    }
+                    else
+                    {
+                        raycast.SetActive(false);
+                    }
+                }
+                /*
+                if (raycast.activeSelf)
+                {
+                    raycast.SetActive(false);
+                }
+                */
                 if (GetGesture(Hand, MLHandTracking.HandKeyPose.C) || GetGesture(Hand, MLHandTracking.HandKeyPose.L)) {
                     if (canIGrab) {
                         Vector3 currPos = Hand.Thumb.KeyPoints[2].Position;
@@ -136,12 +147,11 @@ namespace MagicLeap
                 }
 
                 pose = HandPoses.NoPose;
-                canIPlace = true;
                 if (selectedGameObject && canIGrab == false) {
                     selectedGameObject = null;
                     gameObject.GetComponent<SphereCollider>().radius = 0.01f;
                 }
-
+                
                 // Index
                 _indexFinger.position = Hand.Index.KeyPoints[2].Position;
                 _indexFinger.gameObject.SetActive(Hand.IsVisible);
@@ -153,20 +163,6 @@ namespace MagicLeap
                 // Wrist
                 _wrist.position = Hand.Wrist.KeyPoints[0].Position;
                 _wrist.gameObject.SetActive(Hand.IsVisible);
-            }
-
-            // raycasting
-            if (MLRaycast.IsStarted) {
-                MLRaycast.QueryParams _raycastParams = new MLRaycast.QueryParams {
-                    // update the parameters with the index finger's direction
-                    // What about when index finder's tip is not detected or when it's hiddenn.
-                    Position = _indexFinger.position,
-                    Direction = _indexFinger.position - Hand.Index.KeyPoints[1].Position,
-                    UpVector = _indexFinger.up,
-                    Width = 1,
-                    Height = 1
-                };
-                MLRaycast.Raycast(_raycastParams, HandleOnReceiveRaycast);
             }
         }
 
@@ -210,14 +206,6 @@ namespace MagicLeap
                 }
             }
             return false;
-        }
-
-        // Callback function for raycasting.
-        // 'point' is the hit point.
-        void HandleOnReceiveRaycast(MLRaycast.ResultState state, UnityEngine.Vector3 point, UnityEngine.Vector3 normal, float confidence) {
-            if (state == MLRaycast.ResultState.HitObserved) {
-                // do something in here. This is a callback function.
-            }
         }
     }
 }

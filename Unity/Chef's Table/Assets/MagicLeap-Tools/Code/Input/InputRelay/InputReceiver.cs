@@ -240,7 +240,7 @@ namespace MagicLeapTools
             {
                 return;
             }
-            
+
             DraggedBy.Remove(sender);
             OnDragEnd?.Invoke(sender);
         }

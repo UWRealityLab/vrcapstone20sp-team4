@@ -59,9 +59,14 @@ namespace MagicLeapTools
         private void HandleIntent(ManagedHand hand, IntentPose pose)
         {
             //grab:
-            if (pose == IntentPose.Grasping || pose == IntentPose.Pinching)
+            if (pose == IntentPose.Pinching)
             {
                 Fire0Down();
+            }
+
+            if (pose == IntentPose.Grasping)
+            {
+                Fire1Down();
             }
 
             //release:
