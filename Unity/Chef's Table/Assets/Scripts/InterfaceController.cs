@@ -10,15 +10,48 @@ public class InterfaceController : MonoBehaviour
 {
     // Start is called before the first frame update
     public GameObject recipePrefab;
+    public GameObject previewPrefab;
+    private GameObject preview;
     GameObject scheduler;
     MainScheduler schedulerScript;
     Dictionary<string, Dictionary<string, List<string>>> allTutorials;
+
+    public void loadPreview(string name)
+    {
+        if (allTutorials.ContainsKey(name))
+        {
+            preview.SetActive(true);
+            GameObject utensils = preview.transform.Find("utensils").gameObject;
+            TextMeshProUGUI utenText = utensils.GetComponent<TextMeshProUGUI>();
+            utenText.text = "";
+            List<string> utenList = allTutorials[name]["utensils"];
+            foreach (string utensil in utenList)
+            {
+                utenText.text += utensil + "\n";
+            }
+
+            GameObject ingredients = preview.transform.Find("ingredients").gameObject;
+            TextMeshProUGUI ingText = ingredients.GetComponent<TextMeshProUGUI>();
+            ingText.text = "";
+            List<string> ingList = allTutorials[name]["ingredients"];
+            foreach (string ingredient in ingList)
+            {
+                ingText.text += ingredient + "\n";
+            }
+        }
+        return;
+    }
+
     void Start()
     {
         // loadAnimationTest();
+
         scheduler = GameObject.Find("Scheduler");
         schedulerScript = scheduler.GetComponent<MainScheduler>();
         schedulerScript.previewAllTutorial();
+        preview = (GameObject)Instantiate(previewPrefab, this.transform.position + new Vector3(1.3f, 0, 0), this.transform.rotation);
+        preview.SetActive(false);
+        preview.transform.SetParent(this.transform, true);
         Invoke("delayStart", 0.5f);
     }
 
@@ -39,6 +72,7 @@ public class InterfaceController : MonoBehaviour
             Vector3 pos = i % 2 == 0 ? this.transform.position - offset1 : this.transform.position + offset1;
             pos = pos - i / 2 * offset2;
             GameObject go = (GameObject)Instantiate(recipePrefab, pos, this.transform.rotation);
+            go.tag = "RecipeButton";
             go.transform.SetParent(this.transform, true);
             go.transform.localScale = new Vector3(1, 1, 1);
             TextMeshProUGUI[] tmp = go.GetComponentsInChildren<TextMeshProUGUI>();
