@@ -30,7 +30,7 @@ public class MainScheduler : MonoBehaviour
     // recipe name to info map
     // info map pathtoxml pathToImage, serving, list of ingredient, list of utensils
     private Dictionary<string, Dictionary<string, List<string>>> allTutorials = new Dictionary<string, Dictionary<string, List<string>>>();
-
+    public float animationDistance = 0.0f;
 
 
     public void addToTimer()
@@ -316,7 +316,7 @@ public class MainScheduler : MonoBehaviour
             {
                 res_load = Resources.Load("Animations/default");
             }
-            Animation = (GameObject)Instantiate(res_load, animationPlaySpace.transform.position + new Vector3(0, 0.5f, 0), Quaternion.identity);
+            Animation = (GameObject)Instantiate(res_load, animationPlaySpace.transform.position + new Vector3(0, animationDistance, 0), Quaternion.identity);
 
         }
     }
