@@ -22,22 +22,37 @@ public class InterfaceController : MonoBehaviour
         {
             preview.SetActive(true);
             GameObject utensils = preview.transform.Find("utensils").gameObject;
+            // utensils.SetActive(false);
             TextMeshProUGUI utenText = utensils.GetComponent<TextMeshProUGUI>();
-            utenText.text = "";
+            //TextMeshProUGUI utenText = tmp[0];
+            string temp = "";
             List<string> utenList = allTutorials[name]["utensils"];
             foreach (string utensil in utenList)
             {
-                utenText.text += utensil + "\n";
-            }
+                temp += utensil + ", ";
 
+            }
+            temp = temp.Substring(0, temp.Length - 2);
+            utenText.text = "Utensils needed: \n" + temp;
+
+            temp = "";
             GameObject ingredients = preview.transform.Find("ingredients").gameObject;
             TextMeshProUGUI ingText = ingredients.GetComponent<TextMeshProUGUI>();
-            ingText.text = "";
             List<string> ingList = allTutorials[name]["ingredients"];
             foreach (string ingredient in ingList)
             {
-                ingText.text += ingredient + "\n";
+                temp += ingredient + ", ";
             }
+            temp = temp.Substring(0, temp.Length - 2);
+            ingText.text = "Ingredients required: \n" + temp;
+
+            GameObject recipeName = preview.transform.Find("recipe name").gameObject;
+            TextMeshProUGUI recipeText = recipeName.GetComponent<TextMeshProUGUI>();
+            recipeText.text = name;
+
+            GameObject serving = preview.transform.Find("serving").gameObject;
+            TextMeshProUGUI servingText = serving.GetComponent<TextMeshProUGUI>();
+            servingText.text = "Serving: " + allTutorials[name]["servings"][0];
         }
         return;
     }
@@ -49,19 +64,20 @@ public class InterfaceController : MonoBehaviour
         scheduler = GameObject.Find("Scheduler");
         schedulerScript = scheduler.GetComponent<MainScheduler>();
         schedulerScript.previewAllTutorial();
-        preview = (GameObject)Instantiate(previewPrefab, this.transform.position + new Vector3(1.3f, 0, 0), this.transform.rotation);
+        preview = (GameObject)Instantiate(previewPrefab, this.transform.position + new Vector3(1.6f, 0, 0), this.transform.rotation);
         preview.SetActive(false);
         preview.transform.SetParent(this.transform, true);
         Invoke("delayStart", 0.5f);
+
     }
 
     void delayStart()
     {
-        
+
         allTutorials = schedulerScript.getAllTutorialPreview();
         List<string> recipe_names = new List<string>(allTutorials.Keys);
         Debug.Log(recipe_names.Count);
-        foreach(string s in recipe_names)
+        foreach (string s in recipe_names)
         {
             Debug.Log(s);
         }
@@ -77,7 +93,7 @@ public class InterfaceController : MonoBehaviour
             go.transform.localScale = new Vector3(1, 1, 1);
             TextMeshProUGUI[] tmp = go.GetComponentsInChildren<TextMeshProUGUI>();
             tmp[0].text = recipe_names[i];
-            Button b = go.GetComponent<Button>(); 
+            Button b = go.GetComponent<Button>();
             // string captured = recipe_names[i];
             PointerReceiver pr = go.GetComponent<PointerReceiver>();
             pr.recipe_name = recipe_names[i];
@@ -99,10 +115,12 @@ public class InterfaceController : MonoBehaviour
         if (File.Exists(pathToImage + ".png"))
         {
             completePath = pathToImage + ".png";
-        } else if (File.Exists(pathToImage + ".jpg"))
+        }
+        else if (File.Exists(pathToImage + ".jpg"))
         {
             completePath = pathToImage + ".jpg";
-        } else
+        }
+        else
         {
             Debug.LogError("Image file not found: " + pathToImage + " .jpg/.png");
             return tex;
@@ -115,6 +133,10 @@ public class InterfaceController : MonoBehaviour
 
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.V))
+        {
+            loadPreview("breakfast burrito");
+        }
+
     }
 }
