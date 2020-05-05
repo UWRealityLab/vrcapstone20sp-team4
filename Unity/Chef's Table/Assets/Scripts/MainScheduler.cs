@@ -30,6 +30,9 @@ public class MainScheduler : MonoBehaviour
     // recipe name to info map
     // info map pathtoxml pathToImage, serving, list of ingredient, list of utensils
     private Dictionary<string, Dictionary<string, List<string>>> allTutorials = new Dictionary<string, Dictionary<string, List<string>>>();
+
+
+
     public void addToTimer()
     {
         foreach (Step s in tutorial[stepIndex])
@@ -92,6 +95,14 @@ public class MainScheduler : MonoBehaviour
             s.setActionRequired(false);
         }
         updateAnimation = true;
+    }
+
+    public void toPreviousStep()
+    {
+        List<string> allSteps = getAllSteps();
+        int target = stepIndex == 0 ? 0 : stepIndex - 1;
+        string name = allSteps[target];
+        replay(name, false);
     }
 
     // return names of all tasks in the tutorial
