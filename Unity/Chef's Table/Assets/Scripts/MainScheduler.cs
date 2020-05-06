@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Xml;
 using System;
-using System.IO;
 using UnityEngine;
 
 public class MainScheduler : MonoBehaviour
@@ -166,7 +165,50 @@ public class MainScheduler : MonoBehaviour
         return true;
     }
 
-    // preview all the recipe, store in a map( name : path)
+    public void previewAllTutorial2()
+    {
+        int i = 1;
+        string filename = makeXmlName(i);
+        TextAsset textAsset = (TextAsset)Resources.Load(filename);
+        Debug.Log( filename);
+        while (textAsset != null)
+        {
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(textAsset.text);
+            string name = doc.FirstChild.Attributes.GetNamedItem("name").Value;
+            string pathToImage = "Image/tutorial" + i + "_image";
+            string servings = doc.GetElementsByTagName("ingredients")[0].Attributes.GetNamedItem("servings").Value;
+            List<string> ingredients = new List<string>();
+            List<string> utensils = new List<string>();
+            XmlNodeList ingList = doc.GetElementsByTagName("ingredient");
+            for (int j = 0; j < ingList.Count; j++)
+            {
+                XmlAttributeCollection attributesCollection = ingList[j].Attributes;
+                string ingName = attributesCollection.GetNamedItem("name").Value;
+                ingredients.Add(ingName);
+            }
+            XmlNodeList utenList = doc.GetElementsByTagName("utensil");
+            for (int j = 0; j < ingList.Count; j++)
+            {
+                XmlAttributeCollection attributesCollection = utenList[j].Attributes;
+                string utenName = attributesCollection.GetNamedItem("name").Value;
+                utensils.Add(utenName);
+            }
+            Dictionary<string, List<string>> currentRecipe = new Dictionary<string, List<string>>();
+            currentRecipe.Add("pathToXml", new List<string>() { filename });
+            currentRecipe.Add("pathToImage", new List<string>() { pathToImage });
+            currentRecipe.Add("servings", new List<string>() { servings });
+            currentRecipe.Add("ingredients", ingredients);
+            currentRecipe.Add("utensils", utensils);
+            allTutorials.Add(name, currentRecipe);
+            
+            i++;
+            filename = makeXmlName(i);
+            textAsset = (TextAsset)Resources.Load(filename);
+        }
+    }
+
+   /* // preview all the recipe, store in a map( name : path)
     public void previewAllTutorial()
     {
         const string directory = @"../Chef's Table/Assets/Resources/Tutorials/";
@@ -211,7 +253,7 @@ public class MainScheduler : MonoBehaviour
         }
     }
 
-
+    */
     // return map(name : path), users only want name
     public Dictionary<string, Dictionary<string, List<string>>> getAllTutorialPreview()
     {
@@ -238,7 +280,8 @@ public class MainScheduler : MonoBehaviour
     {
         // const string path = @"../Chef's Table/Assets/Resources/Tutorials/tutorial1.xml";
         XmlDocument doc = new XmlDocument();
-        doc.Load(path);
+        TextAsset textAsset = (TextAsset)Resources.Load(path);
+        doc.LoadXml(textAsset.text);
         XmlNodeList ingredientList = doc.DocumentElement.GetElementsByTagName("ingredient");
         for (int i = 0; i < ingredientList.Count; i++)
         {
@@ -384,5 +427,10 @@ public class MainScheduler : MonoBehaviour
 
         TimeSpan interval = TimeSpan.FromSeconds(Math.Floor(seconds));
         return interval.ToString();
+    }
+
+    string makeXmlName(int i)
+    {
+        return "Tutorials/tutorial" + i;
     }
 }
