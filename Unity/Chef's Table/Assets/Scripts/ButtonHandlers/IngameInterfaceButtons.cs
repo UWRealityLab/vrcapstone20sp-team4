@@ -41,8 +41,10 @@ public class IngameInterfaceButtons : MonoBehaviour
             timerClip.Stop();
         } else if (name == "Plus") {
             scheduler.addToTimer();
+            AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("Plus").transform.position);
         } else if (name == "Minus") {
             scheduler.subtractFromTimer();
+            AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("Minus").transform.position);
         } else {
             Debug.Log("Unknown button");
         } 
