@@ -58,7 +58,7 @@ namespace MagicLeap
             raycast = GameObject.Find("HandPointer");
             interf = GameObject.Find("Interf");
             onboarding = GameObject.Find("OnBoardingInterface");
-
+            //interf.SetActive(false);
         }
 
         // Clean up.

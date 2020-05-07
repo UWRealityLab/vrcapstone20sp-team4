@@ -64,11 +64,6 @@ namespace MagicLeapTools
                 Fire0Down();
             }
 
-            if (pose == IntentPose.Grasping)
-            {
-                Fire1Down();
-            }
-
             //release:
             if (pose == IntentPose.Relaxed)
             {

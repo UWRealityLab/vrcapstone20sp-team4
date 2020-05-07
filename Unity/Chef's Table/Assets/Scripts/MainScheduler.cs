@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Xml;
 using System;
 using UnityEngine;
+using System.Threading;
 
 public class MainScheduler : MonoBehaviour
 {
@@ -414,6 +415,13 @@ public class MainScheduler : MonoBehaviour
             if (t > 0)
             {
                 t -= Time.deltaTime;
+                // set alarm sound if timer crossed 0.
+                if (t <= 0)
+                {
+                    AudioSource timerClip = GameObject.Find("Timer").GetComponent<AudioSource>();
+                    timerClip.loop = true;
+                    AudioSource.PlayClipAtPoint(timerClip.clip, GameObject.Find("ClockText").transform.position);
+                }
             }
             t = Math.Max(t, 0);
             s.setTimer(t);
