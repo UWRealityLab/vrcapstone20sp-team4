@@ -23,12 +23,11 @@ namespace MagicLeap
         private bool canIGrab = false;
         public GameObject selectedGameObject; // the gameObject being dragged or moved
 
-        public enum HandPoses { Ok, Finger, Thumb, OpenHand, Pinch, NoPose, Point};
+        public enum HandPoses { Ok, Finger, Thumb, OpenHand, Pinch, NoPose, Point, L};
         public HandPoses pose = HandPoses.NoPose;
 
         private Vector3? prevPosition = null;
         public Transform  ctransform; // Camera's transform
-        public GameObject handInterface;
         private GameObject raycast;
 
         private MLHandTracking.Hand Hand
@@ -71,7 +70,7 @@ namespace MagicLeap
                 if (canIGrab == false) {
                     selectedGameObject = other.gameObject;
                     canIGrab = true;
-                    other.gameObject.GetComponent<Renderer>().material.color = Color.red;
+                    //other.gameObject.GetComponent<Renderer>().material.color = Color.red;
                 }
             }
         }
@@ -81,7 +80,7 @@ namespace MagicLeap
             if (other.gameObject.tag == "Interactable") {
                 canIGrab = false;
                 prevPosition = null;
-                other.gameObject.GetComponent<Renderer>().material.color = Color.white;
+                //other.gameObject.GetComponent<Renderer>().material.color = Color.white;
             }
         }
 
@@ -93,7 +92,7 @@ namespace MagicLeap
             {
                 transform.position = Hand.Thumb.KeyPoints[2].Position;
                 
-                if (GetGesture(Hand, MLHandTracking.HandKeyPose.Thumb))
+                if (GetGesture(Hand, MLHandTracking.HandKeyPose.Thumb) && pose != HandPoses.Thumb)
                 {
                     if (!raycast.activeSelf)
                     {
@@ -103,13 +102,9 @@ namespace MagicLeap
                     {
                         raycast.SetActive(false);
                     }
+                    pose = HandPoses.Thumb;
                 }
-                /*
-                if (raycast.activeSelf)
-                {
-                    raycast.SetActive(false);
-                }
-                */
+
                 if (GetGesture(Hand, MLHandTracking.HandKeyPose.C) || GetGesture(Hand, MLHandTracking.HandKeyPose.L)) {
                     if (canIGrab) {
                         Vector3 currPos = Hand.Thumb.KeyPoints[2].Position;
@@ -132,6 +127,7 @@ namespace MagicLeap
                         }
                         prevPosition = currPos;
                     }
+                    pose = HandPoses.L;
                     return;
                 }
                 prevPosition = null;
