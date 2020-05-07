@@ -8,6 +8,12 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Game.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 0
+    path: Assets/MagicLeap-Tools/Examples/SimpleHandPointer/Scenes/SimpleHandPointer.unity
+    guid: ddaf64a5de9b3114d96a56113e0d23de
+  - enabled: 0
+    path: Assets/Scenes/TestingIO.unity
+    guid: 0859276c3198804409ca6158e7ca12c9
   m_configObjects:
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 2ba4dbd235ed941bb8fdb5a40ab00f22,
       type: 2}

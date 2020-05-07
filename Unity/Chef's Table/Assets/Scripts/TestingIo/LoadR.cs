@@ -8,7 +8,7 @@ public class LoadR : MonoBehaviour
    // public GameObject resouceLoad;
     void Start()
     {
-        GameObject animation = (GameObject)Instantiate(Resources.Load("Animations/tutorial1/step8"), new Vector3(0, 0, 0), Quaternion.identity);
+        GameObject animation = (GameObject)Instantiate(Resources.Load("Animations/breakfast burrito/step8"), new Vector3(0, 0, 0), Quaternion.identity);
     }
 
     // Update is called once per frame

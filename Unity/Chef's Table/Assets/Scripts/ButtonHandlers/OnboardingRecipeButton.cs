@@ -7,8 +7,6 @@ public class OnboardingRecipeButton : MonoBehaviour
 {
     public void clicked()
     {
-        GameObject gb = GetComponent<GameObject>();
-        Debug.Log("Button Clicked");
 
     }
 }

@@ -275,7 +275,7 @@ MonoBehaviour:
   target: {fileID: 0}
   targetLocation: {x: 0, y: 0, z: 0}
   maintainOffset: 1
-  strength: 120
+  strength: 20
   dampening: 15
 --- !u!114 &3000047011192478680
 MonoBehaviour:
@@ -356,10 +356,11 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   draggable: 0
-  kinematicWhileIdle: 0
-  faceWhileDragging: 1
-  matchWallWhileDragging: 1
+  kinematicWhileIdle: 1
+  faceWhileDragging: 0
+  matchWallWhileDragging: 0
   invertForward: 0
+  recipe_name: 
 --- !u!114 &-4696787391599274196
 MonoBehaviour:
   m_ObjectHideFlags: 0
