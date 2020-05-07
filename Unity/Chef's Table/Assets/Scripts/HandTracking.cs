@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.MagicLeap;
 using MagicLeap.Core.StarterKit;
+using MagicLeapTools;
 
 namespace MagicLeap
 {
@@ -29,6 +30,10 @@ namespace MagicLeap
         private Vector3? prevPosition = null;
         public Transform  ctransform; // Camera's transform
         private GameObject raycast;
+        private GameObject interf;
+        private GameObject onboarding;
+        private bool thumbPoseChanged = false;
+        //private bool okPoseChanged = false;
 
         private MLHandTracking.Hand Hand
         {
@@ -51,6 +56,9 @@ namespace MagicLeap
             MLHandTracking.Start();
             Initialize();
             raycast = GameObject.Find("HandPointer");
+            interf = GameObject.Find("Interf");
+            onboarding = GameObject.Find("OnBoardingInterface");
+
         }
 
         // Clean up.
@@ -91,24 +99,41 @@ namespace MagicLeap
             if (MLHandTracking.IsStarted)
             {
                 transform.position = Hand.Thumb.KeyPoints[2].Position;
-                
-                if (GetGesture(Hand, MLHandTracking.HandKeyPose.Thumb) && pose != HandPoses.Thumb)
-                {
-                    if (!raycast.activeSelf)
-                    {
-                        raycast.SetActive(true);
-                    }
-                    else
-                    {
-                        raycast.SetActive(false);
-                    }
-                    pose = HandPoses.Thumb;
-                }
 
-                if (GetGesture(Hand, MLHandTracking.HandKeyPose.C) || GetGesture(Hand, MLHandTracking.HandKeyPose.L)) {
-                    if (canIGrab) {
+                if (GetGesture(Hand, MLHandTracking.HandKeyPose.Thumb))
+                {
+                    if (thumbPoseChanged == true)
+                    {
+                        if (!raycast.activeSelf)
+                        {
+                            raycast.SetActive(true);
+                        }
+                        else
+                        {
+                            raycast.SetActive(false);
+                        }
+                        pose = HandPoses.Thumb;
+                        thumbPoseChanged = false;
+                    }
+                }
+                else if (GetGesture(Hand, MLHandTracking.HandKeyPose.OpenHand))
+                {
+                    //if (okPoseChanged == true)
+                    if (raycast.activeSelf) 
+                    {
+                        //pose = HandPoses.Ok;
+                        interf.GetComponent<PlaceInFront>().Place();
+                        onboarding.GetComponent<PlaceInFront>().Place();
+                        //okPoseChanged = false;
+                    }
+                }
+                else if (GetGesture(Hand, MLHandTracking.HandKeyPose.C) || GetGesture(Hand, MLHandTracking.HandKeyPose.L))
+                {
+                    if (canIGrab)
+                    {
                         Vector3 currPos = Hand.Thumb.KeyPoints[2].Position;
-                        if (prevPosition != null) {
+                        if (prevPosition != null)
+                        {
                             float smooth = 5.0f; // bad style 
                             float rotationSpeed = 3600.0f; // bad style for now
                             Vector3 rotationDirection = currPos - prevPosition.Value;
@@ -116,49 +141,39 @@ namespace MagicLeap
                             rotationDirection = Vector3.Project(rotationDirection, cameraRight);
                             float left = Vector3.Dot(rotationDirection.normalized, cameraRight.normalized);
                             float magnitude = rotationDirection.magnitude * rotationSpeed;
-                            if (left == 1.0f) { // hand moving right
+                            if (left == 1.0f)
+                            { // hand moving right
                                 magnitude *= -1;
                                 magnitude -= 5.0f; // fine-tuning
                             }
                             Quaternion prev = selectedGameObject.transform.rotation;
                             Quaternion target = Quaternion.Euler(0, prev.eulerAngles.y + magnitude, 0);
-                            selectedGameObject.transform.rotation = 
-                            Quaternion.Slerp(selectedGameObject.transform.rotation, target,  Time.deltaTime * smooth);
+                            selectedGameObject.transform.rotation =
+                            Quaternion.Slerp(selectedGameObject.transform.rotation, target, Time.deltaTime * smooth);
                         }
                         prevPosition = currPos;
                     }
                     pose = HandPoses.L;
-                    return;
                 }
-                prevPosition = null;
-               
-                if (GetGesture(Hand, MLHandTracking.HandKeyPose.Pinch)) {
+                else if (GetGesture(Hand, MLHandTracking.HandKeyPose.Pinch)) {
                     pose = HandPoses.Pinch;
-                    if (canIGrab) {
+                    if (canIGrab)
+                    {
                         selectedGameObject.transform.position = transform.position;
                         // This is so that the object wont leave our hand while we're dragging it.
                         gameObject.GetComponent<SphereCollider>().radius = 0.2f;
                     }
-                    return;
+                } else {
+                    prevPosition = null;
+                    pose = HandPoses.NoPose;
+                    thumbPoseChanged = true;
+                    //okPoseChanged = true;
+                    if (selectedGameObject && canIGrab == false)
+                    {
+                        selectedGameObject = null;
+                        gameObject.GetComponent<SphereCollider>().radius = 0.01f;
+                    }
                 }
-
-                pose = HandPoses.NoPose;
-                if (selectedGameObject && canIGrab == false) {
-                    selectedGameObject = null;
-                    gameObject.GetComponent<SphereCollider>().radius = 0.01f;
-                }
-                
-                // Index
-                _indexFinger.position = Hand.Index.KeyPoints[2].Position;
-                _indexFinger.gameObject.SetActive(Hand.IsVisible);
-
-                // Thumb
-                _thumb.position = Hand.Thumb.KeyPoints[2].Position;
-                _thumb.gameObject.SetActive(Hand.IsVisible);
-
-                // Wrist
-                _wrist.position = Hand.Wrist.KeyPoints[0].Position;
-                _wrist.gameObject.SetActive(Hand.IsVisible);
             }
         }
 

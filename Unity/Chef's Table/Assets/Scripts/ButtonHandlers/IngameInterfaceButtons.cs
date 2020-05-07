@@ -28,6 +28,10 @@ public class IngameInterfaceButtons : MonoBehaviour
             scheduler.changeTimerStatus(2);
         } else if (name == "Pause") {
             scheduler.changeTimerStatus(0);
+        } else if (name == "Plus") {
+            scheduler.addToTimer();
+        } else if (name == "Minus") {
+            scheduler.subtractFromTimer();
         } else {
             Debug.Log("Unknown button");
         } 

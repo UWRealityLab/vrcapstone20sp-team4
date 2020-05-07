@@ -64,7 +64,7 @@ public class InterfaceController : MonoBehaviour
         scheduler = GameObject.Find("Scheduler");
         schedulerScript = scheduler.GetComponent<MainScheduler>();
         schedulerScript.previewAllTutorial2();
-        preview = (GameObject)Instantiate(previewPrefab, this.transform.position + new Vector3(0.9f, 0, 0), this.transform.rotation);
+        preview = (GameObject)Instantiate(previewPrefab, this.transform.position + new Vector3(0.8f, 0, 0), this.transform.rotation);
         preview.SetActive(false);
         preview.transform.SetParent(this.transform, true);
         Invoke("delayStart", 0.5f);

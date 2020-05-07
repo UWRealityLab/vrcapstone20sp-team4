@@ -40,6 +40,7 @@ namespace MagicLeapTools
         [Tooltip("If this transform's forward does not match the direction of it's content turn this on.")]
         public bool invertForward;
         public string recipe_name;
+        public bool exited;
 
         //Public Properties:
         public bool Dragging
@@ -63,7 +64,8 @@ namespace MagicLeapTools
         private Collision _currentCollision;
         private Pointer _draggingPointer;
 
-        private Vector3 originalPos;
+        private Vector3? originalPos;
+        private bool pointerExited = true;
 
         //Init:
         protected override void ResetInherited()
@@ -180,7 +182,10 @@ namespace MagicLeapTools
             
             if (tag == "Button" || tag == "RecipeButton")
             {
-                transform.position = originalPos;
+                //transform.position = originalPos.Value;
+                //pointerExited = true;
+                Behaviour halo = (Behaviour)GetComponent("Halo");
+                halo.enabled = false; // false
             }
         }
 
@@ -191,8 +196,15 @@ namespace MagicLeapTools
             {
                 //TextMeshProUGUI text = GetComponentInChildren(typeof(TextMeshProUGUI)) as TextMeshProUGUI;
                 //text.color = Color.red;
-                originalPos = transform.position;
-                transform.position = originalPos + new Vector3(0, 0, -0.05f);
+                //if (!pointerExited && originalPos != null)
+                //{
+                    //transform.position = originalPos.Value;
+                //}
+                //originalPos = transform.position;
+                Behaviour halo = (Behaviour)GetComponent("Halo");
+                halo.enabled = true; // false
+                //transform.position = originalPos.Value - Camera.main.transform.forward.normalized * 0.1f; //; new Vector3(0, 0, -0.05f);
+                //pointerExited = false;
             }
         }
 
@@ -206,16 +218,12 @@ namespace MagicLeapTools
             {
                 _selectingPointers.Add(pointer);
             }
-            if (tag == "RecipeButton")
-            {
-                InterfaceController controller = GameObject.Find("OnBoardingInterface").GetComponent<InterfaceController>();
-                controller.loadPreview(recipe_name);
-            } else if (tag == "Button")
+            if (tag == "Button")
             {
                 GetComponent<Button>().onClick.Invoke();
             }
         }
-
+        /*
         public override void Fire1DownReceived(GameObject sender)
         {
             base.Fire1DownReceived(sender);
@@ -229,7 +237,7 @@ namespace MagicLeapTools
                 Debug.Log(recipe_name);
             }
         }
-
+        */
         public override void Fire0UpReceived(GameObject sender)
         {
             base.Fire0UpReceived(sender);

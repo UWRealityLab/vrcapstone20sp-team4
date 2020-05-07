@@ -70,7 +70,8 @@ namespace MagicLeapTools
             }
 
             //place:
-            Vector3 flatForward = Vector3.ProjectOnPlane(_camera.forward, Vector3.up).normalized;
+            // Vector3 flatForward = Vector3.ProjectOnPlane(_camera.forward, Vector3.up).normalized;
+            Vector3 flatForward = Vector3.ProjectOnPlane(_camera.forward, _camera.up).normalized;
             Matrix4x4 matrix = Matrix4x4.TRS(_camera.position, Quaternion.LookRotation(flatForward), Vector3.one);
             transform.position = matrix.MultiplyPoint3x4(offset);
 
@@ -78,6 +79,7 @@ namespace MagicLeapTools
             if (faceCamera)
             {
                 Vector3 to = Vector3.ProjectOnPlane(_camera.position - transform.position, Vector3.up).normalized;
+                //Vector3 to = Vector3.ProjectOnPlane(_camera.position - transform.position, _camera.up).normalized;
                 if (flipForward)
                 {
                     to *= -1;
