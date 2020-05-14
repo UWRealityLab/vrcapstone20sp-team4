@@ -73,7 +73,7 @@ namespace MagicLeap
         // an interactable object.
         void OnTriggerEnter(Collider other)
         {
-            Debug.Log("onTriggerEnter");
+            //Debug.Log("onTriggerEnter");
             if (other.gameObject.tag == "Interactable") {
                 if (canIGrab == false) {
                     selectedGameObject = other.gameObject;
