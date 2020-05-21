@@ -20,6 +20,7 @@ public class ControllerCut : MonoBehaviour
     private MeshCutter meshCutter;
     private TempMesh biggerMesh, smallerMesh;
     private float collision_cold_off = 0;
+    public GameObject SimulationContainer;
 
     #region Utility Functions
 
@@ -199,16 +200,20 @@ public class ControllerCut : MonoBehaviour
         
         if (col.gameObject.tag == "Sliceable")
         {
-            Debug.Log("collide");
-            Vector3 point = gameObject.GetComponent<MeshCollider>().transform.position;
-            point = ObjectContainer.InverseTransformPoint(point);
-            // SliceObjects(point, gameObject.transform.rotation.eulerAngles);
-            Vector3 normal = new Vector3(1, 0, 0);
-            normal = transform.TransformVector(normal);
+            if (collision_cold_off > 0.2f)
+            {
+                Vector3 point = gameObject.GetComponent<MeshCollider>().transform.position;
+                point = ObjectContainer.InverseTransformPoint(point);
+                // SliceObjects(point, gameObject.transform.rotation.eulerAngles);
+                Vector3 normal = new Vector3(1, 0, 0);
+                normal = transform.TransformVector(normal);
+
+                Vector3 temp = gameObject.transform.rotation.eulerAngles.normalized;
+                // Debug.Log(temp);
+                SliceObjects(point, normal.normalized);
+                collision_cold_off = 0;
+            }
             
-            Vector3 temp = gameObject.transform.rotation.eulerAngles.normalized;
-            // Debug.Log(temp);
-            SliceObjects(point,normal.normalized);
         }
     }
     void OnTriggerEnter(Collider other)
