@@ -30,10 +30,12 @@ namespace MagicLeap
         private Vector3? prevPosition = null;
         public Transform  ctransform; // Camera's transform
         private GameObject raycast;
+        private GameObject nearInterface;
         private GameObject interf;
         private GameObject onboarding;
         private bool thumbPoseChanged = false;
-        //private bool okPoseChanged = false;
+        private bool okPoseChanged = false;
+        
 
         private MLHandTracking.Hand Hand
         {
@@ -57,6 +59,7 @@ namespace MagicLeap
             Initialize();
             raycast = GameObject.Find("HandPointer");
             interf = GameObject.Find("Interf");
+            nearInterface = GameObject.Find("NearInterface");
             onboarding = GameObject.Find("OnBoardingInterface");
             //interf.SetActive(false);
         }
@@ -73,7 +76,7 @@ namespace MagicLeap
         // an interactable object.
         void OnTriggerEnter(Collider other)
         {
-            //Debug.Log("onTriggerEnter");
+            Debug.Log("onTriggerEnter");
             if (other.gameObject.tag == "Interactable") {
                 if (canIGrab == false) {
                     selectedGameObject = other.gameObject;
@@ -98,9 +101,27 @@ namespace MagicLeap
             // handtracking and moving objects
             if (MLHandTracking.IsStarted)
             {
-                transform.position = Hand.Thumb.KeyPoints[2].Position;
-
-                if (GetGesture(Hand, MLHandTracking.HandKeyPose.Thumb))
+                //transform.position = Hand.Thumb.KeyPoints[2].Position;
+                transform.position = Hand.Index.KeyPoints[2].Position;
+                if (GetGesture(Hand, MLHandTracking.HandKeyPose.Ok))
+                {
+                    if (okPoseChanged == true)
+                    {
+                        if (!nearInterface.activeSelf)
+                        {
+                            nearInterface.SetActive(true);
+                            //interf.SetActive(false);
+                        }
+                        else
+                        {
+                            nearInterface.SetActive(false);
+                            //interf.SetActive(true);
+                        }
+                        pose = HandPoses.Ok;
+                        okPoseChanged = false;
+                    }
+                }
+                else if (GetGesture(Hand, MLHandTracking.HandKeyPose.Thumb))
                 {
                     if (thumbPoseChanged == true)
                     {
@@ -127,6 +148,7 @@ namespace MagicLeap
                         //okPoseChanged = false;
                     }
                 }
+                
                 else if (GetGesture(Hand, MLHandTracking.HandKeyPose.C) || GetGesture(Hand, MLHandTracking.HandKeyPose.L))
                 {
                     if (canIGrab)
@@ -167,13 +189,17 @@ namespace MagicLeap
                     prevPosition = null;
                     pose = HandPoses.NoPose;
                     thumbPoseChanged = true;
-                    //okPoseChanged = true;
+                    okPoseChanged = true;
                     if (selectedGameObject && canIGrab == false)
                     {
                         selectedGameObject = null;
                         gameObject.GetComponent<SphereCollider>().radius = 0.01f;
                     }
                 }
+                _indexFinger.position = Hand.Index.KeyPoints[2].Position;
+                _indexFinger.gameObject.SetActive(Hand.IsVisible);
+                //indexTip.transform.position = Hand.Index.KeyPoints[2].Position;
+                //indexTip.SetActive(Hand.IsVisible);
             }
         }
 

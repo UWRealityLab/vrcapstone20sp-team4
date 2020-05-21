@@ -283,7 +283,7 @@ public class MainScheduler : MonoBehaviour
         }
         SelectedRecipe = name;
         string path = allTutorials[name]["pathToXml"][0];
-        if ()
+        if (!tutorialStarts)
         {
             loadSelectedWithXml(path);
         }

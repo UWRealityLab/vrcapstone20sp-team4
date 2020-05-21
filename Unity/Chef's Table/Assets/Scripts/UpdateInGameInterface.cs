@@ -7,16 +7,20 @@ using TMPro;
 public class UpdateInGameInterface : MonoBehaviour
 {
     private MainScheduler mainScheduler;
-    private TextMeshProUGUI instructionText;
-    private TextMeshProUGUI clock;
+    private TextMeshProUGUI instructionTextFloatingInterf;
+    private TextMeshPro instructionTextNearMenu;
+    private TextMeshProUGUI clockFloatingInterf;
+    private TextMeshPro clockNearMenu;
     private GameObject gameInterface;
 
     // Start is called before the first frsame update
     void Start()
     {
         mainScheduler = GameObject.Find("Scheduler").GetComponent<MainScheduler>();
-        instructionText = GameObject.Find("Interf/InstructionCanvas/Instructions").GetComponent<TextMeshProUGUI>();
-        clock = GameObject.Find("Interf/TimerInterface/ClockText").GetComponent<TextMeshProUGUI>();
+        instructionTextFloatingInterf = GameObject.Find("Interf/InstructionCanvas/Instructions").GetComponent<TextMeshProUGUI>();
+        instructionTextNearMenu = GameObject.Find("NearInterface/InstructionPanel/Instruction").GetComponent<TextMeshPro>();
+        clockFloatingInterf = GameObject.Find("Interf/TimerInterface/ClockText").GetComponent<TextMeshProUGUI>();
+        clockNearMenu = GameObject.Find("NearInterface/InstructionPanel/Clock").GetComponent<TextMeshPro>();
         gameInterface = GameObject.Find("Interf");
         gameInterface.SetActive(false);
     }
@@ -31,7 +35,9 @@ public class UpdateInGameInterface : MonoBehaviour
         if (!gameInterface.activeSelf) {
             gameInterface.SetActive(true);
         }
-        instructionText.text = info["description"][0];
-        clock.text = info["timer"][0];
+        instructionTextFloatingInterf.text = info["description"][0];
+        clockFloatingInterf.text = info["timer"][0];
+        instructionTextNearMenu.text = info["description"][0];
+        clockNearMenu.text = info["timer"][0];
     }
 }

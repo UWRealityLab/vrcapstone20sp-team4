@@ -1,138 +1,97 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.XR.MagicLeap;
-public class Control : MonoBehaviour
-{
 
-    #region Public Variables  
-    public enum Mode { LOOSE, SOFT, HARD };
-    public Mode WorldMode;
-    public Material FrameMat;
-    public GameObject WorldCanvas;
-    public GameObject HandMenu;
-    public GameObject Light;
-    public GameObject Camera;
-    #endregion
+public class Control : MonoBehaviour {
+   #region Public Variables 
+   public enum ButtonStates { 
+	   Normal, 
+	   Pressed, 
+	   JustReleased
+   };
+   public ButtonStates BtnState;  
+   #endregion
 
-    #region Private Variables
-    private HeadLockScript _headlock;
-    private const float _triggerThreshold = 0.2f;
-    private const float _rotspeed = 10.0f;
-    private bool _triggerPressed = false;
-    private MLInputController _control;
-    #endregion
+   #region Private Variables
+   private const float TIME_MESH_SCANNING_TOGGLE = 3.0f;
+   private bool _held = false;
+   private float _startTime = 0.0f;
+   private MeshingScript _meshing;
+   #endregion
 
-    #region Unity Methods
-    private void Start()
-    {
-        // Get the HeadLockScript script
-        _headlock = GetComponentInChildren<HeadLockScript>();
-        // Setup and Start Magic Leap input and add a button event (will be used for the HomeTap)
-        MLInput.Start();
-        MLInput.OnControllerButtonUp += OnButtonUp;
-        _control = MLInput.GetController(MLInput.Hand.Left);
-        // Reset the scene
-        Reset();
-    }
-    private void Update()
-    {
-        // Check the inputs and update the scene
-        CheckControl();
+   #region Unity Methods
+   private void Start() {
+       // Start input
+       MLInput.Start();
 
-        // Update the head lock state
-        CheckStates();
+       // Add button callbacks
+       MLInput.OnControllerButtonDown += HandleOnButtonDown;
+       MLInput.OnControllerButtonUp += HandleOnButtonUp;
 
-        // Update the HandMenu model and light
-        HandMenuRotationAndLight();
-    }
-    private void OnDestroy()
-    {
-        MLInput.OnControllerButtonUp -= OnButtonUp;
-        MLInput.Stop();
-    }
-    #endregion
+       // Assign meshing component
+       _meshing = GetComponent<MeshingScript>();
 
-    #region Private Methods
-    /// CheckStates
-    /// Switch headlock mode depending on the world mode
-    ///
-    private void CheckStates()
-    {
-        if (WorldMode == Mode.LOOSE)
-        {
-            _headlock.HeadLock(WorldCanvas, 1.75f);
-            FrameMat.color = Color.red;
-        }
-        else if (WorldMode == Mode.SOFT)
-        {
-            _headlock.HeadLock(WorldCanvas, 5.0f);
-            FrameMat.color = Color.green;
-        }
-        else
-        {
-            _headlock.HardHeadLock(WorldCanvas);
-            FrameMat.color = Color.blue;
-        }
-    }
+       // Initial State of the Control is Normal
+       BtnState = ButtonStates.Normal;
+   }
 
-    /// HandMenuRotationAndLight
-    /// Rotate the HandMenu model and set the position and rotation of the light
-    ///
-    private void HandMenuRotationAndLight()
-    {
-        HandMenu.transform.Rotate(Vector3.up, -_rotspeed * Time.deltaTime);
-        Light.transform.position = Camera.transform.position;
-        Light.transform.rotation = Camera.transform.rotation;
-    }
+   private void OnDestroy() {
+       // Stop input
+       MLInput.Stop();
 
-    /// Reset
-    /// Resets the scene back to the starting Instruction screen
-    ///    
-    private void Reset()
-    {
-        WorldMode = Mode.LOOSE;
-    }
+       // Remove button callbacks
+       MLInput.OnControllerButtonDown -= HandleOnButtonDown;
+       MLInput.OnControllerButtonUp -= HandleOnButtonUp;
+   }
 
-    /// CheckControl
-    /// Monitor the trigger input to "increment" the  world mode
-    ///
-    private void CheckControl()
-    {
-        if (_control.TriggerValue > _triggerThreshold)
-        {
-            _triggerPressed = true;
-        }
-        else if (_control.TriggerValue == 0.0f && _triggerPressed)
-        {
-            _triggerPressed = false;
-            if (WorldMode == Mode.LOOSE)
-            {
-                WorldMode = Mode.SOFT;
-            }
-            else if (WorldMode == Mode.SOFT)
-            {
-                WorldMode = Mode.HARD;
-            }
-            else
-            {
-                WorldMode = Mode.LOOSE;
-            }
-        }
-    }
+   private void Update() {
+    //    // Bumper button held down - toggle scanning if timer reaches max
+    //    if (GetTime() >= TIME_MESH_SCANNING_TOGGLE && BtnState == ButtonStates.Pressed) {
+    //        _held = true;  
+    //        _startTime = Time.time;
+    //        _meshing.ToggleMeshScanning();               
+    //    }
+       // Bumper was just released - toggle visibility
+       if (BtnState == ButtonStates.JustReleased) {
+             BtnState = ButtonStates.Normal;
+             _startTime = 0.0f;
+             if (!_held) {
+                _meshing.ToggleMeshVisibility();         
+             } 
+             else {
+                _held = false;
+             }
+       }
+   }
+   #endregion
 
-    /// OnButtonUp
-    /// Button event - reset scene when home button is tapped
-    ///
-    private void OnButtonUp(byte controller_id, MLInputControllerButton button)
-    {
-        if (button == MLInputControllerButton.HomeTap)
-        {
-            Reset();
-        }
-    }
-    #endregion
+   #region Private Methods
+   public float GetTime()  {
+       float returnTime = -1.0f;
+       if (_startTime > 0.0f) {
+           returnTime = Time.time - _startTime;
+       }
+       return returnTime;
+   }
+   #endregion
+
+   #region Event Handlers
+   void HandleOnButtonUp(byte controller_id, MLInput.Controller.Button button) {
+       // Callback - Button Up
+       if (button == MLInput.Controller.Button.Bumper) {
+           BtnState = ButtonStates.JustReleased;
+       }
+   }
+
+   void HandleOnButtonDown(byte controller_id, MLInput.Controller.Button button) {
+       // Callback - Button Down
+       if (button == MLInput.Controller.Button.Bumper) {
+           // Start bumper timer
+            // _startTime = Time.time;
+           BtnState = ButtonStates.Pressed;
+       }
+   }
+   #endregion
 }
-
 
