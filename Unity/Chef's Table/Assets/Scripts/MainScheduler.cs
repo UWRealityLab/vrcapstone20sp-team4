@@ -32,6 +32,17 @@ public class MainScheduler : MonoBehaviour
     private Dictionary<string, Dictionary<string, List<string>>> allTutorials = new Dictionary<string, Dictionary<string, List<string>>>();
     public float animationDistance = 0.0f;
 
+    // simply reset everything.
+    public void reset()
+    {
+        tutorial.Clear();
+        memory.Clear();
+        indexTable.Clear();
+        timerStatus.Clear();
+        stepIndex = 0;
+        tutorialStarts = false;
+        updateAnimation = true;
+    }
 
     public void addToTimer()
     {
@@ -272,7 +283,11 @@ public class MainScheduler : MonoBehaviour
         }
         SelectedRecipe = name;
         string path = allTutorials[name]["pathToXml"][0];
-        loadSelectedWithXml(path);
+        if ()
+        {
+            loadSelectedWithXml(path);
+        }
+        
         tutorialStarts = true;
     }
 
@@ -291,7 +306,7 @@ public class MainScheduler : MonoBehaviour
             double quantity = Double.Parse(attributesCollection.GetNamedItem("quantity").Value);
             string unit = attributesCollection.GetNamedItem("unit").Value;
             Ingredient ing = new Ingredient(name, quantity, unit);
-            applicationScript.name2Ingredient.Add(name, ing);
+            // applicationScript.name2Ingredient.Add(name, ing);
         }
 
         XmlNodeList utensilsList = doc.DocumentElement.GetElementsByTagName("utensil");
@@ -300,7 +315,7 @@ public class MainScheduler : MonoBehaviour
             XmlAttributeCollection attributesCollection = utensilsList[i].Attributes;
             string name = attributesCollection.GetNamedItem("name").Value;
             Utensil uten = new Utensil(name);
-            applicationScript.name2Utensil.Add(name, uten);
+            // applicationScript.name2Utensil.Add(name, uten);
         }
 
         XmlNodeList substepList = doc.DocumentElement.GetElementsByTagName("substep");
@@ -320,6 +335,7 @@ public class MainScheduler : MonoBehaviour
             substeps.Add(substep);
             substepsMem.Add(timer);
             indexTable.Add(name, thisSeqNum);
+            Debug.Log(name);
             while (i + 1 < substepList.Count)
             {
                 XmlAttributeCollection nextAttributesCollection = substepList[i + 1].Attributes;
