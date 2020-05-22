@@ -35,7 +35,9 @@ namespace MagicLeap
         private GameObject onboarding;
         private bool thumbPoseChanged = false;
         private bool okPoseChanged = false;
-        
+        private MainScheduler mainScheduler;
+        private GameObject simulationInterface;
+
 
         private MLHandTracking.Hand Hand
         {
@@ -61,6 +63,8 @@ namespace MagicLeap
             interf = GameObject.Find("Interf");
             nearInterface = GameObject.Find("NearInterface");
             onboarding = GameObject.Find("OnBoardingInterface");
+            mainScheduler = GameObject.Find("Scheduler").GetComponent<MainScheduler>();
+            simulationInterface = GameObject.Find("SimulationInterface");
             //interf.SetActive(false);
         }
 
@@ -107,16 +111,32 @@ namespace MagicLeap
                 {
                     if (okPoseChanged == true)
                     {
-                        if (!nearInterface.activeSelf)
+                        Dictionary<string, List<string>> info = mainScheduler.getCurrentStepInfo();
+                        if (info != null)
                         {
-                            nearInterface.SetActive(true);
-                            //interf.SetActive(false);
+                            if (!nearInterface.activeSelf)
+                            {
+                                nearInterface.SetActive(true);
+                                //interf.SetActive(false);
+                            }
+                            else
+                            {
+                                nearInterface.SetActive(false);
+                                //interf.SetActive(true);
+                            }
+                        } else {
+                            if (!simulationInterface.activeSelf)
+                            {
+                                simulationInterface.SetActive(true);
+                                //interf.SetActive(false);
+                            }
+                            else
+                            {
+                                simulationInterface.SetActive(false);
+                                //interf.SetActive(true);
+                            }
                         }
-                        else
-                        {
-                            nearInterface.SetActive(false);
-                            //interf.SetActive(true);
-                        }
+               
                         pose = HandPoses.Ok;
                         okPoseChanged = false;
                     }

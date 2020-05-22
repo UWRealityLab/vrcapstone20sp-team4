@@ -12,6 +12,9 @@ public class UpdateInGameInterface : MonoBehaviour
     private TextMeshProUGUI clockFloatingInterf;
     private TextMeshPro clockNearMenu;
     private GameObject gameInterface;
+    private GameObject nearInterface;
+    GameObject simulationInterface;
+    GameObject cuttingSimulation;
 
     // Start is called before the first frsame update
     void Start()
@@ -22,7 +25,13 @@ public class UpdateInGameInterface : MonoBehaviour
         clockFloatingInterf = GameObject.Find("Interf/TimerInterface/ClockText").GetComponent<TextMeshProUGUI>();
         clockNearMenu = GameObject.Find("NearInterface/InstructionPanel/Clock").GetComponent<TextMeshPro>();
         gameInterface = GameObject.Find("Interf");
+        nearInterface = GameObject.Find("NearInterface");
         gameInterface.SetActive(false);
+        nearInterface.SetActive(false);
+        simulationInterface = GameObject.Find("SimulationInterface");
+        cuttingSimulation = GameObject.Find("CuttingSimulation");
+        simulationInterface.SetActive(false);
+        cuttingSimulation.SetActive(false);
     }
 
     // Update is called once per frame

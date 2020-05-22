@@ -5,19 +5,49 @@ using UnityEngine;
 public class changeSimulation : MonoBehaviour
 {
     // Start is called before the first frame update
-    public Object prefab;
-    public GameObject SlicedObjects;
-    
-    // Update is called once per frame
-    void clicked()
+    private GameObject slicedObjects;
+    public List<GameObject> prefabs;
+    private int index;
+
+    private void Start()
     {
-        foreach (Transform child in transform)
+        slicedObjects = GameObject.Find("CuttingSimulation/SlicedObject");
+        index = 0;
+    }
+
+    public void nextObject()
+    {
+        index++;
+        if (index == prefabs.Count)
+        {
+            index = 0;
+        }
+        updateObject(prefabs[index]);
+    }
+
+    public void previousObject()
+    {
+        index--;
+        if (index == -1)
+        {
+            index = prefabs.Count - 1;
+        }
+        updateObject(prefabs[index]);
+    }
+
+    public void resetObject()
+    {
+        updateObject(prefabs[index]);
+    }
+
+    private void updateObject(GameObject prefab)
+    {
+        foreach (Transform child in slicedObjects.transform)
         {
             GameObject.Destroy(child.gameObject);
         }
-        GameObject go = (GameObject)Instantiate(prefab, SlicedObjects.transform.position, SlicedObjects.transform.rotation);
-        go.transform.SetParent(SlicedObjects.transform);
-        
+        GameObject go = (GameObject)Instantiate(prefab, slicedObjects.transform.position, slicedObjects.transform.rotation);
+        go.transform.SetParent(slicedObjects.transform);
     }
 }
 
