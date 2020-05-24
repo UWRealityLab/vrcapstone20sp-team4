@@ -14,6 +14,7 @@ public class NearInterfaceButton : MonoBehaviour
     Material highlightMat;
     GameObject text;
     GameObject icon;
+    NIThresholdControl NIControl;
 
     void Start()
     {
@@ -25,9 +26,9 @@ public class NearInterfaceButton : MonoBehaviour
         icon = iconText.transform.Find("Icon").gameObject;
         normalMat = Resources.Load("Mat/BoxMat", typeof(Material)) as Material;
         highlightMat = Resources.Load("Mat/HighlightMat", typeof(Material)) as Material;
-        
+        NIControl = GameObject.Find("HeadLockCanvas").GetComponent<NIThresholdControl>();
     }
-
+    
     private void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Hand")
@@ -40,13 +41,14 @@ public class NearInterfaceButton : MonoBehaviour
     private IEnumerator ShowFeedback()
     {
         text.GetComponent<TextMeshPro>().color = Color.red;
-        icon.GetComponent<Renderer>().material.SetColor("_Color", Color.red);
+
+        if (name != "Lock") icon.GetComponent<Renderer>().material.SetColor("_Color", Color.red);
         transform.parent.gameObject.GetComponent<Renderer>().material = highlightMat;
         GetComponent<Collider>().enabled = false;
         yield return new WaitForSeconds(1.0f);
         GetComponent<Collider>().enabled = true;
         text.GetComponent<TextMeshPro>().color = Color.white;
-        icon.GetComponent<Renderer>().material.SetColor("_Color", Color.white);
+        if (name != "Lock") icon.GetComponent<Renderer>().material.SetColor("_Color", Color.white);
         transform.parent.gameObject.GetComponent<Renderer>().material = normalMat;
     }
 
@@ -92,6 +94,21 @@ public class NearInterfaceButton : MonoBehaviour
         {
             scheduler.subtractFromTimer();
             AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("Minus").transform.position);
+        } 
+        else if (name == "Lock")
+        {
+            NIControl.changeLock();
+            GameObject icon = transform.parent.Find("IconAndText").Find("Icon").gameObject;
+            Renderer rend = icon.GetComponent<Renderer>();
+            if (NIControl.getLock())
+            {
+                // assign different material
+                rend.material.color = Color.red;
+            } else
+            {
+                rend.material.color = Color.blue;
+            }
+            AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("Lock").transform.position);
         }
         else
         {
