@@ -5,15 +5,14 @@ using TMPro;
 
 public class RecipeConfirmButton : MonoBehaviour
 {
-    GameObject simulationInterface;
-    GameObject cuttingSimulation;
-    GameObject onboardingInterface;
+
+    InterfaceManager interfaceManager;
+
     private void Start()
     {
-        simulationInterface = GameObject.Find("SimulationInterface");
-        cuttingSimulation = GameObject.Find("CuttingSimulation");
-        onboardingInterface = GameObject.Find("OnBoardingInterface");
+        interfaceManager = GameObject.Find("InterfaceManager").GetComponent<InterfaceManager>();
     }
+
     public void clicked()
     {
         if (name == "Confirm")
@@ -22,13 +21,14 @@ public class RecipeConfirmButton : MonoBehaviour
             GameObject sche = GameObject.Find("Scheduler");
             MainScheduler ms = sche.GetComponent<MainScheduler>();
             ms.startTutorial(recipe_name);
-            onboardingInterface.SetActive(false);
-            Debug.Log(recipe_name);
+            interfaceManager.setActiveOnboardingInterface(false);
+            interfaceManager.setActiveNearInterface(true);
         } else if (name == "CuttingButton")
         {
-            onboardingInterface.SetActive(false);
-            simulationInterface.SetActive(true);
-            cuttingSimulation.SetActive(true);
+            interfaceManager.setActiveNearInterface(false);
+            interfaceManager.setActiveOnboardingInterface(false);
+            interfaceManager.setActiveCuttingSimulation(true);
+            interfaceManager.setActiveSimulationInterface(true);
         } 
     }
 }

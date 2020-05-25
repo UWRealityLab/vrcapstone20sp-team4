@@ -13,25 +13,19 @@ public class UpdateInGameInterface : MonoBehaviour
     private TextMeshPro clockNearMenu;
     private GameObject gameInterface;
     private GameObject nearInterface;
-    GameObject simulationInterface;
-    GameObject cuttingSimulation;
 
     // Start is called before the first frsame update
-    void Start()
+    void Awake()
     {
         mainScheduler = GameObject.Find("Scheduler").GetComponent<MainScheduler>();
-        instructionTextFloatingInterf = GameObject.Find("Interf/InstructionCanvas/Instructions").GetComponent<TextMeshProUGUI>();
-        instructionTextNearMenu = GameObject.Find("NearInterface/InstructionPanel/Instruction").GetComponent<TextMeshPro>();
-        clockFloatingInterf = GameObject.Find("Interf/TimerInterface/ClockText").GetComponent<TextMeshProUGUI>();
-        clockNearMenu = GameObject.Find("NearInterface/InstructionPanel/Clock").GetComponent<TextMeshPro>();
+        
         gameInterface = GameObject.Find("Interf");
+        instructionTextFloatingInterf = gameInterface.transform.Find("InstructionCanvas/Instructions").GetComponent<TextMeshProUGUI>();
+        clockFloatingInterf = GameObject.Find("Interf/TimerInterface/ClockText").GetComponent<TextMeshProUGUI>();
+        
         nearInterface = GameObject.Find("NearInterface");
-        gameInterface.SetActive(false);
-        nearInterface.SetActive(false);
-        simulationInterface = GameObject.Find("SimulationInterface");
-        cuttingSimulation = GameObject.Find("CuttingSimulation");
-        simulationInterface.SetActive(false);
-        cuttingSimulation.SetActive(false);
+        instructionTextNearMenu = GameObject.Find("NearInterface/InstructionPanel/Instruction").GetComponent<TextMeshPro>();
+        clockNearMenu = GameObject.Find("NearInterface/InstructionPanel/Clock").GetComponent<TextMeshPro>();
     }
 
     // Update is called once per frame
@@ -41,12 +35,17 @@ public class UpdateInGameInterface : MonoBehaviour
         if (info == null) {
             return;
         }
-        if (!gameInterface.activeSelf) {
-            gameInterface.SetActive(true);
+        
+        if (nearInterface.activeSelf)
+        {
+            instructionTextNearMenu.text = info["description"][0];
+            clockNearMenu.text = info["timer"][0];
         }
-        instructionTextFloatingInterf.text = info["description"][0];
-        clockFloatingInterf.text = info["timer"][0];
-        instructionTextNearMenu.text = info["description"][0];
-        clockNearMenu.text = info["timer"][0];
+        
+        if (gameInterface.activeSelf) {
+            instructionTextFloatingInterf.text = info["description"][0];
+            clockFloatingInterf.text = info["timer"][0];
+        }
+        
     }
 }

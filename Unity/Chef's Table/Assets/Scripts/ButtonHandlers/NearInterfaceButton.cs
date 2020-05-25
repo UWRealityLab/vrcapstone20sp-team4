@@ -10,23 +10,24 @@ public class NearInterfaceButton : MonoBehaviour
     MainScheduler scheduler;
     AudioSource buttonClip;
     AudioSource timerClip;
-    Material normalMat;
-    Material highlightMat;
     GameObject text;
     GameObject icon;
     NIThresholdControl NIControl;
+    InterfaceManager interfaceManager;
+    changeSimulation changeSimulationScript;
 
-    void Start()
+    void Awake()
     {
         scheduler = GameObject.Find("Scheduler").GetComponent<MainScheduler>();
+        interfaceManager = GameObject.Find("InterfaceManager").GetComponent<InterfaceManager>();
+        changeSimulationScript = GameObject.Find("CuttingSimulation").GetComponent<changeSimulation>();
         buttonClip = GameObject.Find("Button_Click").GetComponent<AudioSource>();
         timerClip = GameObject.Find("Timer").GetComponent<AudioSource>();
         GameObject iconText = transform.parent.transform.Find("IconAndText").gameObject;
         text = iconText.transform.Find("Text").gameObject;
         icon = iconText.transform.Find("Icon").gameObject;
-        normalMat = Resources.Load("Mat/BoxMat", typeof(Material)) as Material;
-        highlightMat = Resources.Load("Mat/HighlightMat", typeof(Material)) as Material;
         NIControl = GameObject.Find("HeadLockCanvas").GetComponent<NIThresholdControl>();
+
     }
     
     private void OnTriggerEnter(Collider other)
@@ -40,16 +41,26 @@ public class NearInterfaceButton : MonoBehaviour
 
     private IEnumerator ShowFeedback()
     {
-        text.GetComponent<TextMeshPro>().color = Color.red;
-
-        if (name != "Lock") icon.GetComponent<Renderer>().material.SetColor("_Color", Color.red);
-        transform.parent.gameObject.GetComponent<Renderer>().material = highlightMat;
+        if (name != "Lock")
+        {
+            text.GetComponent<TextMeshPro>().color = Color.red;
+            icon.GetComponent<Renderer>().material.SetColor("_Color", Color.red);
+        }
         GetComponent<Collider>().enabled = false;
         yield return new WaitForSeconds(1.0f);
         GetComponent<Collider>().enabled = true;
-        text.GetComponent<TextMeshPro>().color = Color.white;
-        if (name != "Lock") icon.GetComponent<Renderer>().material.SetColor("_Color", Color.white);
-        transform.parent.gameObject.GetComponent<Renderer>().material = normalMat;
+        if (name != "Lock")
+        {
+            text.GetComponent<TextMeshPro>().color = Color.white;
+            icon.GetComponent<Renderer>().material.SetColor("_Color", Color.white);
+        }
+        if (name == "Exit")
+        {
+            interfaceManager.setActiveCuttingSimulation(false);
+            interfaceManager.setActiveSimulationInterface(false);
+            interfaceManager.setActiveNearInterface(false);
+            interfaceManager.setActiveOnboardingInterface(true);
+        }
     }
 
     public void clicked()
@@ -98,19 +109,43 @@ public class NearInterfaceButton : MonoBehaviour
         else if (name == "Lock")
         {
             NIControl.changeLock();
-            GameObject icon = transform.parent.Find("IconAndText").Find("Icon").gameObject;
+            //GameObject icon = transform.parent.Find("IconAndText").Find("Icon").gameObject;
             Renderer rend = icon.GetComponent<Renderer>();
             if (NIControl.getLock())
             {
                 // assign different material
                 rend.material.color = Color.red;
+                text.GetComponent<TextMeshPro>().color = Color.red;
             } else
             {
                 rend.material.color = Color.blue;
+                text.GetComponent<TextMeshPro>().color = Color.blue;
             }
             AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("Lock").transform.position);
         }
-        else
+        else if (name == "SimuNext")
+        {
+            Debug.Log("Next Button, " + name);
+            AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("SimuNext").transform.position);
+            changeSimulationScript.nextObject();
+        }
+        else if (name == "SimuBack")
+        {
+            //Debug.Log("Back Button, " + name);
+            changeSimulationScript.previousObject();
+            AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("SimuBack").transform.position);
+        }
+        else if (name == "SimuReset")
+        {
+            //Debug.Log("Reset Button, " + name);
+            changeSimulationScript.resetObject();
+            AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("SimuReset").transform.position);
+        }
+        else if (name == "Exit") 
+        {
+            AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("Exit").transform.position);
+        }
+        else 
         {
             Debug.Log("Unknown button");
         }

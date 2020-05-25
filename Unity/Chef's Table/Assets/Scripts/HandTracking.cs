@@ -30,14 +30,12 @@ namespace MagicLeap
         private Vector3? prevPosition = null;
         public Transform  ctransform; // Camera's transform
         private GameObject raycast;
-        private GameObject nearInterface;
-        private GameObject interf;
         private GameObject onboarding;
         private bool thumbPoseChanged = false;
         private bool okPoseChanged = false;
         private MainScheduler mainScheduler;
         private GameObject simulationInterface;
-
+        private InterfaceManager interfaceManager;
 
         private MLHandTracking.Hand Hand
         {
@@ -60,12 +58,9 @@ namespace MagicLeap
             MLHandTracking.Start();
             Initialize();
             raycast = GameObject.Find("HandPointer");
-            interf = GameObject.Find("Interf");
-            nearInterface = GameObject.Find("NearInterface");
             onboarding = GameObject.Find("OnBoardingInterface");
             mainScheduler = GameObject.Find("Scheduler").GetComponent<MainScheduler>();
-            simulationInterface = GameObject.Find("SimulationInterface");
-            //interf.SetActive(false);
+            interfaceManager = GameObject.Find("InterfaceManager").GetComponent<InterfaceManager>();
         }
 
         // Clean up.
@@ -114,26 +109,22 @@ namespace MagicLeap
                         Dictionary<string, List<string>> info = mainScheduler.getCurrentStepInfo();
                         if (info != null)
                         {
-                            if (!nearInterface.activeSelf)
+                            if (!interfaceManager.isActiveNearInterface())
                             {
-                                nearInterface.SetActive(true);
-                                //interf.SetActive(false);
+                                interfaceManager.setActiveNearInterface(true);
                             }
                             else
                             {
-                                nearInterface.SetActive(false);
-                                //interf.SetActive(true);
+                                interfaceManager.setActiveNearInterface(false);
                             }
-                        } else {
-                            if (!simulationInterface.activeSelf)
+                        } else if (interfaceManager.isActiveCuttingSimulation()) {
+                            if (!interfaceManager.isActiveSimulationInterface())
                             {
-                                simulationInterface.SetActive(true);
-                                //interf.SetActive(false);
+                                interfaceManager.setActiveSimulationInterface(true);
                             }
                             else
                             {
-                                simulationInterface.SetActive(false);
-                                //interf.SetActive(true);
+                                interfaceManager.setActiveSimulationInterface(false);
                             }
                         }
                
@@ -157,13 +148,14 @@ namespace MagicLeap
                         thumbPoseChanged = false;
                     }
                 }
+                
                 else if (GetGesture(Hand, MLHandTracking.HandKeyPose.OpenHand))
                 {
                     //if (okPoseChanged == true)
                     if (raycast.activeSelf) 
                     {
                         //pose = HandPoses.Ok;
-                        interf.GetComponent<PlaceInFront>().Place();
+                        //interf.GetComponent<PlaceInFront>().Place();
                         onboarding.GetComponent<PlaceInFront>().Place();
                         //okPoseChanged = false;
                     }
@@ -203,7 +195,7 @@ namespace MagicLeap
                     {
                         selectedGameObject.transform.position = transform.position;
                         // This is so that the object wont leave our hand while we're dragging it.
-                        gameObject.GetComponent<SphereCollider>().radius = 0.2f;
+                        gameObject.GetComponent<SphereCollider>().radius = 0.04f;
                     }
                 } else {
                     prevPosition = null;

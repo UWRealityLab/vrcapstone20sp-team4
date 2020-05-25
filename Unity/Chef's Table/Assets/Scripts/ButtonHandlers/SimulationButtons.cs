@@ -6,26 +6,22 @@ using TMPro;
 
 public class SimulationButtons : MonoBehaviour
 {
-    GameObject onboardingInterface;
     AudioSource buttonClip;
     changeSimulation changeSimulationScript;
-    GameObject cuttingSimulation;
-    GameObject simulationInterface;
     GameObject text;
     GameObject icon;
+    InterfaceManager interfaceManager;
 
     // Start is called before the first frame update
     void Start()
     {
         buttonClip = GameObject.Find("Button_Click").GetComponent<AudioSource>();
         changeSimulationScript = GameObject.Find("CuttingSimulation").GetComponent<changeSimulation>();
-        onboardingInterface = GameObject.Find("OnBoardingInterface");
-        cuttingSimulation = GameObject.Find("CuttingSimulation");
-        simulationInterface = GameObject.Find("SimulationInterface");
         buttonClip = GameObject.Find("Button_Click").GetComponent<AudioSource>();
         GameObject iconText = transform.parent.transform.Find("IconAndText").gameObject;
         text = iconText.transform.Find("Text").gameObject;
         icon = iconText.transform.Find("Icon").gameObject;
+        interfaceManager = GameObject.Find("InterfaceManager").GetComponent<InterfaceManager>();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -39,20 +35,24 @@ public class SimulationButtons : MonoBehaviour
 
     private IEnumerator ShowFeedback()
     {
-        text.GetComponent<TextMeshPro>().color = Color.red;
-        icon.GetComponent<Renderer>().material.SetColor("_Color", Color.red);
-        //transform.parent.gameObject.GetComponent<Renderer>().material = highlightMat;
+        if (name != "Lock")
+        {
+            text.GetComponent<TextMeshPro>().color = Color.red;
+            icon.GetComponent<Renderer>().material.SetColor("_Color", Color.red);
+        }
         GetComponent<Collider>().enabled = false;
         yield return new WaitForSeconds(1.0f);
         GetComponent<Collider>().enabled = true;
-        text.GetComponent<TextMeshPro>().color = Color.white;
-        icon.GetComponent<Renderer>().material.SetColor("_Color", Color.white);
-        //transform.parent.gameObject.GetComponent<Renderer>().material = normalMat;
+        if (name != "Lock")
+        {
+            text.GetComponent<TextMeshPro>().color = Color.white;
+            icon.GetComponent<Renderer>().material.SetColor("_Color", Color.white);
+        }
         if (name == "Exit")
         {
-            onboardingInterface.SetActive(true);
-            cuttingSimulation.SetActive(false);
-            simulationInterface.SetActive(false);
+            interfaceManager.setActiveCuttingSimulation(false);
+            interfaceManager.setActiveSimulationInterface(false);
+            interfaceManager.setActiveOnboardingInterface(true);
         }
     }
 
