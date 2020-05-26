@@ -9,8 +9,6 @@ public class MainScheduler : MonoBehaviour
 {
     // Start is called before the first frame update
 
-    GameObject applicationState;
-    ApplicationState applicationScript;
 
     // for bookkeeping and manipulation
     private List<List<Step>> tutorial = new List<List<Step>>();
@@ -19,8 +17,13 @@ public class MainScheduler : MonoBehaviour
     private int stepIndex = 0;
     private List<bool> timerStatus = new List<bool>(); // 0 for pause, 1 for start, 0 by default
 
+    // for statistic
+    private string chosenRecipe = "";
+    private float totalTime = 0;
+
     // global states
     private bool tutorialStarts = false; // indicate if a user has choosen a tutorial
+    private bool tutorialFinish = false;
     private bool updateAnimation = true; // indicate if a new animation need to be played, change whenvever user move to a new step
     private string SelectedRecipe;
     public GameObject animationPlaySpace;
@@ -41,8 +44,11 @@ public class MainScheduler : MonoBehaviour
         timerStatus.Clear();
         stepIndex = 0;
         tutorialStarts = false;
+        tutorialFinish = false;
         updateAnimation = true;
-    }
+        chosenRecipe = "";
+        totalTime = 0;
+}
 
     public void addToTimer()
     {
@@ -79,6 +85,19 @@ public class MainScheduler : MonoBehaviour
             }
         }
         timerStatus[stepIndex] = status == 1 ? true : false;
+    }
+
+    public bool isTutorialDone()
+    {
+        return tutorialFinish;
+    }
+
+    public List<string> getSummary()
+    {
+        List<String> res = new List<string>();
+        res.Add(chosenRecipe);
+        res.Add(GetTimeSpanWithSec(totalTime));
+        return res;
     }
 
     // return a map of all info of the current step, null if no tutorial is selected
@@ -298,6 +317,9 @@ public class MainScheduler : MonoBehaviour
         XmlDocument doc = new XmlDocument();
         TextAsset textAsset = (TextAsset)Resources.Load(path);
         doc.LoadXml(textAsset.text);
+        // XmlNode tutorialName = doc.DocumentElement.GetElementsByTagName("tutorial")[0];
+        // chosenRecipe = tutorialName.Attributes.GetNamedItem("name").Value;
+        chosenRecipe = "Breakfast Burrito";
         XmlNodeList ingredientList = doc.DocumentElement.GetElementsByTagName("ingredient");
         for (int i = 0; i < ingredientList.Count; i++)
         {
@@ -383,9 +405,6 @@ public class MainScheduler : MonoBehaviour
 
     void Start()
     {
-        applicationState = GameObject.Find("ApplicationState");
-        applicationScript = applicationState.GetComponent<ApplicationState>();
-        //previewAllTutorial();
     }
 
     // Update is called once per frame
@@ -393,6 +412,11 @@ public class MainScheduler : MonoBehaviour
     {
         if (tutorialStarts)
         {
+            if (!tutorialFinish)
+            {
+                totalTime += Time.deltaTime;
+            }
+            
             List<Step> curr = tutorial[stepIndex];
             curr.ForEach(timerUpdate);
             if (checkCompletion(curr))
@@ -402,8 +426,15 @@ public class MainScheduler : MonoBehaviour
 
             }
             handleAnimationUpdates();
+            if (stepIndex == tutorial.Count - 1)
+            {
+                tutorialFinish = true;
+            } else
+            {
+                tutorialFinish = false;
+            }
         }
-
+        
 
     }
 

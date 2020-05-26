@@ -13,6 +13,7 @@ public class UpdateInGameInterface : MonoBehaviour
     private TextMeshPro clockNearMenu;
     private GameObject gameInterface;
     private GameObject nearInterface;
+    private TextMeshPro ExitOrComplete;
 
     // Start is called before the first frsame update
     void Awake()
@@ -26,6 +27,7 @@ public class UpdateInGameInterface : MonoBehaviour
         nearInterface = GameObject.Find("NearInterface");
         instructionTextNearMenu = GameObject.Find("NearInterface/InstructionPanel/Instruction").GetComponent<TextMeshPro>();
         clockNearMenu = GameObject.Find("NearInterface/InstructionPanel/Clock").GetComponent<TextMeshPro>();
+        ExitOrComplete = GameObject.Find("NearInterface/ExitOrComplete/IconAndText/Text").GetComponent<TextMeshPro>();
     }
 
     // Update is called once per frame
@@ -40,6 +42,15 @@ public class UpdateInGameInterface : MonoBehaviour
         {
             instructionTextNearMenu.text = info["description"][0];
             clockNearMenu.text = info["timer"][0];
+            // TODO: add done and exit switch
+            if (mainScheduler.isTutorialDone())
+            {
+                ExitOrComplete.text = "Complete";
+            }
+            else
+            {
+                ExitOrComplete.text = "Exit";
+            }
         }
         
         if (gameInterface.activeSelf) {
