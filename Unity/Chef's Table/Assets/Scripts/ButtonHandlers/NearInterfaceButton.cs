@@ -145,6 +145,16 @@ public class NearInterfaceButton : MonoBehaviour
         {
             AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("Exit").transform.position);
         }
+        else if (name == "SwitchSimulationMode")
+        {
+            AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("SwitchSimulationMode").transform.position);
+            changeSimulationScript.resetMode();
+        } 
+        else if (name == "AddIngredients")
+        {
+            AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("AddIngredients").transform.position);
+            changeSimulationScript.addIngredients();
+        }
         else 
         {
             Debug.Log("Unknown button");

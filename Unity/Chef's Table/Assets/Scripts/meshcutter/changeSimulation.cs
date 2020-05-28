@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine.Video;
 using UnityEngine;
@@ -6,22 +7,36 @@ using UnityEngine;
 public class changeSimulation : MonoBehaviour
 {
     // Start is called before the first frame update
-    private GameObject slicedObjects;
-    public List<GameObject> prefabs;
-    public List<VideoClip> videos; // indice must match with prefabs
+    // split into mode cut and stir
+    private string mode = "cut"; // cut or skillet
+
+    // cutting mode 
+    public GameObject cuttingSimulation;
+
+
+    // skillet mode
+    public GameObject skilletSimulation;
+    // common
     public GameObject mainCam;
     private int index;
     private GameObject videoScreen;
     private VideoPlayer vp;
+    private List<GameObject> active_prefabs;
+    private List<VideoClip> active_videos;
+    public List<GameObject> cut_prefabs;
+    public List<VideoClip> cut_videos; // indice must match with prefabs
+    public List<GameObject> ingredient_prefabs;
+    public List<VideoClip> skillet_videos;
 
-    private void Start()
+    void Start()
     {
-        slicedObjects = GameObject.Find("CuttingSimulation/SlicedObject");
+        
         videoScreen = GameObject.Find("SimulationVideoScreen");
         vp = videoScreen.transform.Find("Screen").GetComponent<VideoPlayer>();
         
         index = 0;
     }
+
 
     void Update()
     {
@@ -29,14 +44,38 @@ public class changeSimulation : MonoBehaviour
         
     }
 
+    void OnEnable()
+    {
+        resetMode();
+    }
+    public void resetMode()
+    {
+        if (mode == "skillet")
+        {
+            active_prefabs = cut_prefabs;
+            active_videos = cut_videos;
+            cuttingSimulation.SetActive(true);
+            skilletSimulation.SetActive(false);
+            mode = "cut";
+        } else
+        {
+            active_prefabs = ingredient_prefabs;
+            active_videos = skillet_videos;
+            cuttingSimulation.SetActive(false);
+            skilletSimulation.SetActive(true);
+            mode = "skillet";
+        }
+        index = 0;
+    }
+
     public void nextObject()
     {
         index++;
-        if (index == prefabs.Count)
+        if (index == active_prefabs.Count)
         {
             index = 0;
         }
-        updateObject(prefabs[index]);
+        updateObject(active_prefabs[index]);
     }
 
     public void previousObject()
@@ -44,25 +83,67 @@ public class changeSimulation : MonoBehaviour
         index--;
         if (index == -1)
         {
-            index = prefabs.Count - 1;
+            index = active_prefabs.Count - 1;
         }
-        updateObject(prefabs[index]);
+        updateObject(active_prefabs[index]);
     }
 
     public void resetObject()
     {
-        updateObject(prefabs[index]);
+        if (mode == "skillet")
+        {
+            GameObject spawn = GameObject.Find("CuttingSimulation/skilletSimulation/Skillet/spawn");
+            foreach (Transform child in spawn.transform)
+            {
+                GameObject.Destroy(child.gameObject);
+            }
+        } else
+        {
+            updateObject(active_prefabs[index]);
+        }
+        
+    }
+
+    public void addIngredients()
+    {
+        if (mode == "skillet")
+        {
+            GameObject spawn = GameObject.Find("CuttingSimulation/skilletSimulation/Skillet/spawn");
+            System.Random r = new System.Random();
+            int range = r.Next(2, 4);
+            
+            for (int i = 0; i < range; i++)
+            {
+                float local_offset = (float) (r.NextDouble() * 0.2 -  0.1);
+                Vector3 rv = new Vector3(local_offset, local_offset, local_offset);
+                GameObject go = (GameObject)Instantiate(active_prefabs[index], spawn.transform.position + rv, spawn.transform.rotation);
+                go.transform.SetParent(spawn.transform);
+            }
+            
+        }
     }
 
     private void updateObject(GameObject prefab)
     {
-        vp.clip = videos[index]; // update video played
-        foreach (Transform child in slicedObjects.transform)
+        if (index >=0 && index < active_videos.Count)
         {
-            GameObject.Destroy(child.gameObject);
+            vp.clip = active_videos[index]; // update video played
         }
-        GameObject go = (GameObject)Instantiate(prefab, slicedObjects.transform.position, slicedObjects.transform.rotation);
-        go.transform.SetParent(slicedObjects.transform);
+        
+        if (mode == "cut")
+        {
+             GameObject slicedObjects = GameObject.Find("CuttingSimulation/cuttingSimulation/SlicedObject");
+            foreach (Transform child in slicedObjects.transform)
+            {
+                GameObject.Destroy(child.gameObject);
+            }
+            GameObject go = (GameObject)Instantiate(prefab, slicedObjects.transform.position, slicedObjects.transform.rotation);
+            go.transform.SetParent(slicedObjects.transform);
+        } 
+        // for skillet simulation, updates are done in reset and addingredients
+
     }
+
+
 }
 
