@@ -56,10 +56,17 @@ public class NearInterfaceButton : MonoBehaviour
         }
         if (name == "Exit")
         {
-            interfaceManager.setActiveCuttingSimulation(false);
-            interfaceManager.setActiveSimulationInterface(false);
-            interfaceManager.setActiveNearInterface(false);
-            interfaceManager.setActiveOnboardingInterface(true);
+            //interfaceManager.setActiveCuttingSimulation(false);
+            //interfaceManager.setActiveSimulationInterface(false);
+            //interfaceManager.setActiveNearInterface(false);
+            //interfaceManager.setActiveOnboardingInterface(true);
+            if (interfaceManager.isActiveSimulationInterface())
+            {
+                interfaceManager.exitSimulation();
+            } else
+            {
+                interfaceManager.endTutorialGeneral();
+            }
         }
     }
 

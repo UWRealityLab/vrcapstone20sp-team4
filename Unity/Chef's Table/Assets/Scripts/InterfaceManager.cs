@@ -122,6 +122,7 @@ public class InterfaceManager : MonoBehaviour
     {
         if (startCountDown)
         {
+            Debug.Log("reach here");
             completeRedirectTimer -= Time.deltaTime;
 
             if (completeRedirectTimer < 0)
