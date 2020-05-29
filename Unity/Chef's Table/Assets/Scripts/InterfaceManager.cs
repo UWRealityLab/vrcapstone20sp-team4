@@ -8,6 +8,7 @@ public class InterfaceManager : MonoBehaviour
     GameObject nearInterface;
     GameObject simulationInterface;
     GameObject onboardingInterface;
+    GameObject nearOnboardingInterface;
     GameObject cuttingSimulation;
     GameObject floatingInterface;
     GameObject summary; // for completion page
@@ -21,6 +22,7 @@ public class InterfaceManager : MonoBehaviour
         nearInterface = GameObject.Find("NearInterface");
         simulationInterface = GameObject.Find("SimulationInterface");
         onboardingInterface = GameObject.Find("OnBoardingInterface");
+        nearOnboardingInterface = GameObject.Find("NearOnboardingInterface");
         cuttingSimulation = GameObject.Find("CuttingSimulation");
         floatingInterface = GameObject.Find("Interf");
         ms = GameObject.Find("Scheduler").GetComponent<MainScheduler>();
@@ -51,7 +53,8 @@ public class InterfaceManager : MonoBehaviour
 
     public void setActiveOnboardingInterface(bool b)
     {
-        onboardingInterface.SetActive(b);
+        //onboardingInterface.SetActive(b);
+        nearOnboardingInterface.SetActive(b);
     }
 
     public void setActiveFloatingInterface(bool b)
@@ -71,7 +74,8 @@ public class InterfaceManager : MonoBehaviour
 
     public bool isActiveOnboardingInterface()
     {
-        return onboardingInterface.activeSelf;
+        //return onboardingInterface.activeSelf;
+        return nearOnboardingInterface.activeSelf;
     }
 
     public bool isActiveNearInterface()

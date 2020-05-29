@@ -13,6 +13,7 @@ public class NearInterfaceButton : MonoBehaviour
     GameObject text;
     GameObject icon;
     NIThresholdControl NIControl;
+    NOIControl NOnboardControl;
     InterfaceManager interfaceManager;
     changeSimulation changeSimulationScript;
 
@@ -27,6 +28,7 @@ public class NearInterfaceButton : MonoBehaviour
         text = iconText.transform.Find("Text").gameObject;
         icon = iconText.transform.Find("Icon").gameObject;
         NIControl = GameObject.Find("HeadLockCanvas").GetComponent<NIThresholdControl>();
+        NOnboardControl = GameObject.Find("NearOnboardingInterface").GetComponent<NOIControl>();
 
     }
     
@@ -112,7 +114,7 @@ public class NearInterfaceButton : MonoBehaviour
         {
             scheduler.subtractFromTimer();
             AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("Minus").transform.position);
-        } 
+        }
         else if (name == "Lock")
         {
             NIControl.changeLock();
@@ -123,7 +125,8 @@ public class NearInterfaceButton : MonoBehaviour
                 // assign different material
                 rend.material.color = Color.red;
                 text.GetComponent<TextMeshPro>().color = Color.red;
-            } else
+            }
+            else
             {
                 rend.material.color = Color.blue;
                 text.GetComponent<TextMeshPro>().color = Color.blue;
@@ -148,7 +151,7 @@ public class NearInterfaceButton : MonoBehaviour
             changeSimulationScript.resetObject();
             AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("SimuReset").transform.position);
         }
-        else if (name == "Exit") 
+        else if (name == "Exit")
         {
             AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("Exit").transform.position);
         }
@@ -156,13 +159,41 @@ public class NearInterfaceButton : MonoBehaviour
         {
             AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("SwitchSimulationMode").transform.position);
             changeSimulationScript.resetMode();
-        } 
+        }
         else if (name == "AddIngredients")
         {
             AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("AddIngredients").transform.position);
             changeSimulationScript.addIngredients();
         }
-        else 
+        else if (name == "OnboardNext")
+        {
+            NOnboardControl.nextRecipe();
+            AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("OnboardNext").transform.position);
+        }
+        else if (name == "OnboardBack")
+        {
+            NOnboardControl.prevRecipe();
+            AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("OnboardBack").transform.position);
+        }
+        else if (name == "CuttingSimu")
+        {
+            interfaceManager.setActiveNearInterface(false);
+            interfaceManager.setActiveOnboardingInterface(false);
+            interfaceManager.setActiveCuttingSimulation(true);
+            interfaceManager.setActiveSimulationInterface(true);
+            AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("CuttingSimu").transform.position);
+        }
+        else if (name == "OnboardStart")
+        {
+            NOnboardControl.confirm();
+            AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("OnboardStart").transform.position);
+        }
+        else if (name == "OnboardReset")
+        {
+            NOnboardControl.enableRecipe();
+            AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("OnboardReset").transform.position);
+        }
+        else
         {
             Debug.Log("Unknown button");
         }
