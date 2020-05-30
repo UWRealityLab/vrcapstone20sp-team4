@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Threading;
 
 public class NearInterfaceButton : MonoBehaviour
 {
@@ -13,9 +14,12 @@ public class NearInterfaceButton : MonoBehaviour
     GameObject text;
     GameObject icon;
     NIThresholdControl NIControl;
-    NOIControl NOnboardControl;
     InterfaceManager interfaceManager;
     changeSimulation changeSimulationScript;
+    private bool timerPaused = true;
+    private GameObject playButton;
+    private Material startButton;
+    private Material pauseButton;
 
     void Awake()
     {
@@ -25,18 +29,32 @@ public class NearInterfaceButton : MonoBehaviour
         buttonClip = GameObject.Find("Button_Click").GetComponent<AudioSource>();
         timerClip = GameObject.Find("Timer").GetComponent<AudioSource>();
         GameObject iconText = transform.parent.transform.Find("IconAndText").gameObject;
-        text = iconText.transform.Find("Text").gameObject;
+        //text = iconText.transform.Find("Text").gameObject;
         icon = iconText.transform.Find("Icon").gameObject;
         NIControl = GameObject.Find("HeadLockCanvas").GetComponent<NIThresholdControl>();
-        NOnboardControl = GameObject.Find("NearOnboardingInterface").GetComponent<NOIControl>();
-
+        playButton = GameObject.Find("PlayButton").transform.Find("Start").gameObject;
+        startButton = Resources.Load("Mat/ButtonStartMat", typeof(Material)) as Material;
+        pauseButton = Resources.Load("Mat/ButtonPauseMat", typeof(Material)) as Material;
     }
-    
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Hand")
         {
             GetComponent<Button>().onClick.Invoke();
+            if (name == "Start") return;
+            if (name == "Exit")
+            {
+                if (interfaceManager.isActiveSimulationInterface())
+                {
+                    interfaceManager.exitSimulation();
+                }
+                else
+                {
+                    interfaceManager.endTutorialGeneral();
+                }
+                return;
+            }
             StartCoroutine(ShowFeedback());
         }
     }
@@ -45,7 +63,6 @@ public class NearInterfaceButton : MonoBehaviour
     {
         if (name != "Lock")
         {
-            text.GetComponent<TextMeshPro>().color = Color.red;
             icon.GetComponent<Renderer>().material.SetColor("_Color", Color.red);
         }
         GetComponent<Collider>().enabled = false;
@@ -53,22 +70,7 @@ public class NearInterfaceButton : MonoBehaviour
         GetComponent<Collider>().enabled = true;
         if (name != "Lock")
         {
-            text.GetComponent<TextMeshPro>().color = Color.white;
             icon.GetComponent<Renderer>().material.SetColor("_Color", Color.white);
-        }
-        if (name == "Exit")
-        {
-            //interfaceManager.setActiveCuttingSimulation(false);
-            //interfaceManager.setActiveSimulationInterface(false);
-            //interfaceManager.setActiveNearInterface(false);
-            //interfaceManager.setActiveOnboardingInterface(true);
-            if (interfaceManager.isActiveSimulationInterface())
-            {
-                interfaceManager.exitSimulation();
-            } else
-            {
-                interfaceManager.endTutorialGeneral();
-            }
         }
     }
 
@@ -88,8 +90,15 @@ public class NearInterfaceButton : MonoBehaviour
         }
         else if (name == "Start")
         {
-            //Debug.Log("Start Button, " + name);
-            scheduler.changeTimerStatus(1);
+            if (timerPaused)
+            {
+                scheduler.changeTimerStatus(1);
+            } else
+            {
+                scheduler.changeTimerStatus(0);
+            }
+            timerPaused = !timerPaused;
+            icon.GetComponent<Renderer>().material = timerPaused ? startButton : pauseButton;
             AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("Start").transform.position);
         }
         else if (name == "Reset")
@@ -124,12 +133,12 @@ public class NearInterfaceButton : MonoBehaviour
             {
                 // assign different material
                 rend.material.color = Color.red;
-                text.GetComponent<TextMeshPro>().color = Color.red;
+                //text.GetComponent<TextMeshPro>().color = Color.red;
             }
             else
             {
                 rend.material.color = Color.blue;
-                text.GetComponent<TextMeshPro>().color = Color.blue;
+                //text.GetComponent<TextMeshPro>().color = Color.blue;
             }
             AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("Lock").transform.position);
         }
@@ -164,34 +173,6 @@ public class NearInterfaceButton : MonoBehaviour
         {
             AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("AddIngredients").transform.position);
             changeSimulationScript.addIngredients();
-        }
-        else if (name == "OnboardNext")
-        {
-            NOnboardControl.nextRecipe();
-            AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("OnboardNext").transform.position);
-        }
-        else if (name == "OnboardBack")
-        {
-            NOnboardControl.prevRecipe();
-            AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("OnboardBack").transform.position);
-        }
-        else if (name == "CuttingSimu")
-        {
-            interfaceManager.setActiveNearInterface(false);
-            interfaceManager.setActiveOnboardingInterface(false);
-            interfaceManager.setActiveCuttingSimulation(true);
-            interfaceManager.setActiveSimulationInterface(true);
-            AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("CuttingSimu").transform.position);
-        }
-        else if (name == "OnboardStart")
-        {
-            NOnboardControl.confirm();
-            AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("OnboardStart").transform.position);
-        }
-        else if (name == "OnboardReset")
-        {
-            NOnboardControl.enableRecipe();
-            AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("OnboardReset").transform.position);
         }
         else
         {

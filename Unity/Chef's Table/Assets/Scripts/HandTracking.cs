@@ -29,7 +29,7 @@ namespace MagicLeap
 
         private Vector3? prevPosition = null;
         public Transform  ctransform; // Camera's transform
-        private GameObject raycast;
+        //private GameObject raycast;
         private GameObject onboarding;
         private bool thumbPoseChanged = false;
         private bool okPoseChanged = false;
@@ -57,7 +57,7 @@ namespace MagicLeap
         {
             MLHandTracking.Start();
             Initialize();
-            raycast = GameObject.Find("HandPointer");
+            //raycast = GameObject.Find("HandPointer");
             onboarding = GameObject.Find("OnBoardingInterface");
             mainScheduler = GameObject.Find("Scheduler").GetComponent<MainScheduler>();
             interfaceManager = GameObject.Find("InterfaceManager").GetComponent<InterfaceManager>();
@@ -134,8 +134,10 @@ namespace MagicLeap
                 }
                 else if (GetGesture(Hand, MLHandTracking.HandKeyPose.Thumb))
                 {
+                    /*
                     if (thumbPoseChanged == true)
                     {
+
                         if (!raycast.activeSelf)
                         {
                             raycast.SetActive(true);
@@ -146,17 +148,17 @@ namespace MagicLeap
                         }
                         pose = HandPoses.Thumb;
                         thumbPoseChanged = false;
-                    }
+                    }*/
                 }
                 
                 else if (GetGesture(Hand, MLHandTracking.HandKeyPose.OpenHand))
                 {
                     //if (okPoseChanged == true)
-                    if (raycast.activeSelf) 
+                    //if (raycast.activeSelf) 
                     {
                         //pose = HandPoses.Ok;
                         //interf.GetComponent<PlaceInFront>().Place();
-                        onboarding.GetComponent<PlaceInFront>().Place();
+                        //onboarding.GetComponent<PlaceInFront>().Place();
                         //okPoseChanged = false;
                     }
                 }
@@ -210,6 +212,7 @@ namespace MagicLeap
                 }
                 _indexFinger.position = Hand.Index.KeyPoints[2].Position;
                 _indexFinger.gameObject.SetActive(Hand.IsVisible);
+
                 //indexTip.transform.position = Hand.Index.KeyPoints[2].Position;
                 //indexTip.SetActive(Hand.IsVisible);
             }

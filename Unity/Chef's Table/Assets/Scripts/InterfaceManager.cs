@@ -8,27 +8,39 @@ public class InterfaceManager : MonoBehaviour
     GameObject nearInterface;
     GameObject simulationInterface;
     GameObject onboardingInterface;
-    GameObject nearOnboardingInterface;
+    GameObject onboarding;
     GameObject cuttingSimulation;
-    GameObject floatingInterface;
     GameObject summary; // for completion page
     MainScheduler ms;
+    UIFadingAnimation animator;
+    GameObject onboardingPreview;
     private bool startCountDown = false;
     private float completeRedirectTimer = 10;
+
+    private void Awake()
+    {
+        nearInterface = GameObject.Find("NearInterface");
+        simulationInterface = GameObject.Find("SimulationInterface");
+        onboarding = GameObject.Find("Onboarding");
+        cuttingSimulation = GameObject.Find("CuttingSimulation");
+        onboardingPreview = GameObject.Find("Onboarding").transform.Find("OnboardingPreview").gameObject;
+        onboardingInterface = GameObject.Find("Onboarding").transform.Find("OnboardingInterface").gameObject;
+        animator = GameObject.Find("FadingAnimation").GetComponent<UIFadingAnimation>();
+        ms = GameObject.Find("Scheduler").GetComponent<MainScheduler>();
+        summary = GameObject.Find("summary");
+    }
 
     // Start is called before the first frame update
     void Start()
     {
-        nearInterface = GameObject.Find("NearInterface");
-        simulationInterface = GameObject.Find("SimulationInterface");
-        onboardingInterface = GameObject.Find("OnBoardingInterface");
-        nearOnboardingInterface = GameObject.Find("NearOnboardingInterface");
-        cuttingSimulation = GameObject.Find("CuttingSimulation");
-        floatingInterface = GameObject.Find("Interf");
-        ms = GameObject.Find("Scheduler").GetComponent<MainScheduler>();
-        summary = GameObject.Find("summary");
         summary.SetActive(false);
-        setActiveFloatingInterface(false);
+        /*
+        onboardingPreview.SetActive(false);
+        nearInterface.SetActive(false);
+        simulationInterface.SetActive(false);
+        cuttingSimulation.SetActive(false);
+        onboardingInterface.SetActive(true);
+        */
         setActiveNearInterface(false);
         setActiveSimulationInterface(false);
         setActiveCuttingSimulation(false);
@@ -37,29 +49,58 @@ public class InterfaceManager : MonoBehaviour
 
     public void setActiveCuttingSimulation(bool b)
     {
-        cuttingSimulation.SetActive(b);
+        
+        if (b)
+        {
+            StartCoroutine(animator.FadeIn(cuttingSimulation));
+        } else
+        {
+            StartCoroutine(animator.FadeOut(cuttingSimulation));
+        }
+        //cuttingSimulation.SetActive(b);
     }
 
     public void setActiveNearInterface(bool b)
     {
-        nearInterface.SetActive(b);
+        
+        if (b)
+        {
+            StartCoroutine(animator.FadeIn(nearInterface));
+        }
+        else
+        {
+            StartCoroutine(animator.FadeOut(nearInterface));
+        }
+        //nearInterface.SetActive(b);
         completeRedirectTimer = 10;
     }
 
     public void setActiveSimulationInterface(bool b)
     {
-        simulationInterface.SetActive(b);
+        
+        if (b)
+        {
+            StartCoroutine(animator.FadeIn(simulationInterface));
+        }
+        else
+        {
+            StartCoroutine(animator.FadeOut(simulationInterface));
+        }
+        //simulationInterface.SetActive(b);
     }
 
     public void setActiveOnboardingInterface(bool b)
     {
-        //onboardingInterface.SetActive(b);
-        nearOnboardingInterface.SetActive(b);
-    }
-
-    public void setActiveFloatingInterface(bool b)
-    {
-        floatingInterface.SetActive(b);
+        if (b)
+        {
+            onboardingPreview.SetActive(false);
+            onboardingInterface.SetActive(true);
+            StartCoroutine(animator.FadeIn(onboarding));
+        }
+        else
+        {
+            StartCoroutine(animator.FadeOut(onboarding));
+        }
     }
 
     public bool isActiveSimulationInterface()
@@ -74,8 +115,7 @@ public class InterfaceManager : MonoBehaviour
 
     public bool isActiveOnboardingInterface()
     {
-        //return onboardingInterface.activeSelf;
-        return nearOnboardingInterface.activeSelf;
+        return onboardingInterface.activeSelf;
     }
 
     public bool isActiveNearInterface()
@@ -98,7 +138,8 @@ public class InterfaceManager : MonoBehaviour
         if (ExitOrComplete.text == "Exit")
         {
             exitTutorial();
-        } else
+        }
+        else
         {
             completeTutorial();
         }
@@ -132,7 +173,7 @@ public class InterfaceManager : MonoBehaviour
             if (completeRedirectTimer < 0)
             {
                 completeRedirectTimer = 0;
-               
+
                 exitTutorial();
             }
             TextMeshProUGUI statistic = summary.transform.Find("Congratulation").Find("statistic").GetComponent<TextMeshProUGUI>();
