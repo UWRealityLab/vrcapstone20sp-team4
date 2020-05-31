@@ -20,6 +20,7 @@ namespace MagicLeap
         private Transform _indexFinger = null;
         private Transform _thumb = null;
         private Transform _wrist = null;
+        private Transform _middle = null;
 
         private bool canIGrab = false;
         public GameObject selectedGameObject; // the gameObject being dragged or moved
@@ -36,7 +37,7 @@ namespace MagicLeap
         private MainScheduler mainScheduler;
         private GameObject simulationInterface;
         private InterfaceManager interfaceManager;
-
+        public GameObject wrappingSimulation;
         private MLHandTracking.Hand Hand
         {
             get
@@ -61,6 +62,7 @@ namespace MagicLeap
             onboarding = GameObject.Find("OnBoardingInterface");
             mainScheduler = GameObject.Find("Scheduler").GetComponent<MainScheduler>();
             interfaceManager = GameObject.Find("InterfaceManager").GetComponent<InterfaceManager>();
+           // wrappingSimulation = GameObject.Find("CuttingSimulation/wrappingSimulation");
         }
 
         // Clean up.
@@ -213,6 +215,18 @@ namespace MagicLeap
                 _indexFinger.position = Hand.Index.KeyPoints[2].Position;
                 _indexFinger.gameObject.SetActive(Hand.IsVisible);
 
+                if (wrappingSimulation.activeSelf)
+                {
+                    _thumb.position = Hand.Thumb.KeyPoints[2].Position;
+                    _thumb.gameObject.SetActive(Hand.IsVisible);
+                    _middle.position = Hand.Middle.KeyPoints[2].Position;
+                    _middle.gameObject.SetActive(Hand.IsVisible);
+                } else
+                {
+                    _thumb.gameObject.SetActive(false);
+                    _middle.gameObject.SetActive(false);
+                }
+                
                 //indexTip.transform.position = Hand.Index.KeyPoints[2].Position;
                 //indexTip.SetActive(Hand.IsVisible);
             }
@@ -229,6 +243,7 @@ namespace MagicLeap
 
             // Wrist
             _wrist = CreateKeyPoint(Hand.Wrist.KeyPoints[0], Color.white).transform;
+            _middle = CreateKeyPoint(Hand.Middle.KeyPoints[2], Color.white).transform;
         }
 
         /// Create a GameObject for the desired KeyPoint.

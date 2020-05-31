@@ -67,10 +67,10 @@ public class BurritoControlPointTrigger : MonoBehaviour
         if (!toIgnore.Contains(other.gameObject))
         {
             inContact.Add(other.gameObject);
-            foreach (GameObject handle in toIgnore)
-            {
-                handle.GetComponent<BurritoControlPointTrigger>().claimKeyPointOwnerShip(other.gameObject);
-            }
+            //foreach (GameObject handle in toIgnore)
+            //{
+            //    handle.GetComponent<BurritoControlPointTrigger>().claimKeyPointOwnerShip(other.gameObject);
+            //}
         }
         
     }

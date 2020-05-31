@@ -16,6 +16,9 @@ public class changeSimulation : MonoBehaviour
 
     // skillet mode
     public GameObject skilletSimulation;
+
+    // tortilla mode 
+    public GameObject tortillaSimulation;
     // common
     public GameObject mainCam;
     private int index;
@@ -50,19 +53,28 @@ public class changeSimulation : MonoBehaviour
     }
     public void resetMode()
     {
-        if (mode == "skillet")
+        if (mode == "tortilla")
         {
             active_prefabs = cut_prefabs;
             active_videos = cut_videos;
             cuttingSimulation.SetActive(true);
             skilletSimulation.SetActive(false);
+            tortillaSimulation.SetActive(false);
             mode = "cut";
-        } else
+        } else if (mode == "skillet")
         {
+            active_prefabs = null;
+            active_videos = null;
+            cuttingSimulation.SetActive(false);
+            skilletSimulation.SetActive(false);
+            tortillaSimulation.SetActive(true);
+            mode = "tortilla";
+        } else if (mode == "cut") {
             active_prefabs = ingredient_prefabs;
             active_videos = skillet_videos;
             cuttingSimulation.SetActive(false);
             skilletSimulation.SetActive(true);
+            tortillaSimulation.SetActive(false);
             mode = "skillet";
         }
         index = 0;
@@ -90,7 +102,10 @@ public class changeSimulation : MonoBehaviour
 
     public void resetObject()
     {
-        if (mode == "skillet")
+        if (mode == "tortilla")
+        {
+            tortillaSimulation.transform.Find("tortilla").GetComponent<TortillaFolding>().reset();
+        } else if (mode == "skillet")
         {
             GameObject spawn = GameObject.Find("CuttingSimulation/skilletSimulation/Skillet/spawn");
             foreach (Transform child in spawn.transform)
@@ -125,6 +140,10 @@ public class changeSimulation : MonoBehaviour
 
     private void updateObject(GameObject prefab)
     {
+        if (mode == "tortilla")
+        {
+            return;
+        }
         if (index >=0 && index < active_videos.Count)
         {
             vp.clip = active_videos[index]; // update video played

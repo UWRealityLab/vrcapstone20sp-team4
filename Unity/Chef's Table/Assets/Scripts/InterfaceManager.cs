@@ -50,14 +50,14 @@ public class InterfaceManager : MonoBehaviour
     public void setActiveCuttingSimulation(bool b)
     {
         
-        if (b)
-        {
-            StartCoroutine(animator.FadeIn(cuttingSimulation));
-        } else
-        {
-            StartCoroutine(animator.FadeOut(cuttingSimulation));
-        }
-        //cuttingSimulation.SetActive(b);
+        //if (b)
+        //{
+        //    StartCoroutine(animator.FadeIn(cuttingSimulation));
+        //} else
+        //{
+        //    StartCoroutine(animator.FadeOut(cuttingSimulation));
+        //}
+        cuttingSimulation.SetActive(b);
     }
 
     public void setActiveNearInterface(bool b)

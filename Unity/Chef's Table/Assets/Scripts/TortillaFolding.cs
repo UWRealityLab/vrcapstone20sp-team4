@@ -31,7 +31,15 @@ public class TortillaFolding : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        var currentState = anim.GetCurrentAnimatorStateInfo(0);
+        if (currentState.fullPathHash == Animator.StringToHash("Base Layer.01"))
+        {
+            anim.SetBool("back", false);
+            anim.SetBool("12", false);
+            anim.SetBool("23", false);
+            anim.SetBool("34", false);
+            anim.SetBool("41", false);
+        }
         float fold1 = calculateFoldPara(handle1, startPos1);
         anim.SetFloat("fold1", fold1);
         float fold2 = calculateFoldPara(handle2, startPos2);
@@ -57,6 +65,16 @@ public class TortillaFolding : MonoBehaviour
             anim.SetBool("41", true);
         }
     }
+
+    public void reset()
+    {
+        anim.SetBool("back", true);
+        handle1.transform.position = handle1.transform.InverseTransformPoint(startPos1);
+        handle2.transform.position = startPos2;
+        handle3.transform.position = startPos3;
+        handle4.transform.position = startPos4;
+    }
+
     float calculateFoldPara(GameObject handle, Vector3 startPos)
     {
         
