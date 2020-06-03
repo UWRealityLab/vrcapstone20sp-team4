@@ -137,7 +137,7 @@ public class NearInterfaceButton : MonoBehaviour
             }
             else
             {
-                rend.material.color = Color.blue;
+                rend.material.color = Color.white;
                 //text.GetComponent<TextMeshPro>().color = Color.blue;
             }
             AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("Lock").transform.position);

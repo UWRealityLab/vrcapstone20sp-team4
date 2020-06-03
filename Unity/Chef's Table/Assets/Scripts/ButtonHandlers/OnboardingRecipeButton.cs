@@ -50,7 +50,7 @@ public class OnboardingRecipeButton : MonoBehaviour
             }
             else
             {
-                rend.material.color = Color.blue;
+                rend.material.color = Color.white;
                 //text.GetComponent<TextMeshPro>().color = Color.blue;
             }
             AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("Lock").transform.position);
@@ -61,6 +61,9 @@ public class OnboardingRecipeButton : MonoBehaviour
             interfaceManager.setActiveOnboardingInterface(false);
             interfaceManager.setActiveCuttingSimulation(true);
             interfaceManager.setActiveSimulationInterface(true);
+        } else if (name == "RecipeButton")
+        {
+
         }
     }
 }

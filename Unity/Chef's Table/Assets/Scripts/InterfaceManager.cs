@@ -14,6 +14,8 @@ public class InterfaceManager : MonoBehaviour
     MainScheduler ms;
     UIFadingAnimation animator;
     GameObject onboardingPreview;
+    GameObject headLockCanvas;
+    GameObject wrappingSimulation;
     private bool startCountDown = false;
     private float completeRedirectTimer = 10;
 
@@ -22,25 +24,20 @@ public class InterfaceManager : MonoBehaviour
         nearInterface = GameObject.Find("NearInterface");
         simulationInterface = GameObject.Find("SimulationInterface");
         onboarding = GameObject.Find("Onboarding");
+        wrappingSimulation = GameObject.Find("wrappingSimulation");
         cuttingSimulation = GameObject.Find("CuttingSimulation");
         onboardingPreview = GameObject.Find("Onboarding").transform.Find("OnboardingPreview").gameObject;
         onboardingInterface = GameObject.Find("Onboarding").transform.Find("OnboardingInterface").gameObject;
         animator = GameObject.Find("FadingAnimation").GetComponent<UIFadingAnimation>();
         ms = GameObject.Find("Scheduler").GetComponent<MainScheduler>();
         summary = GameObject.Find("summary");
+        headLockCanvas = GameObject.Find("HeadLockCanvas");
     }
 
     // Start is called before the first frame update
     void Start()
     {
         summary.SetActive(false);
-        /*
-        onboardingPreview.SetActive(false);
-        nearInterface.SetActive(false);
-        simulationInterface.SetActive(false);
-        cuttingSimulation.SetActive(false);
-        onboardingInterface.SetActive(true);
-        */
         setActiveNearInterface(false);
         setActiveSimulationInterface(false);
         setActiveCuttingSimulation(false);
@@ -49,14 +46,6 @@ public class InterfaceManager : MonoBehaviour
 
     public void setActiveCuttingSimulation(bool b)
     {
-        
-        //if (b)
-        //{
-        //    StartCoroutine(animator.FadeIn(cuttingSimulation));
-        //} else
-        //{
-        //    StartCoroutine(animator.FadeOut(cuttingSimulation));
-        //}
         cuttingSimulation.SetActive(b);
     }
 
@@ -103,6 +92,23 @@ public class InterfaceManager : MonoBehaviour
         }
     }
 
+    public void setActiveHeadLockCanvas(bool b)
+    {
+        if (b)
+        {
+            StartCoroutine(animator.FadeIn(headLockCanvas));
+        }
+        else
+        {
+            StartCoroutine(animator.FadeOut(headLockCanvas));
+        }
+    }
+
+    public bool isActiveHeadLockCanvas()
+    {
+        return headLockCanvas.activeSelf;
+    }
+
     public bool isActiveSimulationInterface()
     {
         return simulationInterface.activeSelf;
@@ -116,6 +122,11 @@ public class InterfaceManager : MonoBehaviour
     public bool isActiveOnboardingInterface()
     {
         return onboardingInterface.activeSelf;
+    }
+
+    public bool isActiveWrappingSimulation()
+    {
+        return wrappingSimulation.activeSelf;
     }
 
     public bool isActiveNearInterface()
