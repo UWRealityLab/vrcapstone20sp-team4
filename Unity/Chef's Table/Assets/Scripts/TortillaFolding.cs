@@ -10,11 +10,13 @@ public class TortillaFolding : MonoBehaviour
     public GameObject handle2;
     public GameObject handle3;
     public GameObject handle4;
+    public GameObject label;
     private Vector3 startPos1;
     private Vector3 startPos2;
     private Vector3 startPos3;
     private Vector3 startPos4;
     private float radius;
+    private int current = 0;
 
     void Start()
     {
@@ -51,18 +53,37 @@ public class TortillaFolding : MonoBehaviour
         if (fold1 > 1)
         {
             anim.SetBool("12", true);
+            if (current < 1) {
+                label.GetComponent<floating>().resetByMode(handle2.transform.position);
+                current++;
+            }
         }
         if (fold2 > 1)
         {
             anim.SetBool("23", true);
+            if (current < 2)
+            {
+                label.GetComponent<floating>().resetByMode(handle3.transform.position);
+                current++;
+            }
         }
         if (fold3 > 1)
         {
             anim.SetBool("34", true);
+            if (current < 3)
+            {
+                label.GetComponent<floating>().resetByMode(handle4.transform.position);
+                current++;
+            }
         }
         if (fold4 > 1)
         {
             anim.SetBool("41", true);
+            if (current < 4)
+            {
+                //label.GetComponent<floating>().resetByMode(handle1.transform.position);
+                //current++;
+            }
         }
     }
 
@@ -70,10 +91,12 @@ public class TortillaFolding : MonoBehaviour
     {
         anim.SetBool("back", true);
         handle1.transform.position = handle1.transform.InverseTransformPoint(startPos1);
-        handle2.transform.position = startPos2;
-        handle3.transform.position = startPos3;
-        handle4.transform.position = startPos4;
-    }
+        handle2.transform.position = handle2.transform.InverseTransformPoint(startPos2);
+        handle3.transform.position = handle3.transform.InverseTransformPoint(startPos3);
+        handle4.transform.position = handle4.transform.InverseTransformPoint(startPos4);
+        label.GetComponent<floating>().resetByMode(startPos1);
+        current = 0;
+    } 
 
     float calculateFoldPara(GameObject handle, Vector3 startPos)
     {
