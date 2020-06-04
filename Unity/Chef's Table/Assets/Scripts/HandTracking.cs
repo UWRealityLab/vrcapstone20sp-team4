@@ -20,6 +20,8 @@ namespace MagicLeap
         private Transform _indexFinger = null;
         private Transform _thumb = null;
         private Transform _wrist = null;
+        private Transform _middle = null;
+        private Vector3 offset;
 
         private bool canIGrab = false;
         public GameObject selectedGameObject; // the gameObject being dragged or moved
@@ -29,13 +31,16 @@ namespace MagicLeap
 
         private Vector3? prevPosition = null;
         public Transform  ctransform; // Camera's transform
-        private GameObject raycast;
+        //private GameObject raycast;
         private GameObject onboarding;
         private bool thumbPoseChanged = false;
         private bool okPoseChanged = false;
         private MainScheduler mainScheduler;
-        private GameObject simulationInterface;
+        private GameObject movingPoint;
         private InterfaceManager interfaceManager;
+        public GameObject wrappingSimulation;
+        private Material movingPointNormalMat;
+        private Material movingPointHighlightMat;
 
         private MLHandTracking.Hand Hand
         {
@@ -52,15 +57,26 @@ namespace MagicLeap
             }
         }
 
+        private void Awake()
+        {
+            //wrappingSimulation = GameObject.Find("CuttingSimulation/wrappingSimulation");
+        }
+
         // Calls Start on MLHandTrackingStarterKit and initializes the lists of hand transforms.
         void Start()
         {
             MLHandTracking.Start();
             Initialize();
-            raycast = GameObject.Find("HandPointer");
             onboarding = GameObject.Find("OnBoardingInterface");
             mainScheduler = GameObject.Find("Scheduler").GetComponent<MainScheduler>();
             interfaceManager = GameObject.Find("InterfaceManager").GetComponent<InterfaceManager>();
+            GameObject headLockCanvas = GameObject.Find("HeadLockCanvas");
+            Vector3 headLockCanvasPos = headLockCanvas.transform.position;
+            movingPoint = GameObject.Find("MovingPoint");
+            Vector3 haloObjectPos = movingPoint.transform.position;
+            offset = haloObjectPos - headLockCanvasPos + new Vector3(0, 0.08f, 0);
+            movingPointNormalMat = Resources.Load("Mat/Wireframe", typeof(Material)) as Material;
+            movingPointHighlightMat = Resources.Load("Mat/MovingPointHighlightMat", typeof(Material)) as Material;
         }
 
         // Clean up.
@@ -75,12 +91,11 @@ namespace MagicLeap
         // an interactable object.
         void OnTriggerEnter(Collider other)
         {
-            Debug.Log("onTriggerEnter");
             if (other.gameObject.tag == "Interactable") {
                 if (canIGrab == false) {
                     selectedGameObject = other.gameObject;
                     canIGrab = true;
-                    //other.gameObject.GetComponent<Renderer>().material.color = Color.red;
+                    movingPoint.GetComponent<Renderer>().material = movingPointHighlightMat;
                 }
             }
         }
@@ -90,7 +105,7 @@ namespace MagicLeap
             if (other.gameObject.tag == "Interactable") {
                 canIGrab = false;
                 prevPosition = null;
-                //other.gameObject.GetComponent<Renderer>().material.color = Color.white;
+                movingPoint.GetComponent<Renderer>().material = movingPointNormalMat;
             }
         }
 
@@ -106,36 +121,26 @@ namespace MagicLeap
                 {
                     if (okPoseChanged == true)
                     {
-                        Dictionary<string, List<string>> info = mainScheduler.getCurrentStepInfo();
-                        if (info != null)
+                        /*
+                        if (!interfaceManager.isActiveHeadLockCanvas())
                         {
-                            if (!interfaceManager.isActiveNearInterface())
-                            {
-                                interfaceManager.setActiveNearInterface(true);
-                            }
-                            else
-                            {
-                                interfaceManager.setActiveNearInterface(false);
-                            }
-                        } else if (interfaceManager.isActiveCuttingSimulation()) {
-                            if (!interfaceManager.isActiveSimulationInterface())
-                            {
-                                interfaceManager.setActiveSimulationInterface(true);
-                            }
-                            else
-                            {
-                                interfaceManager.setActiveSimulationInterface(false);
-                            }
+                            interfaceManager.setActiveHeadLockCanvas(true);
                         }
-               
+                        else
+                        {
+                            interfaceManager.setActiveHeadLockCanvas(false);
+                        }
+                        */
                         pose = HandPoses.Ok;
                         okPoseChanged = false;
                     }
                 }
                 else if (GetGesture(Hand, MLHandTracking.HandKeyPose.Thumb))
                 {
+                    /*
                     if (thumbPoseChanged == true)
                     {
+
                         if (!raycast.activeSelf)
                         {
                             raycast.SetActive(true);
@@ -146,17 +151,17 @@ namespace MagicLeap
                         }
                         pose = HandPoses.Thumb;
                         thumbPoseChanged = false;
-                    }
+                    }*/
                 }
                 
                 else if (GetGesture(Hand, MLHandTracking.HandKeyPose.OpenHand))
                 {
                     //if (okPoseChanged == true)
-                    if (raycast.activeSelf) 
+                    //if (raycast.activeSelf) 
                     {
                         //pose = HandPoses.Ok;
                         //interf.GetComponent<PlaceInFront>().Place();
-                        onboarding.GetComponent<PlaceInFront>().Place();
+                        //onboarding.GetComponent<PlaceInFront>().Place();
                         //okPoseChanged = false;
                     }
                 }
@@ -193,7 +198,7 @@ namespace MagicLeap
                     pose = HandPoses.Pinch;
                     if (canIGrab)
                     {
-                        selectedGameObject.transform.position = transform.position;
+                        selectedGameObject.transform.localPosition = transform.position + offset;
                         // This is so that the object wont leave our hand while we're dragging it.
                         gameObject.GetComponent<SphereCollider>().radius = 0.04f;
                     }
@@ -210,6 +215,22 @@ namespace MagicLeap
                 }
                 _indexFinger.position = Hand.Index.KeyPoints[2].Position;
                 _indexFinger.gameObject.SetActive(Hand.IsVisible);
+
+                if (interfaceManager.isActiveCuttingSimulation())
+                {
+                    if (wrappingSimulation.activeSelf)
+                    {
+                        _thumb.position = Hand.Thumb.KeyPoints[2].Position;
+                        _thumb.gameObject.SetActive(Hand.IsVisible);
+                        _middle.position = Hand.Middle.KeyPoints[2].Position;
+                        _middle.gameObject.SetActive(Hand.IsVisible);
+                        return;
+                    }
+                }
+                _thumb.gameObject.SetActive(false);
+                _middle.gameObject.SetActive(false);
+
+
                 //indexTip.transform.position = Hand.Index.KeyPoints[2].Position;
                 //indexTip.SetActive(Hand.IsVisible);
             }
@@ -226,6 +247,7 @@ namespace MagicLeap
 
             // Wrist
             _wrist = CreateKeyPoint(Hand.Wrist.KeyPoints[0], Color.white).transform;
+            _middle = CreateKeyPoint(Hand.Middle.KeyPoints[2], Color.white).transform;
         }
 
         /// Create a GameObject for the desired KeyPoint.

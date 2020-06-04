@@ -6,11 +6,9 @@ public class ButtonVisualizer : MonoBehaviour
 {
     Material normalMat;
     Material highlightMat;
-    private GameObject frontPlate;
 
     private void Start()
     {
-        frontPlate = transform.Find("FrontPlate").gameObject;
         normalMat = Resources.Load("Mat/BoxMat", typeof(Material)) as Material;
         highlightMat = Resources.Load("Mat/HighlightMat", typeof(Material)) as Material;
     }
@@ -19,7 +17,16 @@ public class ButtonVisualizer : MonoBehaviour
     {
         if (other.tag.Equals("Hand"))
         {
-            GetComponent<Renderer>().material = highlightMat;
+            if (tag == "RecipePlate")
+            {
+                Debug.Log("herere");
+                GameObject frontPlate = transform.Find("FrontPlate").gameObject;
+                frontPlate.GetComponent<Renderer>().material = highlightMat;
+            }
+            else
+            {
+                GetComponent<Renderer>().material = highlightMat;
+            }
             //Debug.Log("OnTriggerEnter: ButtonViz");
             //frontPlate.SetActive(true);
         }
@@ -29,8 +36,16 @@ public class ButtonVisualizer : MonoBehaviour
     {
         if (other.tag.Equals("Hand"))
         {
-            GetComponent<Renderer>().material = normalMat;
-            //frontPlate.SetActive(false);
+            if (tag == "RecipePlate")
+            {
+                GameObject frontPlate = transform.Find("FrontPlate").gameObject;
+                frontPlate.GetComponent<Renderer>().material = normalMat;
+            }
+            else
+            {
+                GetComponent<Renderer>().material = normalMat;
+                //frontPlate.SetActive(false);
+            }
         }
     }
 }

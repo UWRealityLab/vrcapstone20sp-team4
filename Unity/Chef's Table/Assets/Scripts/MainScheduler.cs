@@ -111,6 +111,8 @@ public class MainScheduler : MonoBehaviour
         dic.Add("ingredients", s.getIngredientsSet());
         dic.Add("description", new List<string>() { s.getDescription() });
         dic.Add("timer", new List<string>() { GetTimeSpanWithSec(s.getTime()) });
+        dic.Add("stepIndex", new List<string>() { stepIndex.ToString() });
+        dic.Add("recipe", new List<string>() { SelectedRecipe });
         return dic;
     }
 
