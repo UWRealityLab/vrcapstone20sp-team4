@@ -145,8 +145,9 @@ public class InterfaceManager : MonoBehaviour
 
     public void endTutorialGeneral()
     {
-        TextMeshPro ExitOrComplete = GameObject.Find("NearInterface/ExitOrComplete/IconAndText/Text").GetComponent<TextMeshPro>();
-        if (ExitOrComplete.text == "Exit")
+        MainScheduler mainScheduler = GameObject.Find("Scheduler").GetComponent<MainScheduler>();
+        
+        if (!mainScheduler.isTutorialDone())
         {
             exitTutorial();
         }

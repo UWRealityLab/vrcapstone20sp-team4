@@ -32,15 +32,16 @@ public class changeSimulation : MonoBehaviour
     public List<GameObject> ingredient_prefabs;
     public List<VideoClip> skillet_videos;
 
-    void Start()
+    private void Awake()
     {
-        
         videoScreen = GameObject.Find("SimulationVideoScreen");
         vp = videoScreen.transform.Find("Screen").GetComponent<VideoPlayer>();
-        
-        index = 0;
     }
 
+    void Start()
+    {
+        index = 0;
+    }
 
     void Update()
     {

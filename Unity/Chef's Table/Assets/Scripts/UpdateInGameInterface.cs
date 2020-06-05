@@ -14,31 +14,46 @@ public class UpdateInGameInterface : MonoBehaviour
     private TextMeshPro clockNearMenu;
     //private GameObject gameInterface;
     private GameObject nearInterface;
-    private TextMeshPro ExitOrComplete;
     private GameObject exitIcon;
     private Material exitMat;
     private Material completeMat;
     private VideoPlayer videoPlayer;
     private int step;
+    private List<GameObject> lockIcons;
+    private Material lockMat;
+    private Material unlockMat;
 
     // Start is called before the first frsame update
     void Awake()
     {
         mainScheduler = GameObject.Find("Scheduler").GetComponent<MainScheduler>();
-        /*
-        gameInterface = GameObject.Find("Interf");
-        instructionTextFloatingInterf = gameInterface.transform.Find("InstructionCanvas/Instructions").GetComponent<TextMeshProUGUI>();
-        clockFloatingInterf = GameObject.Find("Interf/TimerInterface/ClockText").GetComponent<TextMeshProUGUI>();
-        */
         nearInterface = GameObject.Find("NearInterface");
         instructionTextNearMenu = GameObject.Find("NearInterface/InstructionCanvas/Instruction").GetComponent<TextMeshPro>();
         clockNearMenu = GameObject.Find("NearInterface/InterfaceTimer/ClockText").GetComponent<TextMeshPro>();
         exitIcon = GameObject.Find("NearInterface/ExitOrComplete/IconAndText/Icon");
         exitMat = Resources.Load("Mat/ExitButton", typeof(Material)) as Material;
         completeMat = Resources.Load("Mat/CompleteButton", typeof(Material)) as Material;
-        ExitOrComplete = GameObject.Find("NearInterface/ExitOrComplete/IconAndText/Text").GetComponent<TextMeshPro>();
         videoPlayer = GameObject.Find("NearInterface/GameInterfaceScreen/InterfaceScreen").GetComponent<VideoPlayer>();
         step = -1;
+        lockIcons = new List<GameObject>();
+        GameObject lockIcon;
+        lockIcon = GameObject.Find("HeadLockCanvas/SimulationInterface/Lock/IconAndText/Icon");
+        lockIcons.Add(lockIcon);
+        lockIcon = GameObject.Find("HeadLockCanvas/NearInterface/Lock/IconAndText/Icon");
+        lockIcons.Add(lockIcon);
+        lockIcon = GameObject.Find("HeadLockCanvas/Onboarding/OnboardingInterface/Lock/IconAndText/Icon");
+        lockIcons.Add(lockIcon);
+        lockMat = Resources.Load("Mat/ButtonLockMat", typeof(Material)) as Material;
+        unlockMat = Resources.Load("Mat/ButtonUnlockMat", typeof(Material)) as Material;
+    }
+
+    public void updateLock(bool islocked)
+    {
+        Material mat = islocked ? lockMat : unlockMat;
+        for (int i = 0; i < lockIcons.Count; i++)
+        {
+            lockIcons[i].GetComponent<Renderer>().material = mat;
+        }
     }
 
     // Update is called once per frame
@@ -69,12 +84,10 @@ public class UpdateInGameInterface : MonoBehaviour
             
             if (mainScheduler.isTutorialDone())
             {
-                ExitOrComplete.text = "Complete";
                 exitIcon.GetComponent<Renderer>().material = completeMat;
             }
             else
             {
-                ExitOrComplete.text = "Exit";
                 exitIcon.GetComponent<Renderer>().material = exitMat;
             }
             

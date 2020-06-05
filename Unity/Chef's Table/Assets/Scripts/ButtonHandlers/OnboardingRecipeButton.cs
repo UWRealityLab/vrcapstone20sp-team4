@@ -11,6 +11,7 @@ public class OnboardingRecipeButton : MonoBehaviour
     NIThresholdControl NIControl;
     AudioSource buttonClip;
     InterfaceManager interfaceManager;
+    GameObject icon;
 
     private void Awake()
     {
@@ -19,6 +20,9 @@ public class OnboardingRecipeButton : MonoBehaviour
         NIControl = GameObject.Find("HeadLockCanvas").GetComponent<NIThresholdControl>();
         buttonClip = GameObject.Find("Button_Click").GetComponent<AudioSource>();
         interfaceManager = GameObject.Find("InterfaceManager").GetComponent<InterfaceManager>();
+        if (name == "RecipeButton") return;
+        GameObject iconText = transform.parent.transform.Find("IconAndText").gameObject;
+        icon = iconText.transform.Find("Icon").gameObject;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -26,6 +30,23 @@ public class OnboardingRecipeButton : MonoBehaviour
         if (other.tag == "Hand")
         {
             GetComponent<Button>().onClick.Invoke();
+            if (name == "Simulation" || name == "RecipeButton") return;
+            StartCoroutine(ShowFeedback());
+        }
+    }
+
+    private IEnumerator ShowFeedback()
+    {
+        if (name != "Lock")
+        {
+            icon.GetComponent<Renderer>().material.SetColor("_Color", Color.red);
+        }
+        GetComponent<Collider>().enabled = false;
+        yield return new WaitForSeconds(1.0f);
+        GetComponent<Collider>().enabled = true;
+        if (name != "Lock")
+        {
+            icon.GetComponent<Renderer>().material.SetColor("_Color", Color.white);
         }
     }
 
@@ -40,19 +61,8 @@ public class OnboardingRecipeButton : MonoBehaviour
         } else if (name == "Lock")
         {
             NIControl.changeLock();
-            GameObject icon = transform.parent.Find("IconAndText").Find("Icon").gameObject;
-            Renderer rend = icon.GetComponent<Renderer>();
-            if (NIControl.getLock())
-            {
-                // assign different material
-                rend.material.color = Color.red;
-                //text.GetComponent<TextMeshPro>().color = Color.red;
-            }
-            else
-            {
-                rend.material.color = Color.white;
-                //text.GetComponent<TextMeshPro>().color = Color.blue;
-            }
+            UpdateInGameInterface uii = GameObject.Find("InGameInterface").GetComponent<UpdateInGameInterface>();
+            uii.updateLock(NIControl.getLock());
             AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("Lock").transform.position);
         } else if (name == "Simulation")
         {

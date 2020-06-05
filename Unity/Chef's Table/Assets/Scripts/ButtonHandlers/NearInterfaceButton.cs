@@ -29,7 +29,6 @@ public class NearInterfaceButton : MonoBehaviour
         buttonClip = GameObject.Find("Button_Click").GetComponent<AudioSource>();
         timerClip = GameObject.Find("Timer").GetComponent<AudioSource>();
         GameObject iconText = transform.parent.transform.Find("IconAndText").gameObject;
-        //text = iconText.transform.Find("Text").gameObject;
         icon = iconText.transform.Find("Icon").gameObject;
         NIControl = GameObject.Find("HeadLockCanvas").GetComponent<NIThresholdControl>();
         playButton = GameObject.Find("PlayButton").transform.Find("Start").gameObject;
@@ -127,19 +126,8 @@ public class NearInterfaceButton : MonoBehaviour
         else if (name == "Lock")
         {
             NIControl.changeLock();
-            //GameObject icon = transform.parent.Find("IconAndText").Find("Icon").gameObject;
-            Renderer rend = icon.GetComponent<Renderer>();
-            if (NIControl.getLock())
-            {
-                // assign different material
-                rend.material.color = Color.red;
-                //text.GetComponent<TextMeshPro>().color = Color.red;
-            }
-            else
-            {
-                rend.material.color = Color.white;
-                //text.GetComponent<TextMeshPro>().color = Color.blue;
-            }
+            UpdateInGameInterface uii = GameObject.Find("InGameInterface").GetComponent<UpdateInGameInterface>();
+            uii.updateLock(NIControl.getLock());
             AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("Lock").transform.position);
         }
         else if (name == "SimuNext")

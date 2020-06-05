@@ -74,7 +74,8 @@ namespace MagicLeap
             Vector3 headLockCanvasPos = headLockCanvas.transform.position;
             movingPoint = GameObject.Find("MovingPoint");
             Vector3 haloObjectPos = movingPoint.transform.position;
-            offset = haloObjectPos - headLockCanvasPos + new Vector3(0, 0.08f, 0);
+            offset = haloObjectPos - headLockCanvasPos + new Vector3(0.01f, 0.09f, -0.035f);
+            //offset = haloObjectPos - headLockCanvasPos + new Vector3(0, 0.06f, -0.035f);
             movingPointNormalMat = Resources.Load("Mat/Wireframe", typeof(Material)) as Material;
             movingPointHighlightMat = Resources.Load("Mat/MovingPointHighlightMat", typeof(Material)) as Material;
         }

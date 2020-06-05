@@ -11,6 +11,7 @@ public class RecipeConfirmButton : MonoBehaviour
     UIFadingAnimation fader;
     GameObject sche;
     MainScheduler ms;
+    AudioSource buttonClip;
 
     private void Awake()
     {
@@ -18,6 +19,7 @@ public class RecipeConfirmButton : MonoBehaviour
         fader = GameObject.Find("FadingAnimation").GetComponent<UIFadingAnimation>();
         GameObject sche = GameObject.Find("Scheduler");
         ms = sche.GetComponent<MainScheduler>();
+        buttonClip = GameObject.Find("Button_Click").GetComponent<AudioSource>();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -32,12 +34,14 @@ public class RecipeConfirmButton : MonoBehaviour
     {
         if (name == "Confirm")
         {
+            AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("Confirm").transform.position);
             string recipe_name = transform.parent.parent.Find("Canvas").Find("RecipeName").GetComponent<TextMeshPro>().text;
             ms.startTutorial(recipe_name);
             interfaceManager.setActiveOnboardingInterface(false);
             interfaceManager.setActiveNearInterface(true);
         } else if (name == "CuttingButton")
         {
+            AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("CuttingButton").transform.position);
             interfaceManager.setActiveNearInterface(false);
             interfaceManager.setActiveOnboardingInterface(false);
             interfaceManager.setActiveCuttingSimulation(true);
@@ -45,6 +49,7 @@ public class RecipeConfirmButton : MonoBehaviour
 
         } else if (name == "Back")
         {
+            AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("Back").transform.position);
             fader.turnOffPreview();
         }
     }

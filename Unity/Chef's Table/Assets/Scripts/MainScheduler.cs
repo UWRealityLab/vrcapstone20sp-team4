@@ -427,7 +427,7 @@ public class MainScheduler : MonoBehaviour
                 stepIndex = stepIndex + 1 < tutorial.Count ? stepIndex + 1 : stepIndex;
 
             }
-            handleAnimationUpdates();
+            //handleAnimationUpdates();
             if (stepIndex == tutorial.Count - 1)
             {
                 tutorialFinish = true;
