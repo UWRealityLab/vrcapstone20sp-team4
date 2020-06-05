@@ -146,7 +146,7 @@ public class NearInterfaceButton : MonoBehaviour
         {
             Debug.Log("Next Button, " + name);
             AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("SimuNext").transform.position);
-            changeSimulationScript.nextObject();
+            changeSimulationScript.changeObject();
         }
         else if (name == "SimuBack")
         {

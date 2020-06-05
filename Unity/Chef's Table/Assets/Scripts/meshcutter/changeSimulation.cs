@@ -21,6 +21,7 @@ public class changeSimulation : MonoBehaviour
     public GameObject tortillaSimulation;
     // common
     public GameObject mainCam;
+    public GameObject addIngredientButton;
     private int index;
     private GameObject videoScreen;
     private VideoPlayer vp;
@@ -60,6 +61,7 @@ public class changeSimulation : MonoBehaviour
             cuttingSimulation.SetActive(true);
             skilletSimulation.SetActive(false);
             tortillaSimulation.SetActive(false);
+            videoScreen.SetActive(false);
             mode = "cut";
         } else if (mode == "skillet")
         {
@@ -68,6 +70,7 @@ public class changeSimulation : MonoBehaviour
             cuttingSimulation.SetActive(false);
             skilletSimulation.SetActive(false);
             tortillaSimulation.SetActive(true);
+            videoScreen.SetActive(true);
             mode = "tortilla";
         } else if (mode == "cut") {
             active_prefabs = ingredient_prefabs;
@@ -75,6 +78,7 @@ public class changeSimulation : MonoBehaviour
             cuttingSimulation.SetActive(false);
             skilletSimulation.SetActive(true);
             tortillaSimulation.SetActive(false);
+            videoScreen.SetActive(true);
             mode = "skillet";
         }
         index = 0;
@@ -97,6 +101,13 @@ public class changeSimulation : MonoBehaviour
         {
             index = active_prefabs.Count - 1;
         }
+        updateObject(active_prefabs[index]);
+    }
+
+    public void changeObject()
+    {
+        index++;
+        index = index % active_prefabs.Count;
         updateObject(active_prefabs[index]);
     }
 
