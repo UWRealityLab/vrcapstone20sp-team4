@@ -41,12 +41,12 @@ public class changeSimulation : MonoBehaviour
     void Start()
     {
         index = 0;
+
     }
 
     void Update()
     {
         videoScreen.transform.LookAt(mainCam.transform.position);
-        
     }
 
     void OnEnable()
@@ -55,6 +55,7 @@ public class changeSimulation : MonoBehaviour
     }
     public void resetMode()
     {
+        index = 0;
         if (mode == "tortilla")
         {
             active_prefabs = cut_prefabs;
@@ -62,7 +63,8 @@ public class changeSimulation : MonoBehaviour
             cuttingSimulation.SetActive(true);
             skilletSimulation.SetActive(false);
             tortillaSimulation.SetActive(false);
-            videoScreen.SetActive(false);
+            videoScreen.SetActive(true);
+            vp.clip = active_videos[index];
             mode = "cut";
         } else if (mode == "skillet")
         {
@@ -71,7 +73,7 @@ public class changeSimulation : MonoBehaviour
             cuttingSimulation.SetActive(false);
             skilletSimulation.SetActive(false);
             tortillaSimulation.SetActive(true);
-            videoScreen.SetActive(true);
+            videoScreen.SetActive(false);
             mode = "tortilla";
         } else if (mode == "cut") {
             active_prefabs = ingredient_prefabs;
@@ -80,9 +82,9 @@ public class changeSimulation : MonoBehaviour
             skilletSimulation.SetActive(true);
             tortillaSimulation.SetActive(false);
             videoScreen.SetActive(true);
+            vp.clip = active_videos[index];
             mode = "skillet";
         }
-        index = 0;
     }
 
     public void nextObject()
@@ -168,7 +170,7 @@ public class changeSimulation : MonoBehaviour
             {
                 GameObject.Destroy(child.gameObject);
             }
-            GameObject go = (GameObject)Instantiate(prefab, slicedObjects.transform.position, slicedObjects.transform.rotation);
+            GameObject go = (GameObject)Instantiate(prefab, slicedObjects.transform.position, new Quaternion(90, 90, 0, 0));
             go.transform.SetParent(slicedObjects.transform);
         } 
         // for skillet simulation, updates are done in reset and addingredients
