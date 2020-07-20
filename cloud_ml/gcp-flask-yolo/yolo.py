@@ -5,49 +5,48 @@ import urllib
 import numpy as np
 import cv2
 
-
+weights_loaded = False
+net = None
 def download_model_weights():
     download_url = "https://pjreddie.com/media/files/yolov3.weights"
     
     print("downloading model weights...")
     opener = urllib.request.URLopener()
-    opener.retrieve(download_url, "yolo-custom/yolov3.weights")
+    opener.retrieve(download_url, "yolo-coco/yolov3.weights")
     print("model download is complete.")
 
     return
 
 def get_predictions(raw_image):
-    YOLO_DIR = "yolo-custom"
-    CONFIDENCE = 0.5
-    THRESHOLD = 0.3
-
+    YOLO_DIR = "yolo-coco"
+    CONFIDENCE = 0.0
+    THRESHOLD = 0.0
+    global weights_loaded
+    global net
     # load the COCO class labels our YOLO model was trained on
     labelsPath = os.path.sep.join([YOLO_DIR, "obj.names"])
     LABELS = open(labelsPath).read().strip().split("\n")
-
     # initialize a list of colors to represent each possible class label
     np.random.seed(42)
     COLORS = np.random.randint(0, 255, size=(len(LABELS), 3),
-        dtype="uint8")
+                                   dtype="uint8")
+    if not weights_loaded:
+        # download model weights if not already downloaded
+        model_found = 0
+        files = os.listdir("yolo-coco")
     
-    # download model weights if not already downloaded
-    model_found = 0
-    files = os.listdir("yolo-custom")
-    
-    if "yolov3_custom_last.weights" in files:
-        model_found = 1
-
-    if model_found == 0:
-        download_model_weights()
-
-    # derive the paths to the YOLO weights and model configuration
-    weightsPath = os.path.sep.join([YOLO_DIR, "yolov3_custom_last.weights"])
-    configPath = os.path.sep.join([YOLO_DIR, "yolov3_custom.cfg"])
-
-    # load our YOLO object detector trained on COCO dataset (80 classes)
-    print("[INFO] loading YOLO from disk...")
-    net = cv2.dnn.readNetFromDarknet(configPath, weightsPath)
-
+        if "yolov3_custom_last.weights" in files:
+            model_found = 1
+        if model_found == 0:
+            download_model_weights()
+        # derive the paths to the YOLO weights and model configuration
+        weightsPath = os.path.sep.join([YOLO_DIR, "yolov3_custom_last.weights"])
+        configPath = os.path.sep.join([YOLO_DIR, "yolov3_custom.cfg"])
+        # load our YOLO object detector trained on COCO dataset (80 classes)
+        print("[INFO] loading YOLO from disk...")
+        net = cv2.dnn.readNetFromDarknet(configPath, weightsPath)
+        print('weights_loaded ', weights_loaded)
+        weights_loaded = True
     # load input image and grab its spatial dimensions
     nparr = np.fromstring(raw_image.data, np.uint8)
     # decode image
@@ -93,7 +92,6 @@ def get_predictions(raw_image):
                 # use the center (x, y)-coordinates to derive the top and and left corner of the bounding box
                 x = int(centerX - (width / 2))
                 y = int(centerY - (height / 2))
-
                 # update our list of bounding box coordinates, confidences and class IDs
                 boxes.append([x, y, int(width), int(height)])
                 confidences.append(float(confidence))
@@ -114,5 +112,6 @@ def get_predictions(raw_image):
                 "label": LABELS[classIDs[i]], 
                 "confidence": confidences[i]
             })
-
+    print(predictions)
     return predictions
+
