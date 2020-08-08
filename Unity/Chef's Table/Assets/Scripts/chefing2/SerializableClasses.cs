@@ -2,22 +2,49 @@
 using System.Collections.Generic;
 
 // For the first endpoint: findByIngredients
-// Get the recipe id(s)
 [Serializable]
-public class Recipe
+public class MissedIngredients
+{
+	public string name;  // e.g. lettuce leaves
+	public string original;  // e.g. 8 lettuce leaves
+}
+
+[Serializable]
+public class UsedIngredients
+{
+	public string name;
+	public string original;
+}
+
+[Serializable]
+public class UnusedIngredients
+{
+	public string name;
+	public string original;
+}
+
+[Serializable]
+public class PreviewRecipe
 {
 	public int id;
 	public string title;
+	public string image;
+	public string imgeType;
+	public int usedIngredientCount;
+	public int missedIngredientCount;
+	public List<MissedIngredients> missedIngredients;
+	public List<UsedIngredients> usedIngredients;
+	public List<UnusedIngredients> unusedIngredients;
+	public int likes;
 }
 
 [Serializable]
-public class RecipeList
+public class PreviewRecipeList
 {
-	public List<Recipe> result;
+	public List<PreviewRecipe> result;
 }
 
 // For the second endpoint: analyzedInstructions
-// Ingredients for each step
 [Serializable]
 public class Ingredients
 {
@@ -27,13 +54,6 @@ public class Ingredients
 }
 
 [Serializable]
-public class IngredientsList
-{
-	public List<Ingredients> ingredients;
-}
-
-// Equipment for each step
-[Serializable]
 public class Equipment
 {
 	public int id;
@@ -42,28 +62,29 @@ public class Equipment
 }
 
 [Serializable]
-public class EquipmentList
+public class TimePeriod
 {
-	public List<Equipment> equipment;
+	public int number;
+	public string unit;
 }
 
-// wrapper for each step#, step instruction, list of ingredients and list of equipment
 [Serializable]
 public class Instruction
 {
 	public int number;
 	public string step;
-	public IngredientsList ingredientsList;
-	public EquipmentList equipmentList;
+	public List<Ingredients> ingredients;
+	public List<Equipment> equipment;
+	public TimePeriod length;
 }
 
 [Serializable]
 public class InstructionList
 {
+	public string name;
 	public List<Instruction> steps;
 }
 
-// wrapper for all steps
 [Serializable]
 public class StepsList
 {
