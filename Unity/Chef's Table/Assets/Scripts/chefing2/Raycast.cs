@@ -1,24 +1,77 @@
 ﻿using Boo.Lang;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.XR.MagicLeap;
 
 public class Raycast : MonoBehaviour
 {
-
-    public Transform ctransform; // Camera's transform
+    // Camera's transform
     public GameObject prefab;    // Cube prefab
-    public GameObject ImagePlane;
+    private Vector3 cPosition;
+    private bool prevDone = false;
+    private string currClass = "";
+    private Queue<container> detectionQueue = new Queue<container>();
     //[Range(0, 1)] public float x_ = 0.5f;
     //[Range(0, 1)] public float y_ = 0.5f;
 
-    private void Update()
+    public void setCpoition(Vector3 cPosition)
     {
-        
+        this.cPosition = cPosition;
     }
 
+    private void Update()
+    {
+        if (prevDone)
+        {
+            prevDone = false;
+            container con = detectionQueue.Dequeue();
+            Debug.Log("make Raycast for: " + con.name);
+            currClass = con.name;
+            Vector3 rcPoint = con.point;
+            Vector3 direction = rcPoint - cPosition;
+            MLRaycast.QueryParams _raycastParams = new MLRaycast.QueryParams
+            {
+                Position = cPosition,
+                Direction = direction.normalized,
+                UpVector = new Vector3(1, 0, 0),
+                Width = 1,
+                Height = 1
+            };
+            MLRaycast.Raycast(_raycastParams, HandleOnReceiveRaycast);
+        }
+    }
+
+    public class container
+    {
+        public string name;
+        public Vector3 point;
+        
+        public container(string name, Vector3 point)
+        {
+            this.name = name;
+            this.point = point;
+        }
+    }
+    public void makeRayCast2(Dictionary<string, Vector3> detections, bool debugMode) 
+    {
+        Debug.Log("raycast request made");
+        if (!MLRaycast.IsStarted)
+        {
+            MLRaycast.Start();
+        }
+        foreach (var detection in detections)
+        {
+            detectionQueue.Enqueue(new container(detection.Key, detection.Value));
+        }
+        prevDone = true;
+
+    }
+
+    /*
     public void makeRayCast(Dictionary<string, Vector2> detections, bool debugMode)
     {
         if (!MLRaycast.IsStarted)
@@ -27,7 +80,7 @@ public class Raycast : MonoBehaviour
         }
         foreach(var detection in detections)
         {
-            name = detection.Key;
+            string name = detection.Key;
             float x_ = detection.Value.x;
             float y_ = detection.Value.y;
             float x = (x_ - 0.5f) * ImagePlane.transform.localScale.x;
@@ -47,7 +100,7 @@ public class Raycast : MonoBehaviour
             };
             MLRaycast.Raycast(_raycastParams, HandleOnReceiveRaycast);
         }
-    }
+    }*/
     private void OnDestroy()
     {
         MLRaycast.Stop();
@@ -57,9 +110,18 @@ public class Raycast : MonoBehaviour
     // Wait 2 seconds then destroy the prefab.
     private IEnumerator NormalMarker(Vector3 point, Vector3 normal)
     {
+        prevDone = true;
+        Debug.Log("raycast hit");
         Quaternion rotation = Quaternion.FromToRotation(Vector3.up, normal);
-        GameObject go = Instantiate(prefab, point, rotation);
-        yield return new WaitForSeconds(0.1f);
+        GameObject go = Instantiate(prefab, point, Quaternion.LookRotation(-(cPosition - point), Vector3.up));
+        LineRenderer lr = go.AddComponent<LineRenderer>();
+        Text t = go.transform.Find("Canvas/Text").gameObject.GetComponent<Text>();
+        t.text = currClass;
+        lr.material = new Material(Shader.Find("Sprites/Default"));
+        lr.widthMultiplier = 0.05f;
+        lr.SetPosition(0, cPosition);
+        lr.SetPosition(1, point);
+        yield return new WaitForSeconds(7f);
         Destroy(go);
     }
 

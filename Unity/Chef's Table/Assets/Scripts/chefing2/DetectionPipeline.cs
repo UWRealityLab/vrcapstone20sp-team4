@@ -1,7 +1,5 @@
 ﻿using System;
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.Events;
 using UnityEngine.XR.MagicLeap;
 using System.Collections.Generic;
 using System.Threading;
@@ -9,7 +7,7 @@ using MagicLeap.Core.StarterKit;
 using System.Net;
 using System.Text;
 using TMPro;
-using System.Security.Policy;
+using System.Linq;
 
 public class DetectionPipeline : MonoBehaviour
 {
@@ -28,36 +26,156 @@ public class DetectionPipeline : MonoBehaviour
 
     private float timer = 5;
 
-    private string currResponse;
+    private string currResponse = "";
+    private int time_stamp = 0;
     public TextMeshProUGUI UI;
-
+    // private Matrix4x4 intrinsicCameraMatrix = new Matrix4x4();
+    private float Cx = 949.5f;
+    private float Cy = 539.1f;
+    private float Fx = 1400f;
+    private float Fy = 1399.5f;
+    public Transform ctransform;
     private string url = "http://35.225.232.30:5000/predict";
-    /// <summary>
-    /// The example is using threads on the call to MLCamera.CaptureRawImageAsync to alleviate the blocking
-    /// call at the beginning of CaptureRawImageAsync, and the safest way to prevent race conditions here is to
-    /// lock our access into the MLCamera class, so that we don't accidentally shut down the camera
-    /// while the thread is attempting to work
-    /// </summary>
+    private Raycast rc;
+    public GameObject copy_prefab;
+    private Dictionary<int, GameObject> stamp2Copy = new Dictionary<int, GameObject>();
+    private byte[] currImage;
     private object _cameraLockObject = new object();
 
+
+    //controller testing
+    private MLInput.Controller controller;
+    private bool pressed = false;
+
+    private void Start()
+    {
+
+
+        rc = GameObject.Find("RaycastNode").GetComponent<Raycast>();
+    }
 
     void Update()
     {
         timer -= Time.deltaTime;
         if (timer < 0)
         {
-            
+
+            // stamp2Copy[time_stamp] = Instantiate(copy_prefab, ctransform.position, ctransform.rotation);
             timer = 5;
             TriggerAsyncCapture();
+            findDetectedObjects();
         }
-        UI.text = currResponse;
 
 
     }
 
-    /// <summary>
-    /// Using Awake so that Privileges is set before PrivilegeRequester Start.
-    /// </summary>
+    public void drawPreview(List<Vector4> boundingBoxes)
+    {
+        Texture2D texture = new Texture2D(8, 8);
+        bool status = texture.LoadImage(currImage);
+        foreach (Vector4 boundingBox in boundingBoxes)
+        {
+            Vector2 center = new Vector2(boundingBox[0] + boundingBox[2] / 2f, boundingBox[1] + boundingBox[3] / 2f);
+            float w = boundingBox[2] / 8f;
+            float h = boundingBox[3] / 8f;
+            for (int i = (int)(center.x - w); i < (int)(center.x + w); i++)
+            {
+                for (int j = (int)(center.y - h); j < (int)(center.y + h); j++)
+                {
+                    texture.SetPixel(i, j, Color.red);
+                }
+            }
+        }
+        if (status && (texture.width != 8 && texture.height != 8))
+        {
+            _previewObject.SetActive(true);
+            Renderer renderer = _previewObject.GetComponent<Renderer>();
+            if (renderer != null)
+            {
+                renderer.material.mainTexture = texture;
+            }
+        }
+    }
+    // parses detection result and find their location in by raycasting
+    public void findDetectedObjects()
+    {
+        string response = "{\"detections\": " + currResponse + " }";
+        DetectionList DL;
+        try {
+           DL = JsonUtility.FromJson<DetectionList>(response);
+        } catch (Exception e)
+        {
+            return;
+        }
+        Debug.Log("start processing detections");
+        Dictionary<string, Vector3> rays = new Dictionary<string, Vector3>();
+        List<Vector4> boundingBoxes = new List<Vector4>();
+        int stamp = DL.detections[0].stamp;
+        foreach (var pair in stamp2Copy)
+        {
+            Debug.Log(pair.Key);
+        }
+        foreach (var detection in DL.detections)
+        {
+            int x, y, width, height;
+            x = detection.boxes[0];
+            y = detection.boxes[1];
+            width = detection.boxes[2];
+            height = detection.boxes[3];
+            if (x < 0 || y < 0 || width > 1920 || height > 1080)
+            {
+                continue;
+            }
+            Vector3 center = getRaycastPointWorldSpace(x + width / 2f, 1080 - (y + height / 2f), stamp);
+            Vector4 boundingBox = new Vector4(x, y, width, height);
+            boundingBoxes.Add(boundingBox);
+            rays[detection.label] = center;
+        }
+        rc.setCpoition(stamp2Copy[stamp].transform.position);
+        Destroy(stamp2Copy[stamp]);
+        stamp2Copy.Remove(stamp);
+        rc.makeRayCast2(rays, true);
+        drawPreview(boundingBoxes);
+
+    }
+
+    // calculate reference point to do raycast from a point on the image
+    public Vector3 getRaycastPointWorldSpace(float u, float v, int time_stamp)
+    {
+
+        float z = 1;
+        float x = (u - Cx) / Fx;
+        float y = (v - Cy) / Fy;
+        return stamp2Copy[time_stamp].transform.TransformPoint(new Vector3(x, y, z));
+    }
+
+    private async void UploadFile(string uri, byte[] rawImage, int stamp)
+    {
+        WebClient myWebClient = new WebClient();
+        myWebClient.Headers.Add("Content-Type", "binary/octet-stream");
+        myWebClient.Encoding = Encoding.UTF8;
+        byte[] timeByte = BitConverter.GetBytes(stamp);  // in little Endian
+        byte[] imageInfo = rawImage.Concat(timeByte).ToArray();
+        byte[] responseArray = await myWebClient.UploadDataTaskAsync(uri, imageInfo); ;  // send a byte array to the resource and returns a byte array containing any response
+        currResponse = Encoding.UTF8.GetString(responseArray);
+    }
+
+
+    [Serializable]
+    public class DetectionList
+    {
+        public List<Detection> detections;
+    }
+
+    [Serializable]
+    public class Detection
+    {
+        public int stamp;
+        public List<int> boxes;
+        public string label;
+        public float confidence;
+    }
+
     void Awake()
     {
 
@@ -120,12 +238,6 @@ public class DetectionPipeline : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Cannot make the assumption that a reality privilege is still granted after
-    /// returning from pause. Return the application to the state where it
-    /// requests privileges needed and clear out the list of already granted
-    /// privileges. Also, disable the camera and unregister callbacks.
-    /// </summary>
     void OnApplicationPause(bool pause)
     {
         if (pause)
@@ -152,9 +264,7 @@ public class DetectionPipeline : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Cleans up the component.
-    /// </summary>
+
     void OnDestroy()
     {
         if (_privilegesBeingRequested)
@@ -163,14 +273,9 @@ public class DetectionPipeline : MonoBehaviour
 
             MLPrivilegesStarterKit.Stop();
         }
+        MLInput.Stop();
     }
-
-
-    /// <summary>
-    /// Captures a still image using the device's camera and returns
-    /// the data path where it is saved.
-    /// </summary>
-    /// <param name="fileName">The name of the file to be saved to.</param>
+    
     public void TriggerAsyncCapture()
     {
         if (_captureThread == null || (!_captureThread.IsAlive))
@@ -185,10 +290,7 @@ public class DetectionPipeline : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Connects the MLCamera component and instantiates a new instance
-    /// if it was never created.
-    /// </summary>
+
     private void EnableMLCamera()
     {
 #if PLATFORM_LUMIN
@@ -210,9 +312,6 @@ public class DetectionPipeline : MonoBehaviour
 #endif
     }
 
-    /// <summary>
-    /// Disconnects the MLCamera if it was ever created or connected.
-    /// </summary>
     private void DisableMLCamera()
     {
 #if PLATFORM_LUMIN
@@ -229,9 +328,6 @@ public class DetectionPipeline : MonoBehaviour
 #endif
     }
 
-    /// <summary>
-    /// Once privileges have been granted, enable the camera and callbacks.
-    /// </summary>
     private void StartCapture()
     {
         if (!_hasStarted)
@@ -253,10 +349,6 @@ public class DetectionPipeline : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Responds to privilege requester result.
-    /// </summary>
-    /// <param name="result"/>
     private void HandlePrivilegesDone(MLResult result)
     {
         _privilegesBeingRequested = false;
@@ -275,46 +367,28 @@ public class DetectionPipeline : MonoBehaviour
         StartCapture();
     }
 
-    /// <summary>
-    /// Handles the event for button down.
-    /// </summary>
-    /// <param name="controllerId">The id of the controller.</param>
-    /// <param name="button">The button that is being pressed.</param>
     private void OnButtonDown(byte controllerId, MLInput.Controller.Button button)
     {
-        TriggerAsyncCapture();
+        if (button == MLInput.Controller.Button.Bumper)
+        {
+            
+        }
     }
 
-    /// <summary>
-    /// Handles the event of a new image getting captured.
-    /// </summary>
-    /// <param name="imageData">The raw data of the image.</param>
     private void OnCaptureRawImageComplete(byte[] imageData)
     {
         lock (_cameraLockObject)
         {
             _isCapturing = false;
         }
-        // Initialize to 8x8 texture so there is no discrepency
-        // between uninitalized captures and error texture
-        Texture2D texture = new Texture2D(8, 8);
-        bool status = texture.LoadImage(imageData);
-
-        if (status && (texture.width != 8 && texture.height != 8))
-        {
-            _previewObject.SetActive(true);
-            Renderer renderer = _previewObject.GetComponent<Renderer>();
-            if (renderer != null)
-            {
-                renderer.material.mainTexture = texture;
-            }
-        }
-        UploadFile(url, imageData);
+        Debug.Log("capture complete");
+        stamp2Copy[time_stamp] = Instantiate(copy_prefab, ctransform.position, ctransform.rotation);
+        Debug.Log("instantiation complete");
+        time_stamp++;
+        currImage = imageData;
+        UploadFile(url, imageData, time_stamp - 1);
     }
 
-    /// <summary>
-    /// Worker function to call the API's Capture function
-    /// </summary>
     private void CaptureThreadWorker()
     {
 #if PLATFORM_LUMIN
@@ -332,13 +406,6 @@ public class DetectionPipeline : MonoBehaviour
 #endif
     }
 
-    private async void UploadFile(string uri, byte[] rawImage)
-    {
-        WebClient myWebClient = new WebClient();
-        myWebClient.Headers.Add("Content-Type", "binary/octet-stream");
-        myWebClient.Encoding = Encoding.UTF8;
-        byte[] responseArray = await myWebClient.UploadDataTaskAsync(uri, rawImage); ;  // send a byte array to the resource and returns a byte array containing any response
-        currResponse = Encoding.UTF8.GetString(responseArray);
-    }
+
 }
 
