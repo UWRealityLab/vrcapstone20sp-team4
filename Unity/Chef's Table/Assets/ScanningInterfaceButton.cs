@@ -22,12 +22,13 @@ public class ScanningInterfaceButton : MonoBehaviour
     GameObject icon;
     NIThresholdControl NIControl;
     InterfaceManager interfaceManager;
-    changeSimulation changeSimulationScript;
-    private bool timerPaused = true;
-    private GameObject playButton;
-    private Material startButton;
-    private Material pauseButton;
-
+    GameObject scanningStart;
+    GameObject scanningState;
+    GameObject scanningConfirm;
+    GameObject scanningIngredientNamesDisplay;
+    private string[] ingredientList;
+    private bool isScanning = false;
+    
     // For image capture
     private bool _isCameraConnected = false;
     private bool _isCapturing = false;
@@ -42,94 +43,56 @@ public class ScanningInterfaceButton : MonoBehaviour
 
     void Awake()
     {
+        scanningStart = GameObject.Find("ScanningStart");
+        scanningState = GameObject.Find("ScanningState");
+        scanningConfirm = GameObject.Find("ScanningConfirm");
+        scanningIngredientNamesDisplay = GameObject.Find("ScanningIngredientNamesDisplay");
+
         scheduler = GameObject.Find("Scheduler").GetComponent<MainScheduler>();
         interfaceManager = GameObject.Find("InterfaceManager").GetComponent<InterfaceManager>();
-        changeSimulationScript = GameObject.Find("CuttingSimulation").GetComponent<changeSimulation>();
         buttonClip = GameObject.Find("Button_Click").GetComponent<AudioSource>();
         timerClip = GameObject.Find("Timer").GetComponent<AudioSource>();
         GameObject iconText = transform.parent.transform.Find("IconAndText").gameObject;
         icon = iconText.transform.Find("Icon").gameObject;
         NIControl = GameObject.Find("HeadLockCanvas").GetComponent<NIThresholdControl>();
-        playButton = GameObject.Find("PlayButton").transform.Find("Start").gameObject;
-        startButton = Resources.Load("Mat/ButtonStartMat", typeof(Material)) as Material;
-        pauseButton = Resources.Load("Mat/ButtonPauseMat", typeof(Material)) as Material;
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.tag == "Hand")
-        {
-            GetComponent<Button>().onClick.Invoke();
-            if (name == "Start") return;
-            if (name == "Exit")
-            {
-                if (interfaceManager.isActiveSimulationInterface())
-                {
-                    interfaceManager.exitSimulation();
-                }
-                else
-                {
-                    interfaceManager.endTutorialGeneral();
-                }
-                return;
-            }
-            StartCoroutine(ShowFeedback());
-        }
-    }
-
-    private IEnumerator ShowFeedback()
-    {
-        if (name != "Lock")
-        {
-            icon.GetComponent<Renderer>().material.SetColor("_Color", Color.red);
-        }
-        GetComponent<Collider>().enabled = false;
-        yield return new WaitForSeconds(1.0f);
-        GetComponent<Collider>().enabled = true;
-        if (name != "Lock")
-        {
-            icon.GetComponent<Renderer>().material.SetColor("_Color", Color.white);
-        }
+        //pauseButton = Resources.Load("Mat/ButtonPauseMat", typeof(Material)) as Material;
     }
 
     public void clicked()
     {
         if (name == "TrashButton 1")
         {
-            UI.text = currResponse;
+            AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("TrashButton 1").transform.position);
         }
         else if (name == "TrashButton 2")
         {
-            //Debug.Log("Back Button, " + name);
-            scheduler.toPreviousStep();
-            AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("Back").transform.position);
+            AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("TrashButton 2").transform.position);
         }
         else if (name == "TrashButton 3")
         {
-            //Debug.Log("Back Button, " + name);
-            scheduler.toPreviousStep();
-            AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("Back").transform.position);
+            AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("TrashButton 3").transform.position);
         }
         else if (name == "TrashButton 4")
         {
-            //Debug.Log("Back Button, " + name);
-            scheduler.toPreviousStep();
-            AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("Back").transform.position);
+            AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("TrashButton 4").transform.position);
         }
         else if (name == "TrashButton 5")
         {
-            //Debug.Log("Back Button, " + name);
-            scheduler.toPreviousStep();
-            AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("Back").transform.position);
+            AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("TrashButton 5").transform.position);
         }
         else if (name == "TrashButton 6")
         {
-            //Debug.Log("Back Button, " + name);
-            scheduler.toPreviousStep();
-            AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("Back").transform.position);
+            AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("TrashButton 6").transform.position);
+        }
+        else if (name == "GoBack")
+        {
+            // scanningConfirm.SetActive(true);
+            // set everything else to false
+            AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("GoBack").transform.position);
         }
         else if (name == "StartScanning")
         {
+            
             // Before enabling the Camera, the scene must wait until the privilege has been granted.
             MLResult result = MLPrivilegesStarterKit.Start();
 
@@ -158,28 +121,45 @@ public class ScanningInterfaceButton : MonoBehaviour
                 DisableMLCamera();
             }
 
+            // scanningState.SetActive(true);
+            isScanning = true;
+
+            // everything else set false
+            AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("StartScanning").transform.position);
         }
         else if (name == "IngredientList")
         {
-            //Debug.Log("Reset Button, " + name);
-            scheduler.changeTimerStatus(2);
-            AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("Reset").transform.position);
-            timerClip.Stop();
+            // scanningIngredientNamesDisplay.SetActive(true);
+            // everything else set false
+            AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("IngredientList").transform.position);
         }
         else if (name == "GetRecipes")
         {
-            scheduler.changeTimerStatus(0);
-            AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("Pause").transform.position);
-            timerClip.Stop();
+            // !! THIS WILL GO TO THE NEXT SCREEN WITH RECIPES 
+            AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("GetRecipes").transform.position);
         }
         else if (name == "ScanMoreItems")
         {
-            scheduler.addToTimer();
-            AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("Plus").transform.position);
+            // scanningState.SetActive(true);
+            // everything else set false
+            AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("ScanMoreItems").transform.position);
         }
         else
         {
             Debug.Log("Unknown button");
+        }
+    }
+
+    void Update()
+    {
+        timer -= Time.deltaTime;
+        if (timer < 0)
+        {
+            timer = 5;
+            // scanningConfirm.SetActive(true);
+            // set everything else to false
+            // isScanning = false;
+            // ingredientList = currResponse;
         }
     }
 

@@ -26,6 +26,11 @@ public class InterfaceManager : MonoBehaviour
 
     private void Awake()
     {
+        scanningStart = GameObject.Find("ScanningStart");
+        scanningState = GameObject.Find("ScanningState");
+        scanningConfirm = GameObject.Find("ScanningConfirm");
+        scanningIngredientNamesDisplay = GameObject.Find("ScanningIngredientNamesDisplay");
+
         scanningInterface = GameObject.Find("scanningInterface");
         nearInterface = GameObject.Find("NearInterface");
         simulationInterface = GameObject.Find("SimulationInterface");
