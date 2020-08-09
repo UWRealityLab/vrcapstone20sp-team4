@@ -14,21 +14,21 @@ using UnityEngine.Events;
 
 public class ScanningInterfaceButton : MonoBehaviour
 {
-    // Start is called before the first frame update
-    MainScheduler scheduler;
     AudioSource buttonClip;
-    AudioSource timerClip;
-    GameObject text;
-    GameObject icon;
-    NIThresholdControl NIControl;
     InterfaceManager interfaceManager;
     GameObject scanningStart;
     GameObject scanningState;
     GameObject scanningConfirm;
     GameObject scanningIngredientNamesDisplay;
-    private string[] ingredientList;
+    private List<string> ingredientList = new List<string>();
     private bool isScanning = false;
-    
+    Text ingredientNameText1;
+    Text ingredientNameText2;
+    Text ingredientNameText3;
+    Text ingredientNameText4;
+    Text ingredientNameText5;
+    Text ingredientNameText6;
+
     // For image capture
     private bool _isCameraConnected = false;
     private bool _isCapturing = false;
@@ -38,7 +38,7 @@ public class ScanningInterfaceButton : MonoBehaviour
     private float timer = 5;
     private string currResponse;
     public TextMeshProUGUI UI;
-    private string url = "http://35.225.232.30:5000/predict";
+    private string url = "http://35.233.198.97";
     private object _cameraLockObject = new object();
 
     void Awake()
@@ -48,40 +48,56 @@ public class ScanningInterfaceButton : MonoBehaviour
         scanningConfirm = GameObject.Find("ScanningConfirm");
         scanningIngredientNamesDisplay = GameObject.Find("ScanningIngredientNamesDisplay");
 
-        scheduler = GameObject.Find("Scheduler").GetComponent<MainScheduler>();
+        ingredientNameText1 = GameObject.Find("ingredientNameText1").GetComponent<Text>();
+        ingredientNameText2 = GameObject.Find("ingredientNameText2").GetComponent<Text>();
+        ingredientNameText3 = GameObject.Find("ingredientNameText3").GetComponent<Text>();
+        ingredientNameText4 = GameObject.Find("ingredientNameText4").GetComponent<Text>();
+        ingredientNameText5 = GameObject.Find("ingredientNameText5").GetComponent<Text>();
+        ingredientNameText6 = GameObject.Find("ingredientNameText6").GetComponent<Text>();
+
         interfaceManager = GameObject.Find("InterfaceManager").GetComponent<InterfaceManager>();
         buttonClip = GameObject.Find("Button_Click").GetComponent<AudioSource>();
-        timerClip = GameObject.Find("Timer").GetComponent<AudioSource>();
-        GameObject iconText = transform.parent.transform.Find("IconAndText").gameObject;
-        icon = iconText.transform.Find("Icon").gameObject;
-        NIControl = GameObject.Find("HeadLockCanvas").GetComponent<NIThresholdControl>();
-        //pauseButton = Resources.Load("Mat/ButtonPauseMat", typeof(Material)) as Material;
+        //GameObject iconText = transform.parent.transform.Find("IconAndText").gameObject;
+        //icon = iconText.transform.Find("Icon").gameObject;
+        //NIControl = GameObject.Find("HeadLockCanvas").GetComponent<NIThresholdControl>();
     }
 
     public void clicked()
     {
         if (name == "TrashButton 1")
         {
+            ingredientList.Remove(ingredientNameText1.text);
+            ingredientNameText1.text = "";
             AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("TrashButton 1").transform.position);
-        }
+        } 
         else if (name == "TrashButton 2")
         {
+            ingredientList.Remove(ingredientNameText2.text);
+            ingredientNameText2.text = "";
             AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("TrashButton 2").transform.position);
         }
         else if (name == "TrashButton 3")
         {
+            ingredientList.Remove(ingredientNameText3.text);
+            ingredientNameText3.text = "";
             AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("TrashButton 3").transform.position);
         }
         else if (name == "TrashButton 4")
         {
+            ingredientList.Remove(ingredientNameText4.text);
+            ingredientNameText4.text = "";
             AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("TrashButton 4").transform.position);
         }
         else if (name == "TrashButton 5")
         {
+            ingredientList.Remove(ingredientNameText5.text);
+            ingredientNameText5.text = "";
             AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("TrashButton 5").transform.position);
         }
         else if (name == "TrashButton 6")
         {
+            ingredientList.Remove(ingredientNameText6.text);
+            ingredientNameText6.text = "";
             AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("TrashButton 6").transform.position);
         }
         else if (name == "GoBack")
@@ -92,7 +108,11 @@ public class ScanningInterfaceButton : MonoBehaviour
         }
         else if (name == "StartScanning")
         {
-            
+            scanningState.SetActive(true);
+            scanningConfirm.SetActive(false);
+            scanningStart.SetActive(false);
+            scanningIngredientNamesDisplay.SetActive(false);
+
             // Before enabling the Camera, the scene must wait until the privilege has been granted.
             MLResult result = MLPrivilegesStarterKit.Start();
 
@@ -121,16 +141,16 @@ public class ScanningInterfaceButton : MonoBehaviour
                 DisableMLCamera();
             }
 
-            // scanningState.SetActive(true);
             isScanning = true;
-
-            // everything else set false
             AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("StartScanning").transform.position);
         }
         else if (name == "IngredientList")
         {
-            // scanningIngredientNamesDisplay.SetActive(true);
-            // everything else set false
+            scanningState.SetActive(false);
+            scanningConfirm.SetActive(false);
+            scanningStart.SetActive(false);
+            scanningIngredientNamesDisplay.SetActive(true);
+
             AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("IngredientList").transform.position);
         }
         else if (name == "GetRecipes")
@@ -140,8 +160,11 @@ public class ScanningInterfaceButton : MonoBehaviour
         }
         else if (name == "ScanMoreItems")
         {
-            // scanningState.SetActive(true);
-            // everything else set false
+            scanningState.SetActive(true);
+            scanningConfirm.SetActive(false);
+            scanningStart.SetActive(false);
+            scanningIngredientNamesDisplay.SetActive(false);
+
             AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("ScanMoreItems").transform.position);
         }
         else
@@ -156,10 +179,19 @@ public class ScanningInterfaceButton : MonoBehaviour
         if (timer < 0)
         {
             timer = 5;
-            // scanningConfirm.SetActive(true);
-            // set everything else to false
-            // isScanning = false;
+            // ingredientNameText1.text ........
+            // ingredientNameText2.text ........
+            // ingredientNameText3.text ........
+            // ingredientNameText4.text ........
+            // ingredientNameText5.text ........
+            // ingredientNameText6.text ........
+
             // ingredientList = currResponse;
+            scanningConfirm.SetActive(false);
+            scanningState.SetActive(true);
+            scanningStart.SetActive(false);
+            scanningIngredientNamesDisplay.SetActive(false);
+            isScanning = false;
         }
     }
 
