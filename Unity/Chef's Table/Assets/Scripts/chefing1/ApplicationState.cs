@@ -6,21 +6,27 @@ using UnityEngine;
 // that other program will want to acquire
 public class ApplicationState : MonoBehaviour
 {
-    
-    public Dictionary<string, Utensil> name2Utensil = new Dictionary<string, Utensil>(); 
-    public Dictionary<string, Ingredient> name2Ingredient = new Dictionary<string, Ingredient>();
+
+    private Dictionary<string, Vector3> item2Location = new Dictionary<string, Vector3>();
+
     // in the future, we might need 
     // list of all current animation
     // more...
-
-    void Start()
+    public bool contains(string name)
     {
-        
+        return item2Location.ContainsKey(name);
     }
 
-    // Update is called once per frame
-    void Update()
+    // contains should be called before this
+    public Vector3 getItemLocation(string name)
     {
-        
+        return item2Location[name];
     }
+
+    public void setLocation(string name, Vector3 location)
+    {
+        item2Location[name] = location;
+    }
+
+
 }

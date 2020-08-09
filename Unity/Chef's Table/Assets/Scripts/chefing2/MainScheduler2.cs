@@ -57,10 +57,19 @@ public class MainScheduler2 : MonoBehaviour
     }
 
     // change timer status at the current step index for all substeps
-    // 0 for pause, 1 for start, 2 reset timer and pause
-    public void changeTimerStatus(bool pause)
+    // 0 for pause, 1 for start, 2 reset timer
+    public void changeTimerStatus(int status)
     {
-        timerPause = pause;
+        if (status == 0)
+        {
+            timerPause = true;
+        } else if (status == 1)
+        {
+            timerPause = false;
+        } else
+        {
+            resetTimerRecord();
+        }
     }
 
     public bool isTutorialDone()
@@ -83,7 +92,7 @@ public class MainScheduler2 : MonoBehaviour
         Dictionary<string, List<string>> dic = new Dictionary<string, List<string>>();
         // TODO: add utensils and ingredients
         dic.Add("description", new List<string>() { tutorial.steps[stepIndex].step});
-        dic.Add("timer", new List<string>() { GetTimeSpanWithSec(tutorial.steps[stepIndex].timer) });
+        dic.Add("timer", new List<string>() { GetTimeSpanWithSec(tutorial.steps[stepIndex].length.number) });
         dic.Add("recipe", new List<string>() { chosenRecipe });
         dic.Add("StepNum", new List<string>() { (stepIndex + 1) + "" });
         return dic;
@@ -114,7 +123,7 @@ public class MainScheduler2 : MonoBehaviour
             timerRecord.Clear();
             foreach(Instruction instruction in tutorial.steps)
             {
-                timerRecord.Add(instruction.timer);
+                timerRecord.Add(instruction.length.number);
             }
             timerPause = true;
         }

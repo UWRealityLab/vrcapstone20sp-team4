@@ -86,19 +86,11 @@ public class InterfaceController : MonoBehaviour
         }
     }
 
-    void loadAnimationTest()
-    {
-        GameObject animation = (GameObject)Instantiate(Resources.Load("Animations/tutorial1/step8"), new Vector3(0, 0, 0), Quaternion.identity);
-    }
-
-
-
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.V))
         {
             loadPreview("breakfast burrito");
         }
-
     }
 }

@@ -47,7 +47,7 @@ public class NetworkingMain : MonoBehaviour
                 Vector2 center = getNormalizedCenter(x, y, width, height, W, H);
                 rays[detection.label] = center;
             }
-            rc.makeRayCast(rays, true);
+            //rc.makeRayCast(rays, true);
         }
     }
 
