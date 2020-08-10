@@ -23,7 +23,7 @@ public class ScanningInterfaceButton : MonoBehaviour
     GameObject scanningConfirm;
     GameObject scanningIngredientNamesDisplay;
     private List<string> ingredientList = new List<string>();
-    private bool isScanning = false;
+    private bool doneScanning = false;
     TextMeshPro ingredientNameText1;
     TextMeshPro ingredientNameText2;
     TextMeshPro ingredientNameText3;
@@ -39,7 +39,7 @@ public class ScanningInterfaceButton : MonoBehaviour
     private Thread _captureThread = null;
     private float timer = 5;
     private string currResponse;
-    private string url = "http://35.233.198.97/detect_one";
+    private string url = "http://35.233.198.97.5000/detect_one";
     private object _cameraLockObject = new object();
     private Dictionary<int, GameObject> stamp2Copy = new Dictionary<int, GameObject>();
     private int time_stamp = 0;
@@ -178,7 +178,7 @@ public class ScanningInterfaceButton : MonoBehaviour
                 DisableMLCamera();
             }
 
-            isScanning = true;
+            doneScanning = true;
             AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("StartScanning").transform.position);
         }
         else if (name == "IngredientList")
@@ -301,7 +301,6 @@ public class ScanningInterfaceButton : MonoBehaviour
             }
 
             Debug.Log("Scanning!!");
-            isScanning = true;
             //AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("StartScanning").transform.position);
         }
         else if (name.Equals("IngredientList"))
@@ -348,22 +347,26 @@ public class ScanningInterfaceButton : MonoBehaviour
         //Debug.Log("Timer " + timer);
         //Debug.Log("Current Response " + currResponse);
         timer -= Time.deltaTime;
-        if (timer < 0 && isScanning)
+        if (timer < 0 && doneScanning)
         {
             scanningConfirm.SetActive(true);
             timer = 5;
+            Debug.Log("before detecion check");
 
             string response = "{\"detections\": " + currResponse + " }";
             ListOfDetections listOfDetections;
+            
             try
             {
                 listOfDetections = JsonUtility.FromJson<ListOfDetections>(response);
+                Debug.Log("in try of catch");
             }
             catch (Exception e)
             {
                 return;
             }
 
+            Debug.Log("after detecion check");
             // assign text to viewable text by user
             TextMeshPro[] textValues = {ingredientNameText1, ingredientNameText2,
                                                   ingredientNameText3, ingredientNameText4,
@@ -375,7 +378,7 @@ public class ScanningInterfaceButton : MonoBehaviour
                     textValues[i].text = listOfDetections.detections[i].label;
                 }
             }
-
+            Debug.Log("after list sorting");
             // turn off/on if there is some text corresponding to it
             String[] trashButtons = {"TrashButton 1", "TrashButton 2",
                                     "TrashButton 3", "TrashButton 4",
@@ -392,10 +395,11 @@ public class ScanningInterfaceButton : MonoBehaviour
                 }
             }
 
+            scanningConfirm.SetActive(false);
             scanningState.SetActive(false);
             scanningStart.SetActive(false);
-            scanningIngredientNamesDisplay.SetActive(false);
-            isScanning = false;
+            scanningIngredientNamesDisplay.SetActive(true);
+            doneScanning = false;
         }
     }
 
@@ -467,12 +471,11 @@ public class ScanningInterfaceButton : MonoBehaviour
         WebClient myWebClient = new WebClient();
         myWebClient.Headers.Add("Content-Type", "binary/octet-stream");
         myWebClient.Encoding = Encoding.UTF8;
-        byte[] timeByte = BitConverter.GetBytes(stamp);  // in little Endian
-        byte[] imageInfo = rawImage.Concat(timeByte).ToArray();
         Debug.Log("Sending...");
-        byte[] responseArray = await myWebClient.UploadDataTaskAsync(uri, imageInfo);  // send a byte array to the resource and returns a byte array containing any response
+        byte[] responseArray = await myWebClient.UploadDataTaskAsync(uri, rawImage);  // send a byte array to the resource and returns a byte array containing any response
         Debug.Log("Sent!");
         currResponse = Encoding.UTF8.GetString(responseArray);
+        doneScanning = true;
         Debug.Log("Currrent Response:" + currResponse);
     }
 
