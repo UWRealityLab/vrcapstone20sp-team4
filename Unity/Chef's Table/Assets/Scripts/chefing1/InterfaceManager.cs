@@ -11,7 +11,7 @@ public class InterfaceManager : MonoBehaviour
     GameObject onboarding;
     GameObject cuttingSimulation;
     GameObject summary; // for completion page
-    MainScheduler ms;
+    MainScheduler2 ms;
     UIFadingAnimation animator;
     GameObject onboardingPreview;
     GameObject headLockCanvas;
@@ -40,7 +40,7 @@ public class InterfaceManager : MonoBehaviour
         onboardingPreview = GameObject.Find("Onboarding").transform.Find("OnboardingPreview").gameObject;
         onboardingInterface = GameObject.Find("Onboarding").transform.Find("OnboardingInterface").gameObject;
         animator = GameObject.Find("FadingAnimation").GetComponent<UIFadingAnimation>();
-        ms = GameObject.Find("Scheduler").GetComponent<MainScheduler>();
+        ms = GameObject.Find("Scheduler").GetComponent<MainScheduler2>();
         summary = GameObject.Find("summary");
         headLockCanvas = GameObject.Find("HeadLockCanvas");
     }
@@ -180,7 +180,7 @@ public class InterfaceManager : MonoBehaviour
 
     public void endTutorialGeneral()
     {
-        MainScheduler mainScheduler = GameObject.Find("Scheduler").GetComponent<MainScheduler>();
+        MainScheduler2 mainScheduler = GameObject.Find("Scheduler").GetComponent<MainScheduler2>();
         
         if (!mainScheduler.isTutorialDone())
         {

@@ -10,11 +10,11 @@ public class HeadLockInterface : MonoBehaviour
     public TextMeshProUGUI tmp;
     private string currentKey = "";
     GameObject scheduler;
-    MainScheduler schedulerScript;
+    MainScheduler2 schedulerScript;
     void Start()
     {
         scheduler = GameObject.Find("Scheduler");
-        schedulerScript = scheduler.GetComponent<MainScheduler>();
+        schedulerScript = scheduler.GetComponent<MainScheduler2>();
     }
 
     // Update is called once per frame
@@ -24,14 +24,14 @@ public class HeadLockInterface : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.A)) currentKey = "A";
         if (Input.GetKeyDown(KeyCode.S)) currentKey = "S";
         if (Input.GetKeyDown(KeyCode.D)) currentKey = "D";
-
+        /*
         if (Input.GetKeyDown(KeyCode.Alpha1)) schedulerScript.replay("step1-1", false);
         if (Input.GetKeyDown(KeyCode.Alpha2)) schedulerScript.replay("step1-1", true);
         if (Input.GetKeyDown(KeyCode.Alpha3)) schedulerScript.replay("step2-1", false);
         if (Input.GetKeyDown(KeyCode.Alpha4)) schedulerScript.replay("step2-1", true);
         if (Input.GetKeyDown(KeyCode.Alpha5)) schedulerScript.replay("step3-1", false);
         if (Input.GetKeyDown(KeyCode.Alpha6)) schedulerScript.replay("step3-1", true);
-
+        */
         if (Input.GetKeyDown(KeyCode.Alpha7)) schedulerScript.changeTimerStatus(0); // pause
         if (Input.GetKeyDown(KeyCode.Alpha8)) schedulerScript.changeTimerStatus(1); // start
         if (Input.GetKeyDown(KeyCode.Alpha9)) schedulerScript.changeTimerStatus(2); // reset

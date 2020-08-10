@@ -7,7 +7,7 @@ using UnityEngine.Video;
 
 public class UpdateInGameInterface : MonoBehaviour
 {
-    private MainScheduler mainScheduler;
+    private MainScheduler2 mainScheduler;
     //private TextMeshProUGUI instructionTextFloatingInterf;
     private TextMeshPro instructionTextNearMenu;
     //private TextMeshProUGUI clockFloatingInterf;
@@ -26,7 +26,7 @@ public class UpdateInGameInterface : MonoBehaviour
     // Start is called before the first frsame update
     void Awake()
     {
-        mainScheduler = GameObject.Find("Scheduler").GetComponent<MainScheduler>();
+        mainScheduler = GameObject.Find("Scheduler").GetComponent<MainScheduler2>();
         nearInterface = GameObject.Find("NearInterface");
         instructionTextNearMenu = GameObject.Find("NearInterface/InstructionCanvas/Instruction").GetComponent<TextMeshPro>();
         clockNearMenu = GameObject.Find("NearInterface/InterfaceTimer/ClockText").GetComponent<TextMeshPro>();
@@ -59,6 +59,7 @@ public class UpdateInGameInterface : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        /*
         Dictionary<string, List<string>> info = mainScheduler.getCurrentStepInfo();
         if (info == null) {
             return;
@@ -92,6 +93,7 @@ public class UpdateInGameInterface : MonoBehaviour
             }
             
         }
+        */
         /*
         if (gameInterface.activeSelf) {
             instructionTextFloatingInterf.text = info["description"][0];

@@ -1,9 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Networking;
 using MagicLeapTools;
 
 public class InterfaceController : MonoBehaviour
@@ -15,39 +15,39 @@ public class InterfaceController : MonoBehaviour
     private GameObject preview;
     public GameObject previewPrefab;
     GameObject scheduler;
-    MainScheduler schedulerScript;
-    Dictionary<string, Dictionary<string, List<string>>> allTutorials;
+    MainScheduler2 schedulerScript;
+    Dictionary<string, List<Dictionary<string, List<string>>>> allTutorials = new Dictionary<string, List<Dictionary<string, List<string>>>>();
+    List<string> recipe_names = new List<string>();
 
     public void loadPreview(string name)
     {
-        if (allTutorials.ContainsKey(name))
-        {
+        if (allTutorials.ContainsKey(name)) {
             //preview.SetActive(true);
-            TextMeshPro utenText = recipePreview.transform.Find("UtensilsCanvas").Find("Names").GetComponent<TextMeshPro>();
+            int index = recipe_names.FindIndex(a => a.Contains(name));
+            TextMeshPro usedText = recipePreview.transform.Find("UsedIngredientsCanvas").Find("Names").GetComponent<TextMeshPro>();
             string temp = "";
-            List<string> utenList = allTutorials[name]["utensils"];
-            foreach (string utensil in utenList)
-            {
-                temp += utensil + ", ";
+            List<string> usedList = allTutorials[name][index]["used"];
+            foreach (string ingredient in usedList) {
+                temp += ingredient + "\r\n";
             }
-            temp = temp.Substring(0, temp.Length - 2);
-            utenText.text = temp;
+            usedText.text = temp;
 
             temp = "";
-            TextMeshPro ingText = recipePreview.transform.Find("IngredientsCanvas").Find("Names").GetComponent<TextMeshPro>();            List<string> ingList = allTutorials[name]["ingredients"];
-            foreach (string ingredient in ingList)
-            {
-                temp += ingredient + ", ";
+            TextMeshPro missedText = recipePreview.transform.Find("MissedIngredientsCanvas").Find("Names").GetComponent<TextMeshPro>();
+            List<string> missedList = allTutorials[name][index]["missed"];
+            foreach (string ingredient in missedList) {
+                temp += ingredient + "\r\n";
             }
-            temp = temp.Substring(0, temp.Length - 2);
-            ingText.text = temp;
+            missedText.text = temp;
 
             TextMeshPro recipeName = recipePreview.transform.Find("Canvas").Find("RecipeName").GetComponent<TextMeshPro>();
             recipeName.text = name;
-            
-            Texture2D tex = (Texture2D)Resources.Load(allTutorials[name]["pathToImage"][0]);
-            recipePreview.GetComponentInChildren<RawImage>().texture = tex;
-            
+
+            string pathToImage = allTutorials[name][index]["info"][2];
+            Debug.Log(pathToImage);
+            StartCoroutine(GetTexture(pathToImage, recipePreview));
+            index++;
+
             /*
             GameObject serving = preview.transform.Find("serving").gameObject;
             TextMeshProUGUI servingText = serving.GetComponent<TextMeshProUGUI>();
@@ -59,8 +59,8 @@ public class InterfaceController : MonoBehaviour
     void Start()
     {
         scheduler = GameObject.Find("Scheduler");
-        schedulerScript = scheduler.GetComponent<MainScheduler>();
-        schedulerScript.previewAllTutorial2();
+        schedulerScript = scheduler.GetComponent<MainScheduler2>();
+        // schedulerScript.PreviewAllTutorial();
         preview = (GameObject)Instantiate(previewPrefab, this.transform.position + new Vector3(0.8f, 0, 0), this.transform.rotation);
         preview.SetActive(false);
         preview.transform.SetParent(this.transform, true);
@@ -72,24 +72,35 @@ public class InterfaceController : MonoBehaviour
 
     void delayStart()
     {
-        allTutorials = schedulerScript.getAllTutorialPreview();
-        List<string> recipe_names = new List<string>(allTutorials.Keys);
-        Debug.Log(recipe_names.Count);
-        for (int i = 0; i < recipe_names.Count; i++)
-        {
+        schedulerScript.PreviewAllTutorial();
+        allTutorials = schedulerScript.GetAllTutorialPreview();
+        Debug.Log("interface controller: " + allTutorials.Count);
+        recipe_names = new List<string>(allTutorials.Keys);
+        for (int i = 0; i < recipe_names.Count; i++) {
             GameObject recipePlate = onboardingInterface.transform.Find("RecipePlate" + i).gameObject;
             TextMeshPro name = recipePlate.GetComponentInChildren<TextMeshPro>();
             name.text = recipe_names[i];
-            Texture2D tex = (Texture2D) Resources.Load(allTutorials[recipe_names[i]]["pathToImage"][0]);
-            Debug.Log(allTutorials[recipe_names[i]]["pathToImage"][0]);
-            recipePlate.GetComponentInChildren<RawImage>().texture = tex;
+            string pathToImage = allTutorials[name.text][i]["info"][2];
+            Debug.Log(pathToImage);
+            StartCoroutine(GetTexture(pathToImage, recipePlate));
+        }
+    }
+
+    IEnumerator GetTexture(string url, GameObject obj)
+    {
+        UnityWebRequest www = UnityWebRequestTexture.GetTexture(url);
+        yield return www.SendWebRequest();
+
+        if (www.isNetworkError || www.isHttpError) {
+            Debug.Log(www.error);
+        } else {
+            obj.GetComponentInChildren<RawImage>().texture = ((DownloadHandlerTexture)www.downloadHandler).texture;
         }
     }
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.V))
-        {
+        if (Input.GetKeyDown(KeyCode.V)) {
             loadPreview("breakfast burrito");
         }
     }

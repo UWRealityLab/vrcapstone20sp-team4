@@ -10,7 +10,7 @@ public class RecipeConfirmButton : MonoBehaviour
     InterfaceManager interfaceManager;
     UIFadingAnimation fader;
     GameObject sche;
-    MainScheduler ms;
+    MainScheduler2 ms;
     AudioSource buttonClip;
 
     private void Awake()
@@ -18,7 +18,7 @@ public class RecipeConfirmButton : MonoBehaviour
         interfaceManager = GameObject.Find("InterfaceManager").GetComponent<InterfaceManager>();
         fader = GameObject.Find("FadingAnimation").GetComponent<UIFadingAnimation>();
         GameObject sche = GameObject.Find("Scheduler");
-        ms = sche.GetComponent<MainScheduler>();
+        ms = sche.GetComponent<MainScheduler2>();
         buttonClip = GameObject.Find("Button_Click").GetComponent<AudioSource>();
     }
 
