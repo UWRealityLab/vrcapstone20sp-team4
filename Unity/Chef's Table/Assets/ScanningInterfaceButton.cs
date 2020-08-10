@@ -79,8 +79,9 @@ public class ScanningInterfaceButton : MonoBehaviour
         Debug.Log("awake");
         if (notIn)
         {
+            //test call
             notIn = false;
-            //testCall("StartScanning");
+            testCall("StartScanning");
         }
         /*
         testtimer -= Time.deltaTime;
