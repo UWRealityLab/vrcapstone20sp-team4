@@ -44,7 +44,6 @@ public class InterfaceController : MonoBehaviour
             recipeName.text = name;
 
             string pathToImage = allTutorials[name][index]["info"][2];
-            Debug.Log(pathToImage);
             StartCoroutine(GetTexture(pathToImage, recipePreview));
             index++;
 
@@ -74,14 +73,12 @@ public class InterfaceController : MonoBehaviour
     {
         schedulerScript.PreviewAllTutorial();
         allTutorials = schedulerScript.GetAllTutorialPreview();
-        Debug.Log("interface controller: " + allTutorials.Count);
         recipe_names = new List<string>(allTutorials.Keys);
         for (int i = 0; i < recipe_names.Count; i++) {
             GameObject recipePlate = onboardingInterface.transform.Find("RecipePlate" + i).gameObject;
             TextMeshPro name = recipePlate.GetComponentInChildren<TextMeshPro>();
             name.text = recipe_names[i];
             string pathToImage = allTutorials[name.text][i]["info"][2];
-            Debug.Log(pathToImage);
             StartCoroutine(GetTexture(pathToImage, recipePlate));
         }
     }

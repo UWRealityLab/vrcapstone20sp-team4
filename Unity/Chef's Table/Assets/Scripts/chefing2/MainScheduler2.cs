@@ -175,7 +175,6 @@ public class MainScheduler2 : MonoBehaviour
         GameObject recipeAPI = GameObject.Find("RecipeAPI");
         GetInstructions getRecipe = recipeAPI.GetComponent<GetInstructions>();
         allTutorials = getRecipe.GetAllPreviews();
-        Debug.Log("main scheduler: " + allTutorials.Count);
     }
 
     public Dictionary<string, List<Dictionary<string, List<string>>>> GetAllTutorialPreview()
