@@ -5,13 +5,13 @@ using UnityEngine;
 public class IngameInterfaceButtons : MonoBehaviour
 {
     // Start is called before the first frame update
-    MainScheduler scheduler;
+    MainScheduler2 scheduler;
     AudioSource buttonClip;
     AudioSource timerClip;
 
     void Start()
     {
-        scheduler = GameObject.Find("Scheduler").GetComponent<MainScheduler>();
+        scheduler = GameObject.Find("Scheduler").GetComponent<MainScheduler2>();
         buttonClip = GameObject.Find("Button_Click").GetComponent<AudioSource>();
         timerClip = GameObject.Find("Timer").GetComponent<AudioSource>();
     }
@@ -39,13 +39,13 @@ public class IngameInterfaceButtons : MonoBehaviour
             scheduler.changeTimerStatus(0);
             AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("Pause").transform.position);
             timerClip.Stop();
-        } else if (name == "Plus") {
+        } /*else if (name == "Plus") {
             scheduler.addToTimer();
             AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("Plus").transform.position);
         } else if (name == "Minus") {
             scheduler.subtractFromTimer();
             AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("Minus").transform.position);
-        } else {
+        }*/ else {
             Debug.Log("Unknown button");
         } 
     }

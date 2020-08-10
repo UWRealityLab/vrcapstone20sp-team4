@@ -35,7 +35,7 @@ namespace MagicLeap
         private GameObject onboarding;
         private bool thumbPoseChanged = false;
         private bool okPoseChanged = false;
-        private MainScheduler mainScheduler;
+        private MainScheduler2 mainScheduler;
         private GameObject movingPoint;
         private InterfaceManager interfaceManager;
         public GameObject wrappingSimulation;
@@ -68,7 +68,7 @@ namespace MagicLeap
             MLHandTracking.Start();
             Initialize();
             onboarding = GameObject.Find("OnBoardingInterface");
-            mainScheduler = GameObject.Find("Scheduler").GetComponent<MainScheduler>();
+            mainScheduler = GameObject.Find("Scheduler").GetComponent<MainScheduler2>();
             interfaceManager = GameObject.Find("InterfaceManager").GetComponent<InterfaceManager>();
             GameObject headLockCanvas = GameObject.Find("HeadLockCanvas");
             Vector3 headLockCanvasPos = headLockCanvas.transform.position;

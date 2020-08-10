@@ -8,7 +8,7 @@ using System.Threading;
 public class NearInterfaceButton : MonoBehaviour
 {
     // Start is called before the first frame update
-    MainScheduler scheduler;
+    MainScheduler2 scheduler;
     AudioSource buttonClip;
     AudioSource timerClip;
     GameObject text;
@@ -23,7 +23,7 @@ public class NearInterfaceButton : MonoBehaviour
 
     void Awake()
     {
-        scheduler = GameObject.Find("Scheduler").GetComponent<MainScheduler>();
+        scheduler = GameObject.Find("Scheduler").GetComponent<MainScheduler2>();
         interfaceManager = GameObject.Find("InterfaceManager").GetComponent<InterfaceManager>();
         changeSimulationScript = GameObject.Find("CuttingSimulation").GetComponent<changeSimulation>();
         buttonClip = GameObject.Find("Button_Click").GetComponent<AudioSource>();
@@ -113,6 +113,7 @@ public class NearInterfaceButton : MonoBehaviour
             AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("Pause").transform.position);
             timerClip.Stop();
         }
+        /*
         else if (name == "Plus")
         {
             scheduler.addToTimer();
@@ -123,6 +124,7 @@ public class NearInterfaceButton : MonoBehaviour
             scheduler.subtractFromTimer();
             AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("Minus").transform.position);
         }
+        */
         else if (name == "Lock")
         {
             NIControl.changeLock();

@@ -26,6 +26,16 @@ public class MainScheduler2 : MonoBehaviour
     private bool tutorialStarts = false; // indicate if a user has choosen a tutorial
     private bool tutorialFinish = false;
 
+    private ApplicationState As;
+
+
+    private void Start()
+    {
+        As = GameObject.Find("ApplicationState").GetComponent<ApplicationState>();
+    }
+
+    // store the preview info
+    private Dictionary<string, List<Dictionary<string, List<string>>>> allTutorials = new Dictionary<string, List<Dictionary<string, List<string>>>>();
 
 
     // simply reset everything.
@@ -42,16 +52,14 @@ public class MainScheduler2 : MonoBehaviour
 
     public void addToTimer(float delta)
     {
-        if (tutorialStarts)
-        {
+        if (tutorialStarts) {
             timerRecord[stepIndex] += delta;
         }
     }
 
     public void subtractFromTimer(float delta)
     {
-        if (tutorialStarts)
-        {
+        if (tutorialStarts) {
             timerRecord[stepIndex] -= delta;
         }
     }
@@ -60,14 +68,11 @@ public class MainScheduler2 : MonoBehaviour
     // 0 for pause, 1 for start, 2 reset timer
     public void changeTimerStatus(int status)
     {
-        if (status == 0)
-        {
+        if (status == 0) {
             timerPause = true;
-        } else if (status == 1)
-        {
+        } else if (status == 1) {
             timerPause = false;
-        } else
-        {
+        } else {
             resetTimerRecord();
         }
     }
@@ -91,8 +96,19 @@ public class MainScheduler2 : MonoBehaviour
         if (!tutorialStarts) return null;
         Dictionary<string, List<string>> dic = new Dictionary<string, List<string>>();
         // TODO: add utensils and ingredients
+        /*
+        dic.Add("utensils", tutorial.steps[stepIndex].equipment);
+        dic.Add("ingredients", s.getIngredientsSet());
         dic.Add("description", new List<string>() { tutorial.steps[stepIndex].step});
-        dic.Add("timer", new List<string>() { GetTimeSpanWithSec(tutorial.steps[stepIndex].length.number) });
+        */
+        float seconds = tutorial.steps[stepIndex].length.number;
+        string unit = tutorial.steps[stepIndex].length.unit;
+        if (unit.StartsWith("minute", StringComparison.OrdinalIgnoreCase)) {
+            seconds *= 60;
+        } else if (unit.StartsWith("hour", StringComparison.OrdinalIgnoreCase)) {
+            seconds += 3600;
+        }
+        dic.Add("timer", new List<string>() { GetTimeSpanWithSec(seconds) });
         dic.Add("recipe", new List<string>() { chosenRecipe });
         dic.Add("StepNum", new List<string>() { (stepIndex + 1) + "" });
         return dic;
@@ -102,8 +118,7 @@ public class MainScheduler2 : MonoBehaviour
     public void toNextStep()
     {
         stepIndex++;
-        if (stepIndex >= timerRecord.Count)
-        {
+        if (stepIndex >= timerRecord.Count) {
             tutorialFinish = true;
         }
     }
@@ -118,44 +133,63 @@ public class MainScheduler2 : MonoBehaviour
 
     private void resetTimerRecord()
     {
-        if (tutorial != null)
-        {
+        if (tutorial != null) {
             timerRecord.Clear();
-            foreach(Instruction instruction in tutorial.steps)
-            {
+            foreach (Instruction instruction in tutorial.steps) {
                 timerRecord.Add(instruction.length.number);
             }
             timerPause = true;
         }
     }
 
-    // for user interface to call when a user select a recipe
-    // name: name of the recipe
-    public void startTutorial(StepsList wrapper)
+    public void startTutorial(string name)
     {
-        try
-        {
+        /*
+        try {
             tutorial = wrapper.result[0];
             tutorialStarts = true;
             resetTimerRecord();
         }
-        catch (NullReferenceException e)
-        {
+        catch (NullReferenceException e) {
+            Debug.LogWarning(e);
+        }
+        */
+    }
+
+    // for user interface to call when a user select a recipe
+    // name: name of the recipe
+    public void startTutorial(StepsList wrapper)
+    {
+        try {
+            tutorial = wrapper.result[0];
+            tutorialStarts = true;
+            resetTimerRecord();
+        }
+        catch (NullReferenceException e) {
             Debug.LogWarning(e);
         }
     }
 
+    public void PreviewAllTutorial()
+    {
+        GameObject recipeAPI = GameObject.Find("RecipeAPI");
+        GetInstructions getRecipe = recipeAPI.GetComponent<GetInstructions>();
+        allTutorials = getRecipe.GetAllPreviews();
+        Debug.Log("main scheduler: " + allTutorials.Count);
+    }
 
+    public Dictionary<string, List<Dictionary<string, List<string>>>> GetAllTutorialPreview()
+    {
+        return allTutorials;
+    }
 
     // Update is called once per frame
     void Update()
     {
-        if (tutorialStarts)
-        {
-            if (!timerPause)
-            {
+        if (tutorialStarts) {
+            if (!timerPause) {
                 timerRecord[stepIndex] = Math.Max(timerRecord[stepIndex] - Time.deltaTime, 0);
-                
+
             }
         }
 
@@ -169,4 +203,8 @@ public class MainScheduler2 : MonoBehaviour
         return interval.ToString();
     }
 
+    public Vector3 getTimerLocation()
+    {
+        return As.criticalEquipmentLocation(tutorial.steps[stepIndex].equipment);
+    }
 }
