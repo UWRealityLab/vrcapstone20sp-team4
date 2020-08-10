@@ -28,14 +28,13 @@ public class DetectionPipeline : MonoBehaviour
 
     private string currResponse = "";
     private int time_stamp = 0;
-    public TextMeshProUGUI UI;
     // private Matrix4x4 intrinsicCameraMatrix = new Matrix4x4();
     private float Cx = 949.5f;
     private float Cy = 539.1f;
     private float Fx = 1400f;
     private float Fy = 1399.5f;
     public Transform ctransform;
-    private string url = "http://35.225.232.30:5000/predict";
+    private string url = "http://35.233.198.97:5000/predict";
     private Raycast rc;
     public GameObject copy_prefab;
     private Dictionary<int, GameObject> stamp2Copy = new Dictionary<int, GameObject>();
@@ -59,33 +58,18 @@ public class DetectionPipeline : MonoBehaviour
         timer -= Time.deltaTime;
         if (timer < 0)
         {
-
+            Debug.Log("1");
             // stamp2Copy[time_stamp] = Instantiate(copy_prefab, ctransform.position, ctransform.rotation);
             timer = 5;
             TriggerAsyncCapture();
             findDetectedObjects();
         }
-
-
     }
 
-    public void drawPreview(List<Vector4> boundingBoxes)
+    public void drawPreview()
     {
         Texture2D texture = new Texture2D(8, 8);
         bool status = texture.LoadImage(currImage);
-        foreach (Vector4 boundingBox in boundingBoxes)
-        {
-            Vector2 center = new Vector2(boundingBox[0] + boundingBox[2] / 2f, boundingBox[1] + boundingBox[3] / 2f);
-            float w = boundingBox[2] / 8f;
-            float h = boundingBox[3] / 8f;
-            for (int i = (int)(center.x - w); i < (int)(center.x + w); i++)
-            {
-                for (int j = (int)(center.y - h); j < (int)(center.y + h); j++)
-                {
-                    texture.SetPixel(i, j, Color.red);
-                }
-            }
-        }
         if (status && (texture.width != 8 && texture.height != 8))
         {
             _previewObject.SetActive(true);
@@ -111,31 +95,32 @@ public class DetectionPipeline : MonoBehaviour
         Dictionary<string, Vector3> rays = new Dictionary<string, Vector3>();
         List<Vector4> boundingBoxes = new List<Vector4>();
         int stamp = DL.detections[0].stamp;
+        Debug.Log("receive stamp: " + stamp);
+        string keys = "";
         foreach (var pair in stamp2Copy)
         {
-            Debug.Log(pair.Key);
+            keys += " " + pair.Key;
         }
+        Debug.Log(keys);
         foreach (var detection in DL.detections)
         {
-            int x, y, width, height;
-            x = detection.boxes[0];
-            y = detection.boxes[1];
-            width = detection.boxes[2];
-            height = detection.boxes[3];
-            if (x < 0 || y < 0 || width > 1920 || height > 1080)
+            int x1, y1, x2, y2;
+            x1 = detection.boxes[0];
+            y1 = detection.boxes[1];
+            x2 = detection.boxes[2];
+            y2 = detection.boxes[3];
+            if (x1 < 0 || y1 < 0 || x2 > 1920 || y2 > 1080)
             {
                 continue;
             }
-            Vector3 center = getRaycastPointWorldSpace(x + width / 2f, 1080 - (y + height / 2f), stamp);
-            Vector4 boundingBox = new Vector4(x, y, width, height);
-            boundingBoxes.Add(boundingBox);
+            Vector3 center = getRaycastPointWorldSpace((x1 + x2) / 2f, 1080 - ((y1 + y2) / 2f), stamp);
             rays[detection.label] = center;
         }
         rc.setCpoition(stamp2Copy[stamp].transform.position);
         Destroy(stamp2Copy[stamp]);
         stamp2Copy.Remove(stamp);
         rc.makeRayCast2(rays, true);
-        drawPreview(boundingBoxes);
+        drawPreview();
 
     }
 
@@ -381,9 +366,8 @@ public class DetectionPipeline : MonoBehaviour
         {
             _isCapturing = false;
         }
-        Debug.Log("capture complete");
+        Debug.Log("sending time stamp: " + time_stamp);
         stamp2Copy[time_stamp] = Instantiate(copy_prefab, ctransform.position, ctransform.rotation);
-        Debug.Log("instantiation complete");
         time_stamp++;
         currImage = imageData;
         UploadFile(url, imageData, time_stamp - 1);

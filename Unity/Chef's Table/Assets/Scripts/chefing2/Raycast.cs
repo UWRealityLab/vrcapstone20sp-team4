@@ -15,8 +15,14 @@ public class Raycast : MonoBehaviour
     private bool prevDone = false;
     private string currClass = "";
     private Queue<container> detectionQueue = new Queue<container>();
+    ApplicationState As;
     //[Range(0, 1)] public float x_ = 0.5f;
     //[Range(0, 1)] public float y_ = 0.5f;
+
+    private void Start()
+    {
+        As = GameObject.Find("ApplicationState").GetComponent<ApplicationState>();
+    }
 
     public void setCpoition(Vector3 cPosition)
     {
@@ -71,36 +77,7 @@ public class Raycast : MonoBehaviour
 
     }
 
-    /*
-    public void makeRayCast(Dictionary<string, Vector2> detections, bool debugMode)
-    {
-        if (!MLRaycast.IsStarted)
-        {
-            MLRaycast.Start();
-        }
-        foreach(var detection in detections)
-        {
-            string name = detection.Key;
-            float x_ = detection.Value.x;
-            float y_ = detection.Value.y;
-            float x = (x_ - 0.5f) * ImagePlane.transform.localScale.x;
-            float y = (y_ - 0.5f) * ImagePlane.transform.localScale.y;
-            Vector3 local_center = ImagePlane.transform.InverseTransformPoint(0, 0, 0);
-            Vector3 local_point = local_center + new Vector3(x, y, 0);
-            Vector3 world_point = ImagePlane.transform.TransformPoint(local_point);
-            Vector3 direction = world_point - ctransform.position;
-            if (debugMode)  Debug.DrawRay(ctransform.position, direction.normalized, Color.green);
-            MLRaycast.QueryParams _raycastParams = new MLRaycast.QueryParams
-            {
-                Position = ctransform.position,
-                Direction = direction.normalized,
-                UpVector = ctransform.up,
-                Width = 1,
-                Height = 1
-            };
-            MLRaycast.Raycast(_raycastParams, HandleOnReceiveRaycast);
-        }
-    }*/
+
     private void OnDestroy()
     {
         MLRaycast.Stop();
@@ -111,7 +88,6 @@ public class Raycast : MonoBehaviour
     private IEnumerator NormalMarker(Vector3 point, Vector3 normal)
     {
         prevDone = true;
-        Debug.Log("raycast hit");
         Quaternion rotation = Quaternion.FromToRotation(Vector3.up, normal);
         GameObject go = Instantiate(prefab, point, Quaternion.LookRotation(-(cPosition - point), Vector3.up));
         LineRenderer lr = go.AddComponent<LineRenderer>();
@@ -123,6 +99,13 @@ public class Raycast : MonoBehaviour
         lr.SetPosition(1, point);
         yield return new WaitForSeconds(7f);
         Destroy(go);
+
+    }
+
+    private void updateObjects(Vector3 point, Vector3 normal)
+    {
+        prevDone = true;
+        As.setLocation(currClass, point);
     }
 
     // Use a callback to know when to run the NormalMaker() coroutine.
@@ -130,9 +113,9 @@ public class Raycast : MonoBehaviour
     {
         if (state == MLRaycast.ResultState.HitObserved)
         {
-            StartCoroutine(NormalMarker(point, normal));
+            //StartCoroutine(NormalMarker(point, normal));
+            updateObjects(point, normal);
         }
     }
 
-    // When the prefab is destroyed, stop MLWorldRays API from running.
 }
