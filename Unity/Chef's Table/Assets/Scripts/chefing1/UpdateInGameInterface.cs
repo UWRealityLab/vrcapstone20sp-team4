@@ -15,6 +15,7 @@ public class UpdateInGameInterface : MonoBehaviour
     //private GameObject gameInterface;
     private GameObject nearInterface;
     private GameObject exitIcon;
+    public GameObject spaitialTimerPrefab;
     private Material exitMat;
     private Material completeMat;
     private VideoPlayer videoPlayer;

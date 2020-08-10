@@ -8,25 +8,40 @@ public class ApplicationState : MonoBehaviour
 {
 
     private Dictionary<string, Vector3> item2Location = new Dictionary<string, Vector3>();
+    private List<string> impEquipments = new List<string>() { "oven", "microwave oven", "cutting board", "sink", "gas stove" };
 
     // in the future, we might need 
     // list of all current animation
     // more...
     public bool contains(string name)
     {
-        return item2Location.ContainsKey(name);
+        return item2Location.ContainsKey(name.ToLower());
     }
 
     // contains should be called before this
     public Vector3 getItemLocation(string name)
     {
-        return item2Location[name];
+        return item2Location[name.ToLower()];
     }
 
     public void setLocation(string name, Vector3 location)
     {
-        item2Location[name] = location;
+        item2Location[name.ToLower()] = location;
     }
 
+    public Vector3 criticalEquipmentLocation(List<Equipment> equipments)
+    {
+        foreach(var equip in equipments)
+        {
+            if (impEquipments.Contains(equip.name.ToLower()))
+            {
+                if (item2Location.ContainsKey(equip.name.ToLower()))
+                {
+                    return item2Location[equip.name.ToLower()];
+                }
+            }
+        }
+        return Vector3.zero;
+    }
 
 }

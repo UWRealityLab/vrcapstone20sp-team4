@@ -26,6 +26,13 @@ public class MainScheduler2 : MonoBehaviour
     private bool tutorialStarts = false; // indicate if a user has choosen a tutorial
     private bool tutorialFinish = false;
 
+    private ApplicationState As;
+
+
+    private void Start()
+    {
+        As = GameObject.Find("ApplicationState").GetComponent<ApplicationState>();
+    }
 
 
     // simply reset everything.
@@ -169,4 +176,8 @@ public class MainScheduler2 : MonoBehaviour
         return interval.ToString();
     }
 
+    public Vector3 getTimerLocation()
+    {
+        return As.criticalEquipmentLocation(tutorial.steps[stepIndex].equipment);
+    }
 }
