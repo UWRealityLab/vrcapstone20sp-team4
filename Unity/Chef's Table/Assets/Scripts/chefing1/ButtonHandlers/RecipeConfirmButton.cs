@@ -10,7 +10,7 @@ public class RecipeConfirmButton : MonoBehaviour
     InterfaceManager interfaceManager;
     UIFadingAnimation fader;
     GameObject sche;
-    MainScheduler2 ms;
+    MainScheduler2 ms2;
     AudioSource buttonClip;
 
     private void Awake()
@@ -18,7 +18,7 @@ public class RecipeConfirmButton : MonoBehaviour
         interfaceManager = GameObject.Find("InterfaceManager").GetComponent<InterfaceManager>();
         fader = GameObject.Find("FadingAnimation").GetComponent<UIFadingAnimation>();
         GameObject sche = GameObject.Find("Scheduler");
-        ms = sche.GetComponent<MainScheduler2>();
+        ms2 = sche.GetComponent<MainScheduler2>();
         buttonClip = GameObject.Find("Button_Click").GetComponent<AudioSource>();
     }
 
@@ -36,9 +36,10 @@ public class RecipeConfirmButton : MonoBehaviour
         {
             AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("Confirm").transform.position);
             string recipe_name = transform.parent.parent.Find("Canvas").Find("RecipeName").GetComponent<TextMeshPro>().text;
-            ms.startTutorial(recipe_name);
+            ms2.startTutorial(recipe_name);
             interfaceManager.setActiveOnboardingInterface(false);
             interfaceManager.setActiveNearInterface(true);
+
         } else if (name == "CuttingButton")
         {
             AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("CuttingButton").transform.position);

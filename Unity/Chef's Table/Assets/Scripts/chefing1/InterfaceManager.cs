@@ -21,17 +21,23 @@ public class InterfaceManager : MonoBehaviour
     GameObject scanningState;
     GameObject scanningConfirm;
     GameObject scanningIngredientNamesDisplay;
+    GameObject brackets;
+    GameObject welcomeInterface;
     private bool startCountDown = false;
     private float completeRedirectTimer = 10;
 
     private void Awake()
     {
-        scanningStart = GameObject.Find("ScanningStart");
-        scanningState = GameObject.Find("ScanningState");
-        scanningConfirm = GameObject.Find("ScanningConfirm");
-        scanningIngredientNamesDisplay = GameObject.Find("ScanningIngredientNamesDisplay");
+        
+        scanningStart = GameObject.Find("StartScreen");
+        scanningState = GameObject.Find("ScanningText");
+        scanningConfirm = GameObject.Find("IngredientScanGet");
+        scanningIngredientNamesDisplay = GameObject.Find("Ingredients");
+        brackets = GameObject.Find("Brackets");
 
+        welcomeInterface = GameObject.Find("WelcomeInterface");
         scanningInterface = GameObject.Find("scanningInterface");
+        
         nearInterface = GameObject.Find("NearInterface");
         simulationInterface = GameObject.Find("SimulationInterface");
         onboarding = GameObject.Find("Onboarding");
@@ -52,7 +58,9 @@ public class InterfaceManager : MonoBehaviour
         setActiveNearInterface(false);
         setActiveSimulationInterface(false);
         setActiveCuttingSimulation(false);
-        setActiveOnboardingInterface(true);
+        setActiveScanningInterface(false);
+        setActiveOnboardingInterface(false);
+        setActiveWelcomeInterface(true);
     }
 
     public void setActiveCuttingSimulation(bool b)
@@ -89,6 +97,18 @@ public class InterfaceManager : MonoBehaviour
         //simulationInterface.SetActive(b);
     }
 
+    public void setActiveWelcomeInterface(bool b)
+    {
+        if (b)
+        {
+            StartCoroutine(animator.FadeIn(welcomeInterface));
+        }
+        else
+        {
+            StartCoroutine(animator.FadeOut(welcomeInterface));
+        }
+    }
+
     public void setActiveOnboardingInterface(bool b)
     {
         if (b)
@@ -99,6 +119,8 @@ public class InterfaceManager : MonoBehaviour
         }
         else
         {
+            onboardingPreview.SetActive(false);
+            onboardingInterface.SetActive(false);
             StartCoroutine(animator.FadeOut(onboarding));
         }
     }
@@ -119,16 +141,20 @@ public class InterfaceManager : MonoBehaviour
     {
         if (b)
         {
-            /*
             scanningStart.SetActive(true);
             scanningState.SetActive(false);
             scanningConfirm.SetActive(false);
+            brackets.SetActive(true);
             scanningIngredientNamesDisplay.SetActive(false);
-            */  
             StartCoroutine(animator.FadeIn(scanningInterface));
         }
         else
         {
+            scanningStart.SetActive(false);
+            scanningState.SetActive(false);
+            scanningConfirm.SetActive(false);
+            brackets.SetActive(false);
+            scanningIngredientNamesDisplay.SetActive(false);
             StartCoroutine(animator.FadeOut(scanningInterface));
         }
     }
@@ -167,6 +193,10 @@ public class InterfaceManager : MonoBehaviour
     {
         return scanningInterface.activeSelf;
     }
+    public bool isActiveWelcomeInterface()
+    {
+        return welcomeInterface.activeSelf;
+    }
 
     public void exitSimulation()
     {
@@ -176,6 +206,7 @@ public class InterfaceManager : MonoBehaviour
         setActiveSimulationInterface(false);
         setActiveNearInterface(false);
         setActiveScanningInterface(false);
+        setActiveWelcomeInterface(false);
     }
 
     public void endTutorialGeneral()
@@ -206,6 +237,7 @@ public class InterfaceManager : MonoBehaviour
         setActiveSimulationInterface(false);
         setActiveNearInterface(false);
         setActiveScanningInterface(false);
+        setActiveWelcomeInterface(false);
         summary.SetActive(false);
         startCountDown = false;
         ms.reset();

@@ -965,6 +965,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: daa5f3b3e66fa8a4d907b9e634ffd679, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spaitialTimerPrefab: {fileID: 0}
 --- !u!4 &248879420
 Transform:
   m_ObjectHideFlags: 0
@@ -10865,6 +10866,11 @@ PrefabInstance:
       propertyPath: m_LocalScale.y
       value: 0.4652401
       objectReference: {fileID: 0}
+    - target: {fileID: 8355584999373952228, guid: 4950a3ec9eb5f3b459cf62a98d341c47,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0.46
+      objectReference: {fileID: 0}
     - target: {fileID: 8355584999373952229, guid: 4950a3ec9eb5f3b459cf62a98d341c47,
         type: 3}
       propertyPath: m_Name
@@ -10930,7 +10936,7 @@ PrefabInstance:
     - target: {fileID: 8355584999590367840, guid: 4950a3ec9eb5f3b459cf62a98d341c47,
         type: 3}
       propertyPath: m_textInfo.characterCount
-      value: 24
+      value: 31
       objectReference: {fileID: 0}
     - target: {fileID: 8355584999590367840, guid: 4950a3ec9eb5f3b459cf62a98d341c47,
         type: 3}
@@ -10940,7 +10946,7 @@ PrefabInstance:
     - target: {fileID: 8355584999590367840, guid: 4950a3ec9eb5f3b459cf62a98d341c47,
         type: 3}
       propertyPath: m_textInfo.lineCount
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8355584999590367840, guid: 4950a3ec9eb5f3b459cf62a98d341c47,
         type: 3}
@@ -10950,7 +10956,7 @@ PrefabInstance:
     - target: {fileID: 8355584999590367840, guid: 4950a3ec9eb5f3b459cf62a98d341c47,
         type: 3}
       propertyPath: m_text
-      value: 'What you currently have:'
+      value: 'Ingredients you currently have:'
       objectReference: {fileID: 0}
     - target: {fileID: 8355584999590367840, guid: 4950a3ec9eb5f3b459cf62a98d341c47,
         type: 3}
@@ -11077,7 +11083,7 @@ PrefabInstance:
     - target: {fileID: 8355584999903928830, guid: 4950a3ec9eb5f3b459cf62a98d341c47,
         type: 3}
       propertyPath: m_textInfo.characterCount
-      value: 30
+      value: 37
       objectReference: {fileID: 0}
     - target: {fileID: 8355584999903928830, guid: 4950a3ec9eb5f3b459cf62a98d341c47,
         type: 3}
@@ -11087,7 +11093,7 @@ PrefabInstance:
     - target: {fileID: 8355584999903928830, guid: 4950a3ec9eb5f3b459cf62a98d341c47,
         type: 3}
       propertyPath: m_textInfo.lineCount
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8355584999903928830, guid: 4950a3ec9eb5f3b459cf62a98d341c47,
         type: 3}
@@ -11097,7 +11103,7 @@ PrefabInstance:
     - target: {fileID: 8355584999903928830, guid: 4950a3ec9eb5f3b459cf62a98d341c47,
         type: 3}
       propertyPath: m_text
-      value: 'What you currently don''t have:'
+      value: 'Ingredients you currently don''t have:'
       objectReference: {fileID: 0}
     - target: {fileID: 8355584999903928830, guid: 4950a3ec9eb5f3b459cf62a98d341c47,
         type: 3}
@@ -11229,7 +11235,7 @@ PrefabInstance:
     - target: {fileID: 8355585000056361664, guid: 4950a3ec9eb5f3b459cf62a98d341c47,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -0.2
+      value: -0.175
       objectReference: {fileID: 0}
     - target: {fileID: 8355585000056361664, guid: 4950a3ec9eb5f3b459cf62a98d341c47,
         type: 3}
@@ -11567,7 +11573,7 @@ PrefabInstance:
     - target: {fileID: 8355585000843624698, guid: 4950a3ec9eb5f3b459cf62a98d341c47,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 1.13
+      value: 1.11
       objectReference: {fileID: 0}
     - target: {fileID: 8355585000843624698, guid: 4950a3ec9eb5f3b459cf62a98d341c47,
         type: 3}
