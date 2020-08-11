@@ -12,8 +12,6 @@ using System.Linq;
 public class DetectionPipeline : MonoBehaviour
 {
 
-    public GameObject _previewObject;
-
     private bool _isCameraConnected = false;
 
     private bool _isCapturing = false;
@@ -66,20 +64,7 @@ public class DetectionPipeline : MonoBehaviour
         }
     }
 
-    public void drawPreview()
-    {
-        Texture2D texture = new Texture2D(8, 8);
-        bool status = texture.LoadImage(currImage);
-        if (status && (texture.width != 8 && texture.height != 8))
-        {
-            _previewObject.SetActive(true);
-            Renderer renderer = _previewObject.GetComponent<Renderer>();
-            if (renderer != null)
-            {
-                renderer.material.mainTexture = texture;
-            }
-        }
-    }
+
     // parses detection result and find their location in by raycasting
     public void findDetectedObjects()
     {
@@ -120,7 +105,6 @@ public class DetectionPipeline : MonoBehaviour
         Destroy(stamp2Copy[stamp]);
         stamp2Copy.Remove(stamp);
         rc.makeRayCast2(rays, true);
-        drawPreview();
 
     }
 
@@ -163,18 +147,6 @@ public class DetectionPipeline : MonoBehaviour
 
     void Awake()
     {
-
-
-        if (_previewObject == null)
-        {
-            Debug.LogError("Error: ImageCaptureExample._previewObject is not set, disabling script.");
-            enabled = false;
-            return;
-        }
-
-        // This is made active when we have a captured image to show.
-        _previewObject.SetActive(false);
-
         // Before enabling the Camera, the scene must wait until the privilege has been granted.
         MLResult result = MLPrivilegesStarterKit.Start();
 #if PLATFORM_LUMIN

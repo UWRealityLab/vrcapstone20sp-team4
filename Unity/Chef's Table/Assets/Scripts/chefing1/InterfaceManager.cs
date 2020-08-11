@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using System.Threading.Tasks;
 
 public class InterfaceManager : MonoBehaviour
 {
@@ -16,27 +17,27 @@ public class InterfaceManager : MonoBehaviour
     GameObject onboardingPreview;
     GameObject headLockCanvas;
     GameObject wrappingSimulation;
-    GameObject scanningInterface;
-    GameObject scanningStart;
-    GameObject scanningState;
-    GameObject scanningConfirm;
-    GameObject scanningIngredientNamesDisplay;
-    GameObject brackets;
-    GameObject welcomeInterface;
+    //GameObject scanningInterface;
+    //GameObject scanningStart;
+    //GameObject scanningState;
+    //GameObject scanningConfirm;
+    //GameObject scanningIngredientNamesDisplay;
+    //GameObject brackets;
+    //GameObject welcomeInterface;
     private bool startCountDown = false;
     private float completeRedirectTimer = 10;
 
     private void Awake()
     {
         
-        scanningStart = GameObject.Find("StartScreen");
-        scanningState = GameObject.Find("ScanningText");
-        scanningConfirm = GameObject.Find("IngredientScanGet");
-        scanningIngredientNamesDisplay = GameObject.Find("Ingredients");
-        brackets = GameObject.Find("Brackets");
+        //scanningStart = GameObject.Find("StartScreen");
+        //scanningState = GameObject.Find("ScanningText");
+        //scanningConfirm = GameObject.Find("IngredientScanGet");
+        //scanningIngredientNamesDisplay = GameObject.Find("Ingredients");
+        //brackets = GameObject.Find("Brackets");
 
-        welcomeInterface = GameObject.Find("WelcomeInterface");
-        scanningInterface = GameObject.Find("scanningInterface");
+        //welcomeInterface = GameObject.Find("WelcomeInterface");
+        //scanningInterface = GameObject.Find("scanningInterface");
         
         nearInterface = GameObject.Find("NearInterface");
         simulationInterface = GameObject.Find("SimulationInterface");
@@ -58,9 +59,9 @@ public class InterfaceManager : MonoBehaviour
         setActiveNearInterface(false);
         setActiveSimulationInterface(false);
         setActiveCuttingSimulation(false);
-        setActiveScanningInterface(false);
-        setActiveOnboardingInterface(false);
-        setActiveWelcomeInterface(true);
+        //setActiveScanningInterface(false);
+        setActiveOnboardingInterface(true);
+        //setActiveWelcomeInterface(true);
     }
 
     public void setActiveCuttingSimulation(bool b)
@@ -68,11 +69,12 @@ public class InterfaceManager : MonoBehaviour
         cuttingSimulation.SetActive(b);
     }
 
-    public void setActiveNearInterface(bool b)
+    public async void setActiveNearInterface(bool b)
     {
         
         if (b)
         {
+            await Task.Delay(3000);
             StartCoroutine(animator.FadeIn(nearInterface));
         }
         else
@@ -96,7 +98,7 @@ public class InterfaceManager : MonoBehaviour
         }
         //simulationInterface.SetActive(b);
     }
-
+/*
     public void setActiveWelcomeInterface(bool b)
     {
         if (b)
@@ -108,11 +110,13 @@ public class InterfaceManager : MonoBehaviour
             StartCoroutine(animator.FadeOut(welcomeInterface));
         }
     }
-
+*/
     public void setActiveOnboardingInterface(bool b)
     {
+        
         if (b)
         {
+            
             onboardingPreview.SetActive(false);
             onboardingInterface.SetActive(true);
             StartCoroutine(animator.FadeIn(onboarding));
@@ -137,6 +141,7 @@ public class InterfaceManager : MonoBehaviour
         }
     }
 
+/*
     public void setActiveScanningInterface(bool b)
     {
         if (b)
@@ -158,7 +163,7 @@ public class InterfaceManager : MonoBehaviour
             StartCoroutine(animator.FadeOut(scanningInterface));
         }
     }
-
+*/
     public bool isActiveHeadLockCanvas()
     {
         return headLockCanvas.activeSelf;
@@ -189,14 +194,14 @@ public class InterfaceManager : MonoBehaviour
         return nearInterface.activeSelf;
     }
 
-    public bool isActiveScanningInterface()
-    {
-        return scanningInterface.activeSelf;
-    }
-    public bool isActiveWelcomeInterface()
-    {
-        return welcomeInterface.activeSelf;
-    }
+    //public bool isActiveScanningInterface()
+    //{
+    //    return scanningInterface.activeSelf;
+    //}
+    //public bool isActiveWelcomeInterface()
+    //{
+    //    return welcomeInterface.activeSelf;
+    //}
 
     public void exitSimulation()
     {
@@ -205,8 +210,8 @@ public class InterfaceManager : MonoBehaviour
         setActiveOnboardingInterface(true);
         setActiveSimulationInterface(false);
         setActiveNearInterface(false);
-        setActiveScanningInterface(false);
-        setActiveWelcomeInterface(false);
+        //setActiveScanningInterface(false);
+        //setActiveWelcomeInterface(false);
     }
 
     public void endTutorialGeneral()
@@ -236,8 +241,8 @@ public class InterfaceManager : MonoBehaviour
         setActiveOnboardingInterface(true);
         setActiveSimulationInterface(false);
         setActiveNearInterface(false);
-        setActiveScanningInterface(false);
-        setActiveWelcomeInterface(false);
+        //setActiveScanningInterface(false);
+        //setActiveWelcomeInterface(false);
         summary.SetActive(false);
         startCountDown = false;
         ms.reset();

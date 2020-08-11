@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class UIFadingAnimation : MonoBehaviour
 {
-    private HashSet<string> currentObjects;
+    private HashSet<string> currentObjects = new HashSet<string>();
     private GameObject onboardingInterface;
     private GameObject onboardingPreview;
 
@@ -15,11 +15,6 @@ public class UIFadingAnimation : MonoBehaviour
     }
 
     // Start is called before the first frame update
-    void Start()
-    {
-        currentObjects = new HashSet<string>();
-        //onboardingPreview.SetActive(false);
-    }
 
     private void Update()
     {
@@ -67,6 +62,8 @@ public class UIFadingAnimation : MonoBehaviour
 
     public IEnumerator FadeOut(GameObject obj)
     {
+        Debug.Log(obj == null);
+        Debug.Log(currentObjects == null);
         if (obj.activeSelf && !currentObjects.Contains(obj.name))
         {
             currentObjects.Add(obj.name);

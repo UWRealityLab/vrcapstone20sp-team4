@@ -10,7 +10,7 @@ using UnityEngine.XR.MagicLeap;
 public class Raycast : MonoBehaviour
 {
     // Camera's transform
-    public GameObject prefab;    // Cube prefab
+   // public GameObject prefab;    // Cube prefab
     private Vector3 cPosition;
     private bool prevDone = false;
     private string currClass = "";
@@ -85,22 +85,22 @@ public class Raycast : MonoBehaviour
     // Instantiate the prefab at the given point.
     // Rotate the prefab to match given normal.
     // Wait 2 seconds then destroy the prefab.
-    private IEnumerator NormalMarker(Vector3 point, Vector3 normal)
-    {
-        prevDone = true;
-        Quaternion rotation = Quaternion.FromToRotation(Vector3.up, normal);
-        GameObject go = Instantiate(prefab, point, Quaternion.LookRotation(-(cPosition - point), Vector3.up));
-        LineRenderer lr = go.AddComponent<LineRenderer>();
-        Text t = go.transform.Find("Canvas/Text").gameObject.GetComponent<Text>();
-        t.text = currClass;
-        lr.material = new Material(Shader.Find("Sprites/Default"));
-        lr.widthMultiplier = 0.05f;
-        lr.SetPosition(0, cPosition);
-        lr.SetPosition(1, point);
-        yield return new WaitForSeconds(7f);
-        Destroy(go);
+    //private IEnumerator NormalMarker(Vector3 point, Vector3 normal)
+    //{
+    //    prevDone = true;
+    //    Quaternion rotation = Quaternion.FromToRotation(Vector3.up, normal);
+    //    GameObject go = Instantiate(prefab, point, Quaternion.LookRotation(-(cPosition - point), Vector3.up));
+    //    LineRenderer lr = go.AddComponent<LineRenderer>();
+    //    Text t = go.transform.Find("Canvas/Text").gameObject.GetComponent<Text>();
+    //    t.text = currClass;
+    //    lr.material = new Material(Shader.Find("Sprites/Default"));
+    //    lr.widthMultiplier = 0.05f;
+    //    lr.SetPosition(0, cPosition);
+    //    lr.SetPosition(1, point);
+    //    yield return new WaitForSeconds(7f);
+    //    Destroy(go);
 
-    }
+    //}
 
     private void updateObjects(Vector3 point, Vector3 normal)
     {

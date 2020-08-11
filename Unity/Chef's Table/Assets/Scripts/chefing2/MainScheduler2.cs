@@ -103,18 +103,25 @@ public class MainScheduler2 : MonoBehaviour
         if (!tutorialStarts) return null;
         Dictionary<string, List<string>> dic = new Dictionary<string, List<string>>();
         // TODO: add utensils and ingredients
-        /*
-        dic.Add("utensils", tutorial.steps[stepIndex].equipment);
-        dic.Add("ingredients", s.getIngredientsSet());
-        dic.Add("description", new List<string>() { tutorial.steps[stepIndex].step});
-        */
+        
+       // dic.Add("utensils", tutorial.steps[stepIndex].equipment);
+        //dic.Add("ingredients", s.getIngredientsSet());
+        dic.Add("description", new List<string>() { tutorial[stepIndex].step});
+        
         float seconds = tutorial[stepIndex].length.number;
         string unit = tutorial[stepIndex].length.unit;
-        if (unit.StartsWith("minute", StringComparison.OrdinalIgnoreCase)) {
-            seconds *= 60;
-        } else if (unit.StartsWith("hour", StringComparison.OrdinalIgnoreCase)) {
-            seconds += 3600;
+        if (seconds != 0)
+        {
+            if (unit.StartsWith("minute", StringComparison.OrdinalIgnoreCase))
+            {
+                seconds *= 60;
+            }
+            else if (unit.StartsWith("hour", StringComparison.OrdinalIgnoreCase))
+            {
+                seconds += 3600;
+            }
         }
+       
         dic.Add("timer", new List<string>() { GetTimeSpanWithSec(seconds) });
         dic.Add("recipe", new List<string>() { chosenRecipe });
         dic.Add("StepNum", new List<string>() { (stepIndex + 1) + "" });
@@ -124,10 +131,11 @@ public class MainScheduler2 : MonoBehaviour
     // proceed to the next task in the list
     public void toNextStep()
     {
-        stepIndex++;
-        if (stepIndex >= timerRecord.Count) {
+        
+        if (stepIndex + 1 >= timerRecord.Count) {
             tutorialFinish = true;
         }
+        stepIndex++;
     }
 
     public void toPreviousStep()
@@ -158,7 +166,7 @@ public class MainScheduler2 : MonoBehaviour
         int recipeId = Int32.Parse(allTutorials[name]["info"][0]);
         getRecipe.GetRecipeSteps(recipeId);
         Debug.Log("get steps! " + recipeId);
-        Invoke("delayStartTutorial", 1.5f);
+        Invoke("delayStartTutorial", 3f);
     }
 
     // for user interface to call when a user select a recipe
@@ -196,8 +204,14 @@ public class MainScheduler2 : MonoBehaviour
             // https://spoonacular.com/cdn/ingredients_100x100/ranch-dressing.jpg
             string pathToImage = "https://spoonacular.com/cdn/ingredients_100x100/" + li[i].image;
             Debug.Log(pathToImage);
-            GetTexture(pathToImage);
+            StartCoroutine(GetTexture(pathToImage));
         }
+    }
+
+    public Texture getCurrentStepImage()
+    {
+        Debug.Log(imagesCurrentStep.Count);
+        return imagesCurrentStep[stepIndex];
     }
 
     IEnumerator GetTexture(string url)
@@ -221,6 +235,11 @@ public class MainScheduler2 : MonoBehaviour
                 timerRecord[stepIndex] = Math.Max(timerRecord[stepIndex] - Time.deltaTime, 0);
 
             }
+            if (!tutorialFinish)
+            {
+                totalTime += Time.deltaTime;
+            }
+            
         }
 
     }
@@ -237,4 +256,5 @@ public class MainScheduler2 : MonoBehaviour
     {
         return As.criticalEquipmentLocation(tutorial[stepIndex].equipment);
     }
+
 }

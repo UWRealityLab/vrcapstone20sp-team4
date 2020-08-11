@@ -7,7 +7,7 @@ using UnityEngine.Video;
 
 public class UpdateInGameInterface : MonoBehaviour
 {
-    private MainScheduler mainScheduler;
+    private MainScheduler2 mainScheduler;
     //private TextMeshProUGUI instructionTextFloatingInterf;
     private TextMeshPro instructionTextNearMenu;
     //private TextMeshProUGUI clockFloatingInterf;
@@ -19,23 +19,23 @@ public class UpdateInGameInterface : MonoBehaviour
     private GameObject timer;
     private Material exitMat;
     private Material completeMat;
-    private VideoPlayer videoPlayer;
     private int step;
     private List<GameObject> lockIcons;
     private Material lockMat;
     private Material unlockMat;
+    private GameObject ImagePlane;
 
     // Start is called before the first frsame update
     void Awake()
     {
-        mainScheduler = GameObject.Find("Scheduler").GetComponent<MainScheduler>();
+        mainScheduler = GameObject.Find("Scheduler").GetComponent<MainScheduler2>();
         nearInterface = GameObject.Find("NearInterface");
         instructionTextNearMenu = GameObject.Find("NearInterface/InstructionCanvas/Instruction").GetComponent<TextMeshPro>();
         clockNearMenu = GameObject.Find("NearInterface/InterfaceTimer/ClockText").GetComponent<TextMeshPro>();
         exitIcon = GameObject.Find("NearInterface/ExitOrComplete/IconAndText/Icon");
         exitMat = Resources.Load("Mat/ExitButton", typeof(Material)) as Material;
         completeMat = Resources.Load("Mat/CompleteButton", typeof(Material)) as Material;
-        videoPlayer = GameObject.Find("NearInterface/GameInterfaceScreen/InterfaceScreen").GetComponent<VideoPlayer>();
+        ImagePlane = GameObject.Find("NearInterface/GameInterfaceScreen/InterfaceScreen");
         step = -1;
         lockIcons = new List<GameObject>();
         GameObject lockIcon;
@@ -67,23 +67,23 @@ public class UpdateInGameInterface : MonoBehaviour
         if (info == null) {
             return;
         }
-        
         if (nearInterface.activeSelf)
         {
             instructionTextNearMenu.text = info["description"][0];
             clockNearMenu.text = info["timer"][0];
-
-            int currentStep = int.Parse(info["stepIndex"][0]);
-            if (step != currentStep)
-            {
-                string name = info["recipe"][0];
-                string pathToVideo = "Videos/" + name + "/step_" + (currentStep + 1) + "_video";
-                VideoClip video = Resources.Load<VideoClip>(pathToVideo) as VideoClip;
-                Debug.Log("video = " + video + ", step = " + currentStep + ", name = " + name);
-                videoPlayer.clip = video;
-                videoPlayer.Play();
-                step = currentStep;
-            }
+            Renderer temp = ImagePlane.GetComponent<Renderer>();
+            temp.material.mainTexture = mainScheduler.getCurrentStepImage();
+            //int currentStep = int.Parse(info["stepIndex"][0]);
+            //if (step != currentStep)
+            //{
+            //    string name = info["recipe"][0];
+            //    string pathToVideo = "Videos/" + name + "/step_" + (currentStep + 1) + "_video";
+            //    VideoClip video = Resources.Load<VideoClip>(pathToVideo) as VideoClip;
+            //    Debug.Log("video = " + video + ", step = " + currentStep + ", name = " + name);
+            //    videoPlayer.clip = video;
+            //    videoPlayer.Play();
+            //    step = currentStep;
+            //}
             // TODO: add done and exit switch
             
             if (mainScheduler.isTutorialDone())
@@ -94,9 +94,18 @@ public class UpdateInGameInterface : MonoBehaviour
             {
                 exitIcon.GetComponent<Renderer>().material = exitMat;
             }
-            
+
             // update the spatial timer:
-            
+            Vector3 timerLocation = mainScheduler.getTimerLocation();
+            if (timerLocation != Vector3.zero)
+            {
+                timer.SetActive(true);
+                timer.transform.position = timerLocation;
+                timer.transform.FindChild("Canvas/Text").GetComponent<Text>().text = info["timer"][0];
+            } else
+            {
+                timer.SetActive(false);
+            }
         }
         /*
         if (gameInterface.activeSelf) {
