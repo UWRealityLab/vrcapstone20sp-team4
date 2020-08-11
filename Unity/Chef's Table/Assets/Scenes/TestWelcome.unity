@@ -7624,6 +7624,26 @@ PrefabInstance:
       propertyPath: offset.z
       value: 0.3
       objectReference: {fileID: 0}
+    - target: {fileID: 2942992144011722833, guid: d9feae7ea5ec32b45bb5e94528642d83,
+        type: 3}
+      propertyPath: m_Texture
+      value: 
+      objectReference: {fileID: 2800000, guid: f920efe7475377a4d9da823ded208546, type: 3}
+    - target: {fileID: 2942992144011722834, guid: d9feae7ea5ec32b45bb5e94528642d83,
+        type: 3}
+      propertyPath: m_Texture
+      value: 
+      objectReference: {fileID: 2800000, guid: f920efe7475377a4d9da823ded208546, type: 3}
+    - target: {fileID: 2942992144011722835, guid: d9feae7ea5ec32b45bb5e94528642d83,
+        type: 3}
+      propertyPath: m_Texture
+      value: 
+      objectReference: {fileID: 2800000, guid: f920efe7475377a4d9da823ded208546, type: 3}
+    - target: {fileID: 2942992144011722844, guid: d9feae7ea5ec32b45bb5e94528642d83,
+        type: 3}
+      propertyPath: m_Texture
+      value: 
+      objectReference: {fileID: 2800000, guid: f920efe7475377a4d9da823ded208546, type: 3}
     - target: {fileID: 2942992144620336130, guid: d9feae7ea5ec32b45bb5e94528642d83,
         type: 3}
       propertyPath: offset.z
