@@ -7,7 +7,7 @@ using UnityEngine.Video;
 
 public class UpdateInGameInterface : MonoBehaviour
 {
-    private MainScheduler2 mainScheduler;
+    private MainScheduler mainScheduler;
     //private TextMeshProUGUI instructionTextFloatingInterf;
     private TextMeshPro instructionTextNearMenu;
     //private TextMeshProUGUI clockFloatingInterf;
@@ -16,6 +16,7 @@ public class UpdateInGameInterface : MonoBehaviour
     private GameObject nearInterface;
     private GameObject exitIcon;
     public GameObject spaitialTimerPrefab;
+    private GameObject timer;
     private Material exitMat;
     private Material completeMat;
     private VideoPlayer videoPlayer;
@@ -27,7 +28,7 @@ public class UpdateInGameInterface : MonoBehaviour
     // Start is called before the first frsame update
     void Awake()
     {
-        mainScheduler = GameObject.Find("Scheduler").GetComponent<MainScheduler2>();
+        mainScheduler = GameObject.Find("Scheduler").GetComponent<MainScheduler>();
         nearInterface = GameObject.Find("NearInterface");
         instructionTextNearMenu = GameObject.Find("NearInterface/InstructionCanvas/Instruction").GetComponent<TextMeshPro>();
         clockNearMenu = GameObject.Find("NearInterface/InterfaceTimer/ClockText").GetComponent<TextMeshPro>();
@@ -46,6 +47,8 @@ public class UpdateInGameInterface : MonoBehaviour
         lockIcons.Add(lockIcon);
         lockMat = Resources.Load("Mat/ButtonLockMat", typeof(Material)) as Material;
         unlockMat = Resources.Load("Mat/ButtonUnlockMat", typeof(Material)) as Material;
+        timer = Instantiate(spaitialTimerPrefab, this.transform);
+        timer.SetActive(false);
     }
 
     public void updateLock(bool islocked)
@@ -60,7 +63,6 @@ public class UpdateInGameInterface : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        /*
         Dictionary<string, List<string>> info = mainScheduler.getCurrentStepInfo();
         if (info == null) {
             return;
@@ -93,8 +95,9 @@ public class UpdateInGameInterface : MonoBehaviour
                 exitIcon.GetComponent<Renderer>().material = exitMat;
             }
             
+            // update the spatial timer:
+            
         }
-        */
         /*
         if (gameInterface.activeSelf) {
             instructionTextFloatingInterf.text = info["description"][0];
