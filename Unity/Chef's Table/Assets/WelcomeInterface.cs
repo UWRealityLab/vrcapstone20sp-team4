@@ -10,6 +10,7 @@ public class WelcomeInterface : MonoBehaviour
     AudioSource buttonClip;
     InterfaceManager interfaceManager;
     GameObject icon;
+    GameObject scan;
 
     private void Awake()
     {
@@ -48,23 +49,26 @@ public class WelcomeInterface : MonoBehaviour
 
     public void clicked()
     {
-        if (name == "ScanMyIngredients")
+        if (name == "ScanMyIngredientsButton")
         {
-            AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("ScanMyIngredients").transform.position);
+            AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("ScanMyIngredientsButton").transform.position);
             interfaceManager.setActiveNearInterface(false);
             interfaceManager.setActiveOnboardingInterface(false);
             interfaceManager.setActiveCuttingSimulation(false);
             interfaceManager.setActiveSimulationInterface(false);
+            interfaceManager.setActiveWelcomeInterface(false);
             interfaceManager.setActiveScanningInterface(true);
+
         }
         else if (name == "BrowseRecipeLibrary")
         {
-            AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("Lock").transform.position);
+            AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("BrowseRecipeButton").transform.position);
             interfaceManager.setActiveNearInterface(false);
-            interfaceManager.setActiveOnboardingInterface(true);
             interfaceManager.setActiveCuttingSimulation(false);
             interfaceManager.setActiveSimulationInterface(false);
             interfaceManager.setActiveScanningInterface(false);
+            interfaceManager.setActiveWelcomeInterface(false);
+            interfaceManager.setActiveOnboardingInterface(true);
         }
         else if (name == "Lock")
         {

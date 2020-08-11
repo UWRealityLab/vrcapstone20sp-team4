@@ -17,7 +17,7 @@ using System.IO;
 public class ScanningInterfaceButton : MonoBehaviour
 {
     AudioSource buttonClip;
-    InterfaceManager interfaceManager;
+    //InterfaceManager interfaceManager;
     GameObject scanningStart;
     GameObject scanningState;
     GameObject scanningConfirm;
@@ -65,18 +65,9 @@ public class ScanningInterfaceButton : MonoBehaviour
         ingredientNameText5.text = "";
         ingredientNameText6.text = "";
 
-        interfaceManager = GameObject.Find("InterfaceManager").GetComponent<InterfaceManager>();
+        //interfaceManager = GameObject.Find("InterfaceManager").GetComponent<InterfaceManager>();
         buttonClip = GameObject.Find("Button_Click").GetComponent<AudioSource>();
-
-/*
-        Debug.Log("awake");
-        if (notIn)
-        {
-            //test call
-            notIn = false;
-            testCall("StartScanning");
-        }
-*/
+        
     }
 
     public void clicked()
@@ -360,7 +351,6 @@ public class ScanningInterfaceButton : MonoBehaviour
             scanningStart.SetActive(false);
             scanningIngredientNamesDisplay.SetActive(false);
 
-            /*
             // Before enabling the Camera, the scene must wait until the privilege has been granted.
             MLResult result = MLPrivilegesStarterKit.Start();
 
@@ -390,12 +380,8 @@ public class ScanningInterfaceButton : MonoBehaviour
                 _isCapturing = false;
                 DisableMLCamera();
             }
-            */
-
-            doneScanning = true;
-
-            //Debug.Log("Scanning!!");
-            //AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("StartScanning").transform.position);
+            
+            AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("StartScanning").transform.position);
         }
         else if (name.Equals("IngredientList"))
         {
@@ -532,7 +518,6 @@ public class ScanningInterfaceButton : MonoBehaviour
         {
             scanningConfirm.SetActive(true);
 
-            /*
             string response = "{\"detections\": " + currResponse + " }";
             ListOfDetections listOfDetections;
 
@@ -549,13 +534,13 @@ public class ScanningInterfaceButton : MonoBehaviour
             {
                 ingredientList.Add(listOfDetections.detections[i].label);
             }
-            */
-
+            
+            /*
             List<String> test = new List<String>() { "cheese", "cheese", "eggs", "milk" };
             for (int i = 0; test.Count > i; i++)
             {
                 ingredientList.Add(test[i]);
-            }
+            }*/
 
             // remove any duplicates
             ingredientList = ingredientList.Distinct().ToList();
