@@ -19,7 +19,7 @@ public class GetInstructions : MonoBehaviour
     private float apiCheckCountdown = API_CHECK_MAXTIME;
     private Texture2D OperationImage;
     private List<PreviewRecipe> recipeList = null;
-    private Dictionary<string, List<Dictionary<string, List<string>>>> allPreviews = new Dictionary<string, List<Dictionary<string, List<string>>>>();
+    private Dictionary<string, Dictionary<string, List<string>>> allPreviews = new Dictionary<string, Dictionary<string, List<string>>>();
 
     // Start is called before the first frame update
     void Start()
@@ -49,7 +49,6 @@ public class GetInstructions : MonoBehaviour
     private void GetPreviewList()
     {
         if (recipeList != null) {
-            List<Dictionary<string, List<string>>> res = new List<Dictionary<string, List<string>>>();
             for (int i = 0; i < RECIPE_NUMBER; i++) {
                 PreviewRecipe recipe = recipeList[i];
                 Dictionary<string, List<string>> recipeDict = new Dictionary<string, List<string>>();
@@ -63,7 +62,7 @@ public class GetInstructions : MonoBehaviour
                 info.Add(recipe.likes.ToString());
                 recipeDict.Add("info", info);
 
-                // usedIngredients(1): "You currently have: "
+                // usedIngredients(1)
                 List<string> usedIngredients = new List<string>();
                 List<UsedIngredients> used = recipe.usedIngredients;
                 for (int j = 0; j < used.Count; j++) {
@@ -71,7 +70,7 @@ public class GetInstructions : MonoBehaviour
                 }
                 recipeDict.Add("used", usedIngredients);
 
-                // missedIngredients(1): "You currently don't have: "
+                // missedIngredients(1)
                 List<string> missedIngredients = new List<string>();
                 List<MissedIngredients> missed = recipe.missedIngredients;
                 for (int j = 0; j < missed.Count; j++) {
@@ -79,13 +78,12 @@ public class GetInstructions : MonoBehaviour
                 }
                 recipeDict.Add("missed", missedIngredients);
 
-                res.Add(recipeDict);
-                allPreviews.Add(recipe.title, res);
+                allPreviews.Add(recipe.title, recipeDict);
             }
         }
     }
 
-    public Dictionary<string, List<Dictionary<string, List<string>>>> GetAllPreviews()
+    public Dictionary<string, Dictionary<string, List<string>>> GetAllPreviews()
     {
         return allPreviews;
     }

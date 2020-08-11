@@ -35,7 +35,7 @@ public class MainScheduler2 : MonoBehaviour
     }
 
     // store the preview info
-    private Dictionary<string, List<Dictionary<string, List<string>>>> allTutorials = new Dictionary<string, List<Dictionary<string, List<string>>>>();
+    private Dictionary<string, Dictionary<string, List<string>>> allTutorials = new Dictionary<string, Dictionary<string, List<string>>>();
 
 
     // simply reset everything.
@@ -144,16 +144,14 @@ public class MainScheduler2 : MonoBehaviour
 
     public void startTutorial(string name)
     {
-        /*
-        try {
-            tutorial = wrapper.result[0];
-            tutorialStarts = true;
-            resetTimerRecord();
+        if (!allTutorials.ContainsKey(name)) {
+            Debug.LogError("invalid recipe entry");
+            return;
         }
-        catch (NullReferenceException e) {
-            Debug.LogWarning(e);
-        }
-        */
+        int recipeId = Int32.Parse(allTutorials[name]["info"][0]);
+        // get a steplist
+        StepsList wrapper = null;
+        startTutorial(wrapper);
     }
 
     // for user interface to call when a user select a recipe
@@ -177,7 +175,7 @@ public class MainScheduler2 : MonoBehaviour
         allTutorials = getRecipe.GetAllPreviews();
     }
 
-    public Dictionary<string, List<Dictionary<string, List<string>>>> GetAllTutorialPreview()
+    public Dictionary<string, Dictionary<string, List<string>>> GetAllTutorialPreview()
     {
         return allTutorials;
     }

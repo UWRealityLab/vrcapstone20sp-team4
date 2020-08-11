@@ -16,17 +16,16 @@ public class InterfaceController : MonoBehaviour
     public GameObject previewPrefab;
     GameObject scheduler;
     MainScheduler2 schedulerScript;
-    Dictionary<string, List<Dictionary<string, List<string>>>> allTutorials = new Dictionary<string, List<Dictionary<string, List<string>>>>();
+    Dictionary<string, Dictionary<string, List<string>>> allTutorials = new Dictionary<string, Dictionary<string, List<string>>>();
     List<string> recipe_names = new List<string>();
 
     public void loadPreview(string name)
     {
         if (allTutorials.ContainsKey(name)) {
             //preview.SetActive(true);
-            int index = recipe_names.FindIndex(a => a.Contains(name));
             TextMeshPro usedText = recipePreview.transform.Find("UsedIngredientsCanvas").Find("Names").GetComponent<TextMeshPro>();
             string temp = "";
-            List<string> usedList = allTutorials[name][index]["used"];
+            List<string> usedList = allTutorials[name]["used"];
             foreach (string ingredient in usedList) {
                 temp += ingredient + "\r\n";
             }
@@ -34,7 +33,7 @@ public class InterfaceController : MonoBehaviour
 
             temp = "";
             TextMeshPro missedText = recipePreview.transform.Find("MissedIngredientsCanvas").Find("Names").GetComponent<TextMeshPro>();
-            List<string> missedList = allTutorials[name][index]["missed"];
+            List<string> missedList = allTutorials[name]["missed"];
             foreach (string ingredient in missedList) {
                 temp += ingredient + "\r\n";
             }
@@ -43,15 +42,8 @@ public class InterfaceController : MonoBehaviour
             TextMeshPro recipeName = recipePreview.transform.Find("Canvas").Find("RecipeName").GetComponent<TextMeshPro>();
             recipeName.text = name;
 
-            string pathToImage = allTutorials[name][index]["info"][2];
+            string pathToImage = allTutorials[name]["info"][2];
             StartCoroutine(GetTexture(pathToImage, recipePreview));
-            index++;
-
-            /*
-            GameObject serving = preview.transform.Find("serving").gameObject;
-            TextMeshProUGUI servingText = serving.GetComponent<TextMeshProUGUI>();
-            servingText.text = "Serving: " + allTutorials[name]["servings"][0];
-            */
         }
     }
 
@@ -78,7 +70,7 @@ public class InterfaceController : MonoBehaviour
             GameObject recipePlate = onboardingInterface.transform.Find("RecipePlate" + i).gameObject;
             TextMeshPro name = recipePlate.GetComponentInChildren<TextMeshPro>();
             name.text = recipe_names[i];
-            string pathToImage = allTutorials[name.text][i]["info"][2];
+            string pathToImage = allTutorials[name.text]["info"][2];
             StartCoroutine(GetTexture(pathToImage, recipePlate));
         }
     }
