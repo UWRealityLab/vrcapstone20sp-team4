@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Xml;
 using System;
 using UnityEngine;
+using UnityEngine.Networking;
 using System.Threading;
 
 public class MainScheduler2 : MonoBehaviour
@@ -12,7 +13,7 @@ public class MainScheduler2 : MonoBehaviour
 
     // for bookkeeping and manipulation
 
-    private InstructionList tutorial; // tutorial will be read only
+    private List<Instruction> tutorial; // tutorial will be read only
     private int stepIndex = 0;
     private List<float> timerRecord = new List<float>();
     private bool timerPause = true;
@@ -27,11 +28,17 @@ public class MainScheduler2 : MonoBehaviour
     private bool tutorialFinish = false;
 
     private ApplicationState As;
+    GameObject recipeAPI;
+    GetInstructions getRecipe;
+
+    private List<Texture> imagesCurrentStep = new List<Texture>();
 
 
     private void Start()
     {
         As = GameObject.Find("ApplicationState").GetComponent<ApplicationState>();
+        recipeAPI = GameObject.Find("RecipeAPI");
+        getRecipe = recipeAPI.GetComponent<GetInstructions>();
     }
 
     // store the preview info
@@ -101,8 +108,8 @@ public class MainScheduler2 : MonoBehaviour
         dic.Add("ingredients", s.getIngredientsSet());
         dic.Add("description", new List<string>() { tutorial.steps[stepIndex].step});
         */
-        float seconds = tutorial.steps[stepIndex].length.number;
-        string unit = tutorial.steps[stepIndex].length.unit;
+        float seconds = tutorial[stepIndex].length.number;
+        string unit = tutorial[stepIndex].length.unit;
         if (unit.StartsWith("minute", StringComparison.OrdinalIgnoreCase)) {
             seconds *= 60;
         } else if (unit.StartsWith("hour", StringComparison.OrdinalIgnoreCase)) {
@@ -135,7 +142,7 @@ public class MainScheduler2 : MonoBehaviour
     {
         if (tutorial != null) {
             timerRecord.Clear();
-            foreach (Instruction instruction in tutorial.steps) {
+            foreach (Instruction instruction in tutorial) {
                 timerRecord.Add(instruction.length.number);
             }
             timerPause = true;
@@ -149,17 +156,19 @@ public class MainScheduler2 : MonoBehaviour
             return;
         }
         int recipeId = Int32.Parse(allTutorials[name]["info"][0]);
-        // get a steplist
-        StepsList wrapper = null;
-        startTutorial(wrapper);
+        getRecipe.GetRecipeSteps(recipeId);
+        Debug.Log("get steps! " + recipeId);
+        Invoke("delayStartTutorial", 1.5f);
     }
 
     // for user interface to call when a user select a recipe
     // name: name of the recipe
-    public void startTutorial(StepsList wrapper)
+    public void delayStartTutorial()
     {
         try {
-            tutorial = wrapper.result[0];
+            tutorial = getRecipe.RecipeSteps();
+            Debug.Log("tutorial length: " + tutorial.Count);
+            GetImagesForEachStep();
             tutorialStarts = true;
             resetTimerRecord();
         }
@@ -170,14 +179,38 @@ public class MainScheduler2 : MonoBehaviour
 
     public void PreviewAllTutorial()
     {
-        GameObject recipeAPI = GameObject.Find("RecipeAPI");
-        GetInstructions getRecipe = recipeAPI.GetComponent<GetInstructions>();
+        
         allTutorials = getRecipe.GetAllPreviews();
     }
 
     public Dictionary<string, Dictionary<string, List<string>>> GetAllTutorialPreview()
     {
         return allTutorials;
+    }
+
+    // construct a list of images of ingredient for the current step(stepIndex)
+    public void GetImagesForEachStep()
+    {
+        List<Ingredients> li = tutorial[1].ingredients;
+        for (int i = 0; i < li.Count; i++) {
+            // https://spoonacular.com/cdn/ingredients_100x100/ranch-dressing.jpg
+            string pathToImage = "https://spoonacular.com/cdn/ingredients_100x100/" + li[i].image;
+            Debug.Log(pathToImage);
+            GetTexture(pathToImage);
+        }
+    }
+
+    IEnumerator GetTexture(string url)
+    {
+        UnityWebRequest www = UnityWebRequestTexture.GetTexture(url);
+        yield return www.SendWebRequest();
+
+        if (www.isNetworkError || www.isHttpError) {
+            Debug.Log(www.error);
+        } else {
+            Texture t = ((DownloadHandlerTexture)www.downloadHandler).texture;
+            imagesCurrentStep.Add(t);
+        }
     }
 
     // Update is called once per frame
@@ -202,6 +235,6 @@ public class MainScheduler2 : MonoBehaviour
 
     public Vector3 getTimerLocation()
     {
-        return As.criticalEquipmentLocation(tutorial.steps[stepIndex].equipment);
+        return As.criticalEquipmentLocation(tutorial[stepIndex].equipment);
     }
 }

@@ -17,9 +17,9 @@ public class GetInstructions : MonoBehaviour
     public GameObject RecipeSystem;
     public string Ingredients;
     private float apiCheckCountdown = API_CHECK_MAXTIME;
-    private Texture2D OperationImage;
     private List<PreviewRecipe> recipeList = null;
     private Dictionary<string, Dictionary<string, List<string>>> allPreviews = new Dictionary<string, Dictionary<string, List<string>>>();
+    List<Instruction> steps = new List<Instruction>();
 
     // Start is called before the first frame update
     void Start()
@@ -88,6 +88,16 @@ public class GetInstructions : MonoBehaviour
         return allPreviews;
     }
 
+    public async void GetRecipeSteps(int recipeId)
+    {
+        steps = (await GetSteps(recipeId)).result[0].steps;
+    }
+
+    public List<Instruction> RecipeSteps()
+    {
+        return steps;
+    }
+
     private async Task<PreviewRecipeList> GetRecipes()
     {
         HttpWebRequest request = (HttpWebRequest)WebRequest.Create(String.Format(
@@ -114,37 +124,4 @@ public class GetInstructions : MonoBehaviour
         return info;
     }
 
-    /*
-    private void GetOperationImage(string Step)
-    {
-        Boolean hasImage = false;
-        for (int i = 0; i < COOKING_METHODS.Length; i++) {
-            string operation = COOKING_METHODS[i];
-            bool contains = Step.IndexOf(operation, StringComparison.OrdinalIgnoreCase) >= 0;
-            if (contains) {
-                hasImage = true;
-                DisplayImage(operation);
-                break;  // one image for each step
-            }
-        }
-        if (!hasImage) {
-            for (int i = 0; i < OPERATIONS.Length; i++) {
-                string operation = OPERATIONS[i];
-                bool contains = Step.IndexOf(operation, StringComparison.OrdinalIgnoreCase) >= 0;
-                if (contains) {
-                    DisplayImage(operation);
-                    break;  // one image for each step
-                }
-            }
-        }
-    }
-
-    private void DisplayImage(string operation)
-    {
-        string filename = "Sprites/" + operation;
-        OperationImage = Resources.Load(filename) as Texture2D;
-        GameObject rawImage = GameObject.Find("RawImage");
-        rawImage.GetComponent<RawImage>().texture = OperationImage;
-    }
-    */
 }

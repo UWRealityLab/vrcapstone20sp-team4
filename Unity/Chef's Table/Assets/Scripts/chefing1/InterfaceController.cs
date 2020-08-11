@@ -58,7 +58,7 @@ public class InterfaceController : MonoBehaviour
         onboarding = GameObject.Find("Onboarding");
         onboardingInterface = onboarding.transform.Find("OnboardingInterface").gameObject;
         recipePreview = onboarding.transform.Find("OnboardingPreview").gameObject;
-        Invoke("delayStart", 0.5f);
+        Invoke("delayStart", 1.5f);
     }
 
     void delayStart()
