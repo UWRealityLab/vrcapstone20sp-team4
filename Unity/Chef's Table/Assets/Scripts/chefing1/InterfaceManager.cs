@@ -50,6 +50,7 @@ public class InterfaceManager : MonoBehaviour
         ms = GameObject.Find("Scheduler").GetComponent<MainScheduler2>();
         summary = GameObject.Find("summary");
         headLockCanvas = GameObject.Find("HeadLockCanvas");
+        
     }
 
     // Start is called before the first frame update
@@ -71,14 +72,16 @@ public class InterfaceManager : MonoBehaviour
 
     public async void setActiveNearInterface(bool b)
     {
-        
+        GameObject ObjectDetection = GameObject.Find("objectdetection");
         if (b)
         {
+            ObjectDetection.SetActive(true);
             await Task.Delay(3000);
             StartCoroutine(animator.FadeIn(nearInterface));
         }
         else
         {
+            //if (ObjectDetection.activeSelf) ObjectDetection.SetActive(false);
             StartCoroutine(animator.FadeOut(nearInterface));
         }
         //nearInterface.SetActive(b);

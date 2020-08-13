@@ -34,7 +34,6 @@ public class GetInstructions : MonoBehaviour
     void Update()
     {
         if (!previewed) {
-            Debug.Log("update: " + time + ": " + Ingredients);
             time++;
             ingredientsCheckCountdown -= 0.1f;
             if (ingredientsCheckCountdown <= 0) {
@@ -42,7 +41,6 @@ public class GetInstructions : MonoBehaviour
                 Debug.Log(Ingredients);
                 if (Ingredients.Length > 0) {
                     previewed = true;
-                    Debug.Log("ingredients gotten");
                     HandlePreviews();
                 }
             }

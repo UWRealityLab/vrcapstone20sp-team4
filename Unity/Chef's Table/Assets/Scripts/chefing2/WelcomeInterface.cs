@@ -48,7 +48,6 @@ public class WelcomeInterface : MonoBehaviour
 
     public void clicked()
     {
-        Debug.Log(2);
         if (name == "ScanMyIngredientsButton")
         {
             AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("ScanMyIngredientsButton").transform.position);
