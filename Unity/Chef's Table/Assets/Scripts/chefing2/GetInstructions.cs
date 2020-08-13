@@ -14,34 +14,44 @@ public class GetInstructions : MonoBehaviour
     private const float API_CHECK_MAXTIME = 10 * 60.0f;  // 10 minutes
     private const int RECIPE_NUMBER = 6;
     public GameObject RecipeSystem;
-    public string Ingredients;
+    private string Ingredients;
     private float apiCheckCountdown = API_CHECK_MAXTIME;
     private List<PreviewRecipe> recipeList = null;
     private Dictionary<string, Dictionary<string, List<string>>> allPreviews = new Dictionary<string, Dictionary<string, List<string>>>();
     List<Instruction> steps = new List<Instruction>();
+    ScanningInterfaceButton button; // = GameObject.Find("ScanningInterface").GetComponent<ScanningInterfaceButton>();
 
     // Start is called before the first frame update
     void Start()
     {
+        button = GameObject.Find("ScanningInterface").GetComponent<ScanningInterfaceButton>();
         HandleInstructions();
     }
 
     // Update is called once per frame
     void Update()
     {
+        Ingredients = button.getIngredients();
+        if (Ingredients.Length > 0) {
+            HandleInstructions();
+        }
+        /*
         apiCheckCountdown -= Time.deltaTime;
         if (apiCheckCountdown <= 0) {
             HandleInstructions();
             apiCheckCountdown = API_CHECK_MAXTIME;
         }
+        */
+
     }
 
     public async void HandleInstructions()
     {
-        recipeList = (await GetRecipes()).result;
-        GetPreviewList();
-
-        // List<Instruction> steps = (await GetSteps(recipeId)).result[0].steps;
+        Ingredients = button.getIngredients();
+        if (Ingredients.Length > 0) {
+            recipeList = (await GetRecipes()).result;
+            GetPreviewList();
+        }
     }
 
     // Get the preview info for all recipes
