@@ -14,10 +14,11 @@ public class InterfaceController : MonoBehaviour
     private GameObject recipePreview;
     private GameObject preview;
     public GameObject previewPrefab;
-    GameObject scheduler;
-    MainScheduler2 schedulerScript;
-    Dictionary<string, Dictionary<string, List<string>>> allTutorials = new Dictionary<string, Dictionary<string, List<string>>>();
-    List<string> recipe_names = new List<string>();
+    private MainScheduler2 schedulerScript;
+    private Dictionary<string, Dictionary<string, List<string>>> allTutorials = new Dictionary<string, Dictionary<string, List<string>>>();
+    private List<string> recipe_names = new List<string>();
+
+    private float delayPreviewTime = 5 * 1.0f;
 
     public void loadPreview(string name)
     {
@@ -49,8 +50,7 @@ public class InterfaceController : MonoBehaviour
 
     void Start()
     {
-        scheduler = GameObject.Find("Scheduler");
-        schedulerScript = scheduler.GetComponent<MainScheduler2>();
+        schedulerScript = GameObject.Find("Scheduler").GetComponent<MainScheduler2>();
         // schedulerScript.PreviewAllTutorial();
         preview = (GameObject)Instantiate(previewPrefab, this.transform.position + new Vector3(0.8f, 0, 0), this.transform.rotation);
         preview.SetActive(false);
@@ -58,7 +58,7 @@ public class InterfaceController : MonoBehaviour
         onboarding = GameObject.Find("Onboarding");
         onboardingInterface = onboarding.transform.Find("OnboardingInterface").gameObject;
         recipePreview = onboarding.transform.Find("OnboardingPreview").gameObject;
-        Invoke("delayStart", 1.5f);
+        Invoke("delayStart", delayPreviewTime);
     }
 
     void delayStart()

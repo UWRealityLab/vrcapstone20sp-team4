@@ -42,7 +42,9 @@ public class ScanningInterfaceButton : MonoBehaviour
     private string url = "http://35.233.198.97:5000/detect_one";
     private object _cameraLockObject = new object();
     private int time_stamp = 0;
-    
+
+    private float sendIngredientsdelayTime = 2.0f;
+
     void Awake()
     {
         scanningStart = GameObject.Find("StartScreen");
@@ -292,6 +294,10 @@ public class ScanningInterfaceButton : MonoBehaviour
 
     public string getIngredients()
     {
+        sendIngredientsdelayTime -= 0.5f;
+        if (sendIngredientsdelayTime <= 0) {
+            ingredientListString = "avocado";
+        }
         return ingredientListString;
     }
 

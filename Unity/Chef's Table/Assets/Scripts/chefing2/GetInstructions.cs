@@ -11,51 +11,54 @@ using System.Linq;
 public class GetInstructions : MonoBehaviour
 {
     private const string API_KEY = "c17e83382cd44c48aba862f8f2999f73";
-    private const float API_CHECK_MAXTIME = 5.0f;
+    private const float API_CHECK_MAXTIME = 2.0f;
     private const int RECIPE_NUMBER = 6;
     public GameObject RecipeSystem;
-    private string Ingredients;
-    private float apiCheckCountdown = API_CHECK_MAXTIME;
+    private string Ingredients = "";
+    private float ingredientsCheckCountdown = API_CHECK_MAXTIME;
     private List<PreviewRecipe> recipeList = null;
     private Dictionary<string, Dictionary<string, List<string>>> allPreviews = new Dictionary<string, Dictionary<string, List<string>>>();
     List<Instruction> steps = new List<Instruction>();
-    ScanningInterfaceButton button; // = GameObject.Find("ScanningInterface").GetComponent<ScanningInterfaceButton>();
+    ScanningInterfaceButton button;
+    Boolean previewed = false;
+    int time = 0;
 
     // Start is called before the first frame update
     void Start()
     {
         button = GameObject.Find("ScanningInterface").GetComponent<ScanningInterfaceButton>();
-        HandleInstructions();
+        Debug.Log("start: " + Ingredients);
     }
 
     // Update is called once per frame
     void Update()
     {
-
-        apiCheckCountdown -= Time.deltaTime;
-        if (apiCheckCountdown <= 0) {
-            Ingredients = button.getIngredients();
-            Debug.Log(Ingredients);
-            if (Ingredients.Length > 0) {
-                HandleInstructions();
+        if (!previewed) {
+            Debug.Log("update: " + time + ": " + Ingredients);
+            time++;
+            ingredientsCheckCountdown -= 0.1f;
+            if (ingredientsCheckCountdown <= 0) {
+                Ingredients = button.getIngredients();
+                Debug.Log(Ingredients);
+                if (Ingredients.Length > 0) {
+                    previewed = true;
+                    Debug.Log("ingredients gotten");
+                    HandlePreviews();
+                }
             }
-            apiCheckCountdown = API_CHECK_MAXTIME;
         }
-
     }
 
-    public async void HandleInstructions()
+    public async void HandlePreviews()
     {
-        Ingredients = button.getIngredients();
-        if (Ingredients.Length > 0) {
-            recipeList = (await GetRecipes()).result;
-            GetPreviewList();
-        }
+        recipeList = (await GetRecipes()).result;
+        GetPreviewList();
     }
 
     // Get the preview info for all recipes
     private void GetPreviewList()
     {
+        Debug.Log("preview " + time);
         if (recipeList != null) {
             for (int i = 0; i < RECIPE_NUMBER; i++) {
                 PreviewRecipe recipe = recipeList[i];
