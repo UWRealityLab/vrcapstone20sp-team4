@@ -23,7 +23,7 @@ public class ScanningInterfaceButton : MonoBehaviour
     GameObject scanningConfirm;
     GameObject scanningIngredientNamesDisplay;
     private List<string> ingredientList = new List<string>();
-    private string ingredientListString = "";
+    private string ingredientListString = "beef,tomato,salt,lettuce";
     private bool doneScanning = false;
     TextMeshPro ingredientNameText1;
     TextMeshPro ingredientNameText2;
