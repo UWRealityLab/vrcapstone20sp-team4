@@ -19,7 +19,6 @@ public class ButtonVisualizer : MonoBehaviour
         {
             if (tag == "RecipePlate")
             {
-                Debug.Log("herere");
                 GameObject frontPlate = transform.Find("FrontPlate").gameObject;
                 frontPlate.GetComponent<Renderer>().material = highlightMat;
             }

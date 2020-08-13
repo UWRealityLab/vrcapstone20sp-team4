@@ -37,8 +37,18 @@ public class WelcomeInterface : MonoBehaviour
         }
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "Hand")
+        {
+            GetComponent<Button>().onClick.Invoke();
+            StartCoroutine(ShowFeedback());
+        }
+    }
+
     public void clicked()
     {
+        Debug.Log(2);
         if (name == "ScanMyIngredientsButton")
         {
             AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("ScanMyIngredientsButton").transform.position);

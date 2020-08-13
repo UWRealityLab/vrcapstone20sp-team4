@@ -62,8 +62,6 @@ public class UIFadingAnimation : MonoBehaviour
 
     public IEnumerator FadeOut(GameObject obj)
     {
-        Debug.Log(obj == null);
-        Debug.Log(currentObjects == null);
         if (obj.activeSelf && !currentObjects.Contains(obj.name))
         {
             currentObjects.Add(obj.name);
