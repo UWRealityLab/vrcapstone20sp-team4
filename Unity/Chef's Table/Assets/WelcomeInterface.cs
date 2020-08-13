@@ -60,7 +60,7 @@ public class WelcomeInterface : MonoBehaviour
             interfaceManager.setActiveScanningInterface(true);
 
         }
-        else if (name == "BrowseRecipeLibrary")
+        else if (name == "BrowseRecipeButton")
         {
             AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("BrowseRecipeButton").transform.position);
             interfaceManager.setActiveNearInterface(false);
