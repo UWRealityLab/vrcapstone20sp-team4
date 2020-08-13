@@ -60,8 +60,8 @@ public class InterfaceManager : MonoBehaviour
         setActiveSimulationInterface(false);
         setActiveCuttingSimulation(false);
         setActiveScanningInterface(false);
-        setActiveOnboardingInterface(true);
-        setActiveWelcomeInterface(false);
+        setActiveOnboardingInterface(false);
+        setActiveWelcomeInterface(true);
     }
 
     public void setActiveCuttingSimulation(bool b)

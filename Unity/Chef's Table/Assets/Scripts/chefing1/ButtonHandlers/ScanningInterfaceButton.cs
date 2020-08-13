@@ -70,6 +70,14 @@ public class ScanningInterfaceButton : MonoBehaviour
         
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "Hand")
+        {
+            GetComponent<Button>().onClick.Invoke();
+        }
+    }
+
     public void clicked()
     {
         if (name == "TrashButton 1")
