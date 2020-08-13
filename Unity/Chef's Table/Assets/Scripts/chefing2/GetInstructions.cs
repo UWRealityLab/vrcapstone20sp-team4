@@ -11,7 +11,7 @@ using System.Linq;
 public class GetInstructions : MonoBehaviour
 {
     private const string API_KEY = "c17e83382cd44c48aba862f8f2999f73";
-    private const float API_CHECK_MAXTIME = 10 * 60.0f;  // 10 minutes
+    private const float API_CHECK_MAXTIME = 5.0f;
     private const int RECIPE_NUMBER = 6;
     public GameObject RecipeSystem;
     private string Ingredients;
@@ -31,17 +31,16 @@ public class GetInstructions : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Ingredients = button.getIngredients();
-        if (Ingredients.Length > 0) {
-            HandleInstructions();
-        }
-        /*
+
         apiCheckCountdown -= Time.deltaTime;
         if (apiCheckCountdown <= 0) {
-            HandleInstructions();
+            Ingredients = button.getIngredients();
+            Debug.Log(Ingredients);
+            if (Ingredients.Length > 0) {
+                HandleInstructions();
+            }
             apiCheckCountdown = API_CHECK_MAXTIME;
         }
-        */
 
     }
 
