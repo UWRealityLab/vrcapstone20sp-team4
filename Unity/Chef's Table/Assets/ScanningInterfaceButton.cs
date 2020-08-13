@@ -23,7 +23,7 @@ public class ScanningInterfaceButton : MonoBehaviour
     GameObject scanningConfirm;
     GameObject scanningIngredientNamesDisplay;
     private List<string> ingredientList = new List<string>();
-    private string ingredientListString = "beef,tomato,salt,lettuce";
+    private string ingredientListString = "";
     private bool doneScanning = false;
     TextMeshPro ingredientNameText1;
     TextMeshPro ingredientNameText2;
@@ -42,8 +42,6 @@ public class ScanningInterfaceButton : MonoBehaviour
     private string url = "http://35.233.198.97:5000/detect_one";
     private object _cameraLockObject = new object();
     private int time_stamp = 0;
-
-    private bool notIn = true;
     
     void Awake()
     {
@@ -52,7 +50,6 @@ public class ScanningInterfaceButton : MonoBehaviour
         scanningConfirm = GameObject.Find("IngredientScanGet");
         scanningIngredientNamesDisplay = GameObject.Find("Ingredients");
 
-        Debug.Log("nameis: " + GameObject.Find("IngredientName1").GetComponent<TextMeshPro>().ToString());
         ingredientNameText1 = GameObject.Find("IngredientName1").GetComponent<TextMeshPro>();
         ingredientNameText2 = GameObject.Find("IngredientName2").GetComponent<TextMeshPro>();
         ingredientNameText3 = GameObject.Find("IngredientName3").GetComponent<TextMeshPro>();
