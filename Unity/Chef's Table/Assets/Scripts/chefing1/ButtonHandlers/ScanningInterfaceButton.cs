@@ -341,7 +341,10 @@ public class ScanningInterfaceButton : MonoBehaviour
             // remove any duplicates
             ingredientList = ingredientList.Distinct().ToList();
 
+            scanningState.SetActive(false);
             scanningConfirm.SetActive(true);
+            scanningStart.SetActive(false);
+            scanningIngredientNamesDisplay.SetActive(false);
             doneScanning = false;
         }
     }
