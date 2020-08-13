@@ -35,7 +35,6 @@ public class Raycast : MonoBehaviour
         {
             prevDone = false;
             container con = detectionQueue.Dequeue();
-            Debug.Log("make Raycast for: " + con.name);
             currClass = con.name;
             Vector3 rcPoint = con.point;
             Vector3 direction = rcPoint - cPosition;
@@ -64,7 +63,6 @@ public class Raycast : MonoBehaviour
     }
     public void makeRayCast2(Dictionary<string, Vector3> detections, bool debugMode) 
     {
-        Debug.Log("raycast request made");
         if (!MLRaycast.IsStarted)
         {
             MLRaycast.Start();

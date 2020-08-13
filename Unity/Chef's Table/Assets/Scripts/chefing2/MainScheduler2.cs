@@ -24,8 +24,8 @@ public class MainScheduler2 : MonoBehaviour
 
 
     // global states
-    private bool tutorialStarts = false; // indicate if a user has choosen a tutorial
-    private bool tutorialFinish = false;
+    public bool tutorialStarts = false; // indicate if a user has choosen a tutorial
+    public bool tutorialFinish = false;
 
     private ApplicationState As;
     GameObject recipeAPI;
@@ -165,7 +165,6 @@ public class MainScheduler2 : MonoBehaviour
         }
         int recipeId = Int32.Parse(allTutorials[name]["info"][0]);
         getRecipe.GetRecipeSteps(recipeId);
-        Debug.Log("get steps! " + recipeId);
         Invoke("delayStartTutorial", 3f);
     }
 
@@ -175,7 +174,6 @@ public class MainScheduler2 : MonoBehaviour
     {
         try {
             tutorial = getRecipe.RecipeSteps();
-            Debug.Log("tutorial length: " + tutorial.Count);
             GetImagesForEachStep();
             tutorialStarts = true;
             resetTimerRecord();
@@ -210,7 +208,6 @@ public class MainScheduler2 : MonoBehaviour
 
     public Texture getCurrentStepImage()
     {
-        Debug.Log(imagesCurrentStep.Count);
         return imagesCurrentStep[stepIndex];
     }
 

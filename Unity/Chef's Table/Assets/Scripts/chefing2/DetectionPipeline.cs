@@ -22,7 +22,7 @@ public class DetectionPipeline : MonoBehaviour
 
     private Thread _captureThread = null;
 
-    private float timer = 5;
+    private float timer = 3;
 
     private string currResponse = "";
     private int time_stamp = 0;
@@ -38,7 +38,7 @@ public class DetectionPipeline : MonoBehaviour
     private Dictionary<int, GameObject> stamp2Copy = new Dictionary<int, GameObject>();
     private byte[] currImage;
     private object _cameraLockObject = new object();
-
+    private MainScheduler2 mainScheduler;
 
     //controller testing
     private MLInput.Controller controller;
@@ -49,21 +49,36 @@ public class DetectionPipeline : MonoBehaviour
 
 
         rc = GameObject.Find("RaycastNode").GetComponent<Raycast>();
+        mainScheduler = GameObject.Find("MainScheduler").GetComponent<MainScheduler2>();
+
     }
 
     void Update()
     {
-        timer -= Time.deltaTime;
-        if (timer < 0)
-        {
-            Debug.Log("1");
-            // stamp2Copy[time_stamp] = Instantiate(copy_prefab, ctransform.position, ctransform.rotation);
-            timer = 5;
-            TriggerAsyncCapture();
-            findDetectedObjects();
-        }
+        //if (mainScheduler.tutorialStarts && !mainScheduler.tutorialFinish)
+        //{
+            timer -= Time.deltaTime;
+            if (timer < 0)
+            {
+                // stamp2Copy[time_stamp] = Instantiate(copy_prefab, ctransform.position, ctransform.rotation);
+                timer = 3;
+                TriggerAsyncCapture();
+                findDetectedObjects();
+            }
+        //} else
+        //{
+        //    resetState();
+        //}
+
     }
 
+    private void resetState()
+    {
+        timer = 3;
+        time_stamp = 0;
+        stamp2Copy.Clear();
+        currResponse = "";
+    }
 
     // parses detection result and find their location in by raycasting
     public void findDetectedObjects()
@@ -76,17 +91,9 @@ public class DetectionPipeline : MonoBehaviour
         {
             return;
         }
-        Debug.Log("start processing detections");
         Dictionary<string, Vector3> rays = new Dictionary<string, Vector3>();
-        List<Vector4> boundingBoxes = new List<Vector4>();
         int stamp = DL.detections[0].stamp;
-        Debug.Log("receive stamp: " + stamp);
-        string keys = "";
-        foreach (var pair in stamp2Copy)
-        {
-            keys += " " + pair.Key;
-        }
-        Debug.Log(keys);
+        if (!stamp2Copy.ContainsKey(stamp)) return; 
         foreach (var detection in DL.detections)
         {
             int x1, y1, x2, y2;
@@ -338,7 +345,6 @@ public class DetectionPipeline : MonoBehaviour
         {
             _isCapturing = false;
         }
-        Debug.Log("sending time stamp: " + time_stamp);
         stamp2Copy[time_stamp] = Instantiate(copy_prefab, ctransform.position, ctransform.rotation);
         time_stamp++;
         currImage = imageData;

@@ -99,6 +99,7 @@ public class UpdateInGameInterface : MonoBehaviour
             Vector3 timerLocation = mainScheduler.getTimerLocation();
             if (timerLocation != Vector3.zero)
             {
+                Debug.Log("spaitail timer activated");
                 timer.SetActive(true);
                 timer.transform.position = timerLocation;
                 timer.transform.FindChild("Canvas/Text").GetComponent<Text>().text = info["timer"][0];
