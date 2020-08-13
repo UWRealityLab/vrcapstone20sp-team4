@@ -59,8 +59,8 @@ public class InterfaceManager : MonoBehaviour
         setActiveNearInterface(false);
         setActiveSimulationInterface(false);
         setActiveCuttingSimulation(false);
-        setActiveScanningInterface(true);
-        setActiveOnboardingInterface(false);
+        setActiveScanningInterface(false);
+        setActiveOnboardingInterface(true);
         setActiveWelcomeInterface(false);
     }
 
