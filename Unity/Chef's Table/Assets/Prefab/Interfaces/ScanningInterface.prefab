@@ -25,7 +25,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 81047952549940480}
   m_LocalRotation: {x: 0.07843447, y: -0, z: -0, w: 0.9969193}
-  m_LocalPosition: {x: -252, y: -263.56158, z: -42.72291}
+  m_LocalPosition: {x: -175, y: -203.80598, z: -33.26158}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 3774765046119961220}
@@ -175,7 +175,7 @@ GameObject:
   - component: {fileID: 1725974929394115039}
   - component: {fileID: 3506819437616279359}
   - component: {fileID: 2547766777178557168}
-  - component: {fileID: 9189650538829955305}
+  - component: {fileID: 7956738241791881313}
   m_Layer: 0
   m_Name: ScanMoreItemsButton
   m_TagString: Untagged
@@ -253,7 +253,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 9189650538829955305}
+      - m_Target: {fileID: 7956738241791881313}
         m_MethodName: clicked
         m_Mode: 1
         m_Arguments:
@@ -280,7 +280,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &9189650538829955305
+--- !u!114 &7956738241791881313
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -289,7 +289,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 298944628155207522}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 807e77fbcbc6daf489aac4ef8184dfdb, type: 3}
+  m_Script: {fileID: 11500000, guid: 18fb42d6d6ecc3d4c99d047980311d98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &402648731504064611
@@ -3200,7 +3200,7 @@ GameObject:
   - component: {fileID: 8921883369066935835}
   - component: {fileID: 5761801647353480625}
   - component: {fileID: 6533856684553901361}
-  - component: {fileID: 4304976369758465553}
+  - component: {fileID: 8271642443088916187}
   m_Layer: 0
   m_Name: TrashButtonScript 3
   m_TagString: Untagged
@@ -3278,7 +3278,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 4304976369758465553}
+      - m_Target: {fileID: 8271642443088916187}
         m_MethodName: clicked
         m_Mode: 1
         m_Arguments:
@@ -3305,7 +3305,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &4304976369758465553
+--- !u!114 &8271642443088916187
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3314,7 +3314,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3071792564731573371}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 807e77fbcbc6daf489aac4ef8184dfdb, type: 3}
+  m_Script: {fileID: 11500000, guid: 18fb42d6d6ecc3d4c99d047980311d98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &3166386790912315878
@@ -3997,7 +3997,7 @@ GameObject:
   - component: {fileID: 6945701310102464884}
   - component: {fileID: 7398292322556686617}
   - component: {fileID: 8578239346528961580}
-  - component: {fileID: 4453653256472614674}
+  - component: {fileID: 469438321620155556}
   m_Layer: 0
   m_Name: TrashButtonScript 5
   m_TagString: Untagged
@@ -4075,7 +4075,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 4453653256472614674}
+      - m_Target: {fileID: 469438321620155556}
         m_MethodName: clicked
         m_Mode: 1
         m_Arguments:
@@ -4102,7 +4102,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &4453653256472614674
+--- !u!114 &469438321620155556
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4111,7 +4111,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3811340949477911607}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 807e77fbcbc6daf489aac4ef8184dfdb, type: 3}
+  m_Script: {fileID: 11500000, guid: 18fb42d6d6ecc3d4c99d047980311d98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &3920400171213424256
@@ -4126,7 +4126,7 @@ GameObject:
   - component: {fileID: 8614389561217095372}
   - component: {fileID: 4568824171275981412}
   - component: {fileID: 5592103946516742685}
-  - component: {fileID: 4689870052326681123}
+  - component: {fileID: 3449660376771508675}
   m_Layer: 0
   m_Name: TrashButtonScript 1
   m_TagString: Untagged
@@ -4204,7 +4204,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 4689870052326681123}
+      - m_Target: {fileID: 3449660376771508675}
         m_MethodName: clicked
         m_Mode: 1
         m_Arguments:
@@ -4231,7 +4231,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &4689870052326681123
+--- !u!114 &3449660376771508675
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4240,7 +4240,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3920400171213424256}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 807e77fbcbc6daf489aac4ef8184dfdb, type: 3}
+  m_Script: {fileID: 11500000, guid: 18fb42d6d6ecc3d4c99d047980311d98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &3992543825550164274
@@ -4591,7 +4591,7 @@ GameObject:
   - component: {fileID: 3337555401995280858}
   - component: {fileID: 2574810999768069829}
   - component: {fileID: 1410285264094714945}
-  - component: {fileID: 5110523587557289324}
+  - component: {fileID: 2055489749127318011}
   m_Layer: 0
   m_Name: IngredientListButton
   m_TagString: Untagged
@@ -4669,7 +4669,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 5110523587557289324}
+      - m_Target: {fileID: 2055489749127318011}
         m_MethodName: clicked
         m_Mode: 1
         m_Arguments:
@@ -4696,7 +4696,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &5110523587557289324
+--- !u!114 &2055489749127318011
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4705,7 +4705,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4112273161319018733}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 807e77fbcbc6daf489aac4ef8184dfdb, type: 3}
+  m_Script: {fileID: 11500000, guid: 18fb42d6d6ecc3d4c99d047980311d98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &4187207173806567933
@@ -4799,7 +4799,7 @@ GameObject:
   - component: {fileID: 3744841411235830275}
   - component: {fileID: 1149940402633611219}
   - component: {fileID: 9098689845997118509}
-  - component: {fileID: 8850063803137218196}
+  - component: {fileID: 8638063676864423429}
   m_Layer: 0
   m_Name: BackButtonScript
   m_TagString: Untagged
@@ -4877,7 +4877,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 8850063803137218196}
+      - m_Target: {fileID: 8638063676864423429}
         m_MethodName: clicked
         m_Mode: 1
         m_Arguments:
@@ -4904,7 +4904,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &8850063803137218196
+--- !u!114 &8638063676864423429
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4913,7 +4913,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4249071678045587457}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 807e77fbcbc6daf489aac4ef8184dfdb, type: 3}
+  m_Script: {fileID: 11500000, guid: 18fb42d6d6ecc3d4c99d047980311d98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &4259812517242923501
@@ -5894,7 +5894,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4819297800927714776}
   m_LocalRotation: {x: 0.07843447, y: -0, z: -0, w: 0.9969193}
-  m_LocalPosition: {x: -252, y: -263.56158, z: -42.72291}
+  m_LocalPosition: {x: -175, y: -203.80598, z: -33.26158}
   m_LocalScale: {x: 0.13, y: 0.025999999, z: 0.014819999}
   m_Children:
   - {fileID: 194088972421703681}
@@ -6916,7 +6916,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6202101748985897559}
   m_LocalRotation: {x: 0.07843447, y: -0, z: -0, w: 0.9969193}
-  m_LocalPosition: {x: -252, y: -263.56158, z: -42.72291}
+  m_LocalPosition: {x: -175, y: -203.80598, z: -33.26158}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 7796824789126245837}
@@ -7572,7 +7572,7 @@ GameObject:
   - component: {fileID: 2032266553983668252}
   - component: {fileID: 2451723007073864518}
   - component: {fileID: 7442661132555653784}
-  - component: {fileID: 3703297635150165009}
+  - component: {fileID: 500751950917553497}
   m_Layer: 0
   m_Name: TrashButtonScript 2
   m_TagString: Untagged
@@ -7650,7 +7650,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3703297635150165009}
+      - m_Target: {fileID: 500751950917553497}
         m_MethodName: clicked
         m_Mode: 1
         m_Arguments:
@@ -7677,7 +7677,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &3703297635150165009
+--- !u!114 &500751950917553497
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -7686,7 +7686,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6450598926987429215}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 807e77fbcbc6daf489aac4ef8184dfdb, type: 3}
+  m_Script: {fileID: 11500000, guid: 18fb42d6d6ecc3d4c99d047980311d98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &6707008658359031846
@@ -8670,7 +8670,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7202859068220414143}
   m_LocalRotation: {x: 0.07843447, y: -0, z: -0, w: 0.9969193}
-  m_LocalPosition: {x: 0, y: 0, z: -42.72291}
+  m_LocalPosition: {x: 0, y: 0, z: -33.26158}
   m_LocalScale: {x: 0.13, y: 0.12999998, z: 0.13}
   m_Children:
   - {fileID: 6233834460479587573}
@@ -8682,7 +8682,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: -202, y: -213.56158}
+  m_AnchoredPosition: {x: -125, y: -153.80598}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &5946539041351294430
@@ -9028,7 +9028,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7461230016607049637}
   m_LocalRotation: {x: 0.07843447, y: -0, z: -0, w: 0.9969193}
-  m_LocalPosition: {x: -252, y: -263.56158, z: -42.72291}
+  m_LocalPosition: {x: -175, y: -203.80598, z: -33.26158}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2544803151069874311}
@@ -9200,7 +9200,7 @@ GameObject:
   - component: {fileID: 2787549283000199095}
   - component: {fileID: 7767975889329714455}
   - component: {fileID: 6193916408970822493}
-  - component: {fileID: 190418034115557294}
+  - component: {fileID: 7304641864264381082}
   m_Layer: 0
   m_Name: TrashButtonScript 6
   m_TagString: Untagged
@@ -9278,7 +9278,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 190418034115557294}
+      - m_Target: {fileID: 7304641864264381082}
         m_MethodName: clicked
         m_Mode: 1
         m_Arguments:
@@ -9305,7 +9305,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &190418034115557294
+--- !u!114 &7304641864264381082
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -9314,7 +9314,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7533819112005042965}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 807e77fbcbc6daf489aac4ef8184dfdb, type: 3}
+  m_Script: {fileID: 11500000, guid: 18fb42d6d6ecc3d4c99d047980311d98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &7554855717006647957
@@ -9745,7 +9745,7 @@ GameObject:
   - component: {fileID: 6877936350632899817}
   - component: {fileID: 2654376515570396260}
   - component: {fileID: 1015505774689813604}
-  - component: {fileID: 4309067960725679713}
+  - component: {fileID: 2569887848027835487}
   m_Layer: 0
   m_Name: GetRecipesButton
   m_TagString: Untagged
@@ -9823,7 +9823,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 4309067960725679713}
+      - m_Target: {fileID: 2569887848027835487}
         m_MethodName: clicked
         m_Mode: 1
         m_Arguments:
@@ -9850,7 +9850,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &4309067960725679713
+--- !u!114 &2569887848027835487
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -9859,7 +9859,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7755451941772469763}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 807e77fbcbc6daf489aac4ef8184dfdb, type: 3}
+  m_Script: {fileID: 11500000, guid: 18fb42d6d6ecc3d4c99d047980311d98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &7797054562701965212
@@ -10695,7 +10695,7 @@ GameObject:
   - component: {fileID: 1364079980695454141}
   - component: {fileID: 600026330628063736}
   - component: {fileID: 5203795147806402867}
-  - component: {fileID: 1052598069931680481}
+  - component: {fileID: 8133547276175011756}
   m_Layer: 0
   m_Name: TrashButtonScript 4
   m_TagString: Untagged
@@ -10773,7 +10773,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1052598069931680481}
+      - m_Target: {fileID: 8133547276175011756}
         m_MethodName: clicked
         m_Mode: 1
         m_Arguments:
@@ -10800,7 +10800,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &1052598069931680481
+--- !u!114 &8133547276175011756
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -10809,7 +10809,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8199264163904006467}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 807e77fbcbc6daf489aac4ef8184dfdb, type: 3}
+  m_Script: {fileID: 11500000, guid: 18fb42d6d6ecc3d4c99d047980311d98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &8363819912952898540
@@ -11197,7 +11197,7 @@ GameObject:
   - component: {fileID: 6376650147338933182}
   - component: {fileID: 8980110948434872453}
   - component: {fileID: 1424238827133321318}
-  - component: {fileID: 8277064271505002682}
+  - component: {fileID: 5406392146687121416}
   m_Layer: 0
   m_Name: StartScanningButton
   m_TagString: Untagged
@@ -11275,7 +11275,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 8277064271505002682}
+      - m_Target: {fileID: 5406392146687121416}
         m_MethodName: clicked
         m_Mode: 1
         m_Arguments:
@@ -11302,7 +11302,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &8277064271505002682
+--- !u!114 &5406392146687121416
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -11311,7 +11311,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8900272549988855304}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 807e77fbcbc6daf489aac4ef8184dfdb, type: 3}
+  m_Script: {fileID: 11500000, guid: 18fb42d6d6ecc3d4c99d047980311d98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &8901170060782068286
