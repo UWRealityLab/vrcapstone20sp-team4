@@ -22,16 +22,6 @@ public class WelcomeInterface : MonoBehaviour
         icon = iconText.transform.Find("Icon").gameObject;
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.tag == "Hand")
-        {
-            GetComponent<Button>().onClick.Invoke();
-            if (name == "Simulation" || name == "BrowseRecipeLibrary" || name == "ScanMyIngredients") return;
-            StartCoroutine(ShowFeedback());
-        }
-    }
-
     private IEnumerator ShowFeedback()
     {
         if (name != "Lock")
