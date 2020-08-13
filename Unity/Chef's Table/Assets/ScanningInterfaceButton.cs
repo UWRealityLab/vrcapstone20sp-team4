@@ -17,7 +17,7 @@ using System.IO;
 public class ScanningInterfaceButton : MonoBehaviour
 {
     AudioSource buttonClip;
-    //InterfaceManager interfaceManager;
+    InterfaceManager interfaceManager;
     GameObject scanningStart;
     GameObject scanningState;
     GameObject scanningConfirm;
@@ -66,7 +66,7 @@ public class ScanningInterfaceButton : MonoBehaviour
         ingredientNameText5.text = "";
         ingredientNameText6.text = "";
 
-        //interfaceManager = GameObject.Find("InterfaceManager").GetComponent<InterfaceManager>();
+        interfaceManager = GameObject.Find("InterfaceManager").GetComponent<InterfaceManager>();
         buttonClip = GameObject.Find("Button_Click").GetComponent<AudioSource>();
         
     }
@@ -273,8 +273,9 @@ public class ScanningInterfaceButton : MonoBehaviour
         }
         else if (name == "GetRecipes")
         {
-            // !! THIS WILL GO TO THE NEXT SCREEN WITH RECIPES 
             ingredientListString = string.Join(",", ingredientList.ToArray());
+            interfaceManager.setActiveOnboardingInterface(true);
+            interfaceManager.setActiveScanningInterface(false);
             AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("GetRecipes").transform.position);
         }
         else if (name == "ScanMoreItems")
