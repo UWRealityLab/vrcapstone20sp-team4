@@ -23,6 +23,7 @@ public class ScanningInterfaceButton : MonoBehaviour
     GameObject scanningConfirm;
     GameObject scanningIngredientNamesDisplay;
     private List<string> ingredientList = new List<string>();
+    private string ingredientListString = "";
     private bool doneScanning = false;
     TextMeshPro ingredientNameText1;
     TextMeshPro ingredientNameText2;
@@ -273,6 +274,7 @@ public class ScanningInterfaceButton : MonoBehaviour
         else if (name == "GetRecipes")
         {
             // !! THIS WILL GO TO THE NEXT SCREEN WITH RECIPES 
+            ingredientListString = string.Join(",", ingredientList.ToArray());
             AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("GetRecipes").transform.position);
         }
         else if (name == "ScanMoreItems")
@@ -288,6 +290,11 @@ public class ScanningInterfaceButton : MonoBehaviour
         {
             Debug.Log("Unknown button");
         }
+    }
+
+    public string getIngredients()
+    {
+        return ingredientListString;
     }
 
     //TESTING 
