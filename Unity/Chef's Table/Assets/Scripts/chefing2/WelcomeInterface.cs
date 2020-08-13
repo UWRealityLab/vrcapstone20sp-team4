@@ -10,7 +10,6 @@ public class WelcomeInterface : MonoBehaviour
     AudioSource buttonClip;
     InterfaceManager interfaceManager;
     GameObject icon;
-    GameObject scan;
 
     private void Awake()
     {
