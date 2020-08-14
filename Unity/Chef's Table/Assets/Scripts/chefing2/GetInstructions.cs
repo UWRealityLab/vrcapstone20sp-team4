@@ -6,17 +6,17 @@ using System.Threading.Tasks;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using System.Linq;
-
+using System.ServiceModel;
 
 public class GetInstructions : MonoBehaviour
 {
     private const string API_KEY = "c17e83382cd44c48aba862f8f2999f73";
     private const float API_CHECK_MAXTIME = 2.0f;
     private const int RECIPE_NUMBER = 6;
-    public GameObject RecipeSystem;
-    private string Ingredients = "";
+    // public GameObject RecipeSystem;
+    private string ingredientList = "";
     private float ingredientsCheckCountdown = API_CHECK_MAXTIME;
-    private List<PreviewRecipe> recipeList = null;
+    public List<PreviewRecipe> RecipeList = null;
     private Dictionary<string, Dictionary<string, List<string>>> allPreviews = new Dictionary<string, Dictionary<string, List<string>>>();
     List<Instruction> steps = new List<Instruction>();
     ScanningInterfaceButton button;
@@ -26,13 +26,14 @@ public class GetInstructions : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        button = GameObject.Find("ScanningInterface").GetComponent<ScanningInterfaceButton>();
-        Debug.Log("start: " + Ingredients);
+        // button = GameObject.Find("ScanningInterface").GetComponent<ScanningInterfaceButton>();
+        // Debug.Log("start: " + Ingredients);
     }
 
     // Update is called once per frame
     void Update()
     {
+        /*
         if (!previewed) {
             time++;
             ingredientsCheckCountdown -= 0.1f;
@@ -45,21 +46,32 @@ public class GetInstructions : MonoBehaviour
                 }
             }
         }
+        */
+    }
+
+    public Boolean GetIngredientsList(string list)
+    {
+        if (list.Length > 0) {
+            ingredientList = list;
+            HandlePreviews();
+            return true;
+        }
+        return false;
     }
 
     public async void HandlePreviews()
     {
-        recipeList = (await GetRecipes()).result;
-        GetPreviewList();
+        if (ingredientList.Length > 0) {
+            RecipeList = (await GetRecipes()).result;
+        }
     }
 
     // Get the preview info for all recipes
     private void GetPreviewList()
     {
-        Debug.Log("preview " + time);
-        if (recipeList != null) {
+        if (RecipeList != null) {
             for (int i = 0; i < RECIPE_NUMBER; i++) {
-                PreviewRecipe recipe = recipeList[i];
+                PreviewRecipe recipe = RecipeList[i];
                 Dictionary<string, List<string>> recipeDict = new Dictionary<string, List<string>>();
 
                 // info(0) - (id(0), title(1), image(2), imageType(3), likes(4))
@@ -111,7 +123,7 @@ public class GetInstructions : MonoBehaviour
     {
         HttpWebRequest request = (HttpWebRequest)WebRequest.Create(String.Format(
             "https://api.spoonacular.com/recipes/findByIngredients?ingredients={0}&number={1}&apiKey={2}",
-            Ingredients, RECIPE_NUMBER, API_KEY));
+            ingredientList, RECIPE_NUMBER, API_KEY));
         HttpWebResponse response = (HttpWebResponse)(await request.GetResponseAsync());
         StreamReader reader = new StreamReader(response.GetResponseStream());
         string jsonResponse = reader.ReadToEnd();
