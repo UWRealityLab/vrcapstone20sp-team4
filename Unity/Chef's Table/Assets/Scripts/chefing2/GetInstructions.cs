@@ -19,7 +19,6 @@ public class GetInstructions : MonoBehaviour
     public List<PreviewRecipe> RecipeList = null;
     private Dictionary<string, Dictionary<string, List<string>>> allPreviews = new Dictionary<string, Dictionary<string, List<string>>>();
     List<Instruction> steps = new List<Instruction>();
-    ScanningInterfaceButton button;
     Boolean previewed = false;
     int time = 0;
 

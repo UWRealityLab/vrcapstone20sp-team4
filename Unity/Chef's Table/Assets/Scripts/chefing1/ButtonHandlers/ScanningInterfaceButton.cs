@@ -44,7 +44,7 @@ public class ScanningInterfaceButton : MonoBehaviour
     private int time_stamp = 0;
 
     private float sendIngredientsdelayTime = 2.0f;
-
+    private GetInstructions recipeApi;
     void Awake()
     {
         scanningStart = GameObject.Find("StartScreen");
@@ -67,7 +67,7 @@ public class ScanningInterfaceButton : MonoBehaviour
 
         interfaceManager = GameObject.Find("InterfaceManager").GetComponent<InterfaceManager>();
         buttonClip = GameObject.Find("Button_Click").GetComponent<AudioSource>();
-        
+        recipeApi = GameObject.Find("RecipeAPI").GetComponent<GetInstructions>();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -281,6 +281,7 @@ public class ScanningInterfaceButton : MonoBehaviour
         else if (name == "GetRecipesButton")
         {
             ingredientListString = string.Join(",", ingredientList.ToArray());
+            recipeApi.GetIngredientsList(ingredientListString);
             interfaceManager.setActiveOnboardingInterface(true);
             interfaceManager.setActiveScanningInterface(false);
             AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("GetRecipesButton").transform.position);
@@ -309,44 +310,39 @@ public class ScanningInterfaceButton : MonoBehaviour
         return ingredientListString;
     }
 
-    void Update()
+    private void updateScanningInterface()
     {
-        if (doneScanning)
+        string response = "{\"detections\": " + currResponse + " }";
+        ListOfDetections listOfDetections;
+
+        try
         {
-         
-            string response = "{\"detections\": " + currResponse + " }";
-            ListOfDetections listOfDetections;
-
-            try
-            {
-                listOfDetections = JsonUtility.FromJson<ListOfDetections>(response);
-            }
-            catch (Exception e)
-            {
-                return;
-            }
-
-            for (int i = 0; listOfDetections.detections.Count > i; i++)
-            {
-                ingredientList.Add(listOfDetections.detections[i].label);
-            }
-            
-            /*
-            List<String> test = new List<String>() { "cheese", "cheese", "eggs", "milk" };
-            for (int i = 0; test.Count > i; i++)
-            {
-                ingredientList.Add(test[i]);
-            }*/
-
-            // remove any duplicates
-            ingredientList = ingredientList.Distinct().ToList();
-
-            scanningState.SetActive(false);
-            scanningConfirm.SetActive(true);
-            scanningStart.SetActive(false);
-            scanningIngredientNamesDisplay.SetActive(false);
-            doneScanning = false;
+            listOfDetections = JsonUtility.FromJson<ListOfDetections>(response);
         }
+        catch (Exception e)
+        {
+            return;
+        }
+
+        for (int i = 0; listOfDetections.detections.Count > i; i++)
+        {
+            ingredientList.Add(listOfDetections.detections[i].label);
+        }
+
+        /*
+        List<String> test = new List<String>() { "cheese", "cheese", "eggs", "milk" };
+        for (int i = 0; test.Count > i; i++)
+        {
+            ingredientList.Add(test[i]);
+        }*/
+
+        // remove any duplicates
+        ingredientList = ingredientList.Distinct().ToList();
+
+        scanningState.SetActive(false);
+        scanningConfirm.SetActive(true);
+        scanningStart.SetActive(false);
+        scanningIngredientNamesDisplay.SetActive(false);
     }
 
     public void TriggerAsyncCapture()
@@ -412,17 +408,14 @@ public class ScanningInterfaceButton : MonoBehaviour
 
     private async void UploadFile(string uri, byte[] rawImage, int stamp)
     {
-        Debug.Log("Uploading...");
 
         WebClient myWebClient = new WebClient();
         myWebClient.Headers.Add("Content-Type", "binary/octet-stream");
         myWebClient.Encoding = Encoding.UTF8;
-        Debug.Log("Sending...");
         byte[] responseArray = await myWebClient.UploadDataTaskAsync(uri, rawImage);  // send a byte array to the resource and returns a byte array containing any response
-        Debug.Log("Sent!");
         currResponse = Encoding.UTF8.GetString(responseArray);
-        doneScanning = true;
         Debug.Log("Currrent Response:" + currResponse);
+        updateScanningInterface();
     }
 
 

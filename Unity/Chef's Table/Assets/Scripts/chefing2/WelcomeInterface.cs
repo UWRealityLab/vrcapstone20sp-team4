@@ -16,7 +16,7 @@ public class WelcomeInterface : MonoBehaviour
         NIControl = GameObject.Find("HeadLockCanvas").GetComponent<NIThresholdControl>();
         buttonClip = GameObject.Find("Button_Click").GetComponent<AudioSource>();
         interfaceManager = GameObject.Find("InterfaceManager").GetComponent<InterfaceManager>();
-        if (name == "BrowseRecipeLibrary" || name == "ScanMyIngredients") return;
+        if (name == "BrowseRecipeButton" || name == "ScanMyIngredientsButton" || name == "WelcomeInterface") return;
         GameObject iconText = transform.parent.transform.Find("IconAndText").gameObject;
         icon = iconText.transform.Find("Icon").gameObject;
     }
