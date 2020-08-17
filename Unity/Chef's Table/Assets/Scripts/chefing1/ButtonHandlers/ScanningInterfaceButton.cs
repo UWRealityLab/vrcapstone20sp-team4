@@ -172,39 +172,6 @@ public class ScanningInterfaceButton : MonoBehaviour
         }
         else if (name == "IngredientListButton")
         {
-            scanningIngredientNamesDisplay.SetActive(true);
-
-            int size = 0;
-            if (ingredientList.Count > size)
-            {
-                ingredientNameText1.text = ingredientList[0];
-                size++;
-            }
-            if (ingredientList.Count > size)
-            {
-                ingredientNameText2.text = ingredientList[1];
-                size++;
-            }
-            if (ingredientList.Count > size)
-            {
-                ingredientNameText3.text = ingredientList[2];
-                size++;
-            }
-            if (ingredientList.Count > size)
-            {
-                ingredientNameText4.text = ingredientList[3];
-                size++;
-            }
-            if (ingredientList.Count > size)
-            {
-                ingredientNameText5.text = ingredientList[4];
-                size++;
-            }
-            if (ingredientList.Count > size)
-            {
-                ingredientNameText6.text = ingredientList[5];
-                size++;
-            }
 
             if (ingredientNameText1.text.Length < 2)
             {
@@ -272,6 +239,7 @@ public class ScanningInterfaceButton : MonoBehaviour
                 GameObject.Find("TrashButton 6").SetActive(true);
             }
 
+            scanningIngredientNamesDisplay.SetActive(true);
             scanningState.SetActive(false);
             scanningConfirm.SetActive(false);
             scanningStart.SetActive(false);
@@ -312,6 +280,32 @@ public class ScanningInterfaceButton : MonoBehaviour
 
     private void updateScanningInterface()
     {
+        // check whether or not there is currently text being displayed, add it to ingredient list if it is
+        if (ingredientNameText1.text.Length > 1 && !ingredientNameText1.text.Equals("Ingredient Name"))
+        {
+            ingredientList[0] = ingredientNameText1.text;
+        }
+        if (ingredientNameText2.text.Length > 1 && !ingredientNameText2.text.Equals("Ingredient Name"))
+        {
+            ingredientList[1] = ingredientNameText2.text;
+        }
+        if (ingredientNameText3.text.Length > 1 && !ingredientNameText3.text.Equals("Ingredient Name"))
+        {
+            ingredientList[2] = ingredientNameText3.text;
+        }
+        if (ingredientNameText4.text.Length > 1 && !ingredientNameText4.text.Equals("Ingredient Name"))
+        {
+            ingredientList[3] = ingredientNameText4.text;
+        }
+        if (ingredientNameText5.text.Length > 1 && !ingredientNameText5.text.Equals("Ingredient Name"))
+        {
+            ingredientList[4] = ingredientNameText5.text;
+        }
+        if (ingredientNameText6.text.Length > 1 && !ingredientNameText6.text.Equals("Ingredient Name"))
+        {
+            ingredientList[5] = ingredientNameText6.text;
+        }
+
         string response = "{\"detections\": " + currResponse + " }";
         ListOfDetections listOfDetections;
 
@@ -338,6 +332,38 @@ public class ScanningInterfaceButton : MonoBehaviour
 
         // remove any duplicates
         ingredientList = ingredientList.Distinct().ToList();
+
+        // change the displayed text for the next state because ingredientList is not saved
+        int size = 0;
+        if (ingredientList.Count > size)
+        {
+            ingredientNameText1.text = ingredientList[0];
+            size++;
+        }
+        if (ingredientList.Count > size)
+        {
+            ingredientNameText2.text = ingredientList[1];
+            size++;
+        }
+        if (ingredientList.Count > size)
+        {
+            ingredientNameText3.text = ingredientList[2];
+            size++;
+        }
+        if (ingredientList.Count > size)
+        {
+            ingredientNameText4.text = ingredientList[3];
+            size++;
+        }
+        if (ingredientList.Count > size)
+        {
+            ingredientNameText5.text = ingredientList[4];
+            size++;
+        }
+        if (ingredientList.Count > size)
+        {
+            ingredientNameText6.text = ingredientList[5];
+        }
 
         scanningState.SetActive(false);
         scanningConfirm.SetActive(true);
