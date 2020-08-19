@@ -42,7 +42,7 @@ public class ScanningInterfaceButton : MonoBehaviour
     TextMeshPro ingredientNameText4;
     TextMeshPro ingredientNameText5;
     TextMeshPro ingredientNameText6;
-    private float timer = 2;
+    private float timer = 1;
 
     // For image capture
     private bool _isCameraConnected = false;
@@ -54,7 +54,7 @@ public class ScanningInterfaceButton : MonoBehaviour
     private string url = "http://35.233.198.97:5000/detect_one";
     private object _cameraLockObject = new object();
     private int time_stamp = 0;
-
+     
     private float sendIngredientsdelayTime = 2.0f;
     private GetInstructions recipeApi;
 
@@ -167,11 +167,6 @@ public class ScanningInterfaceButton : MonoBehaviour
             scanningStart.SetActive(false);
             scanningIngredientNamesDisplay.SetActive(false);
 
-            // two second timer so that the scene state can change
-            timer -= Time.deltaTime;
-            if (timer < 0)
-            {
-                timer = 2;
                 // Before enabling the Camera, the scene must wait until the privilege has been granted.
                 MLResult result = MLPrivilegesStarterKit.Start();
 
@@ -199,7 +194,7 @@ public class ScanningInterfaceButton : MonoBehaviour
                     _isCapturing = false;
                     DisableMLCamera();
                 }
-            }
+
         }
         else if (name == "IngredientListButton")
         {
@@ -343,7 +338,6 @@ public class ScanningInterfaceButton : MonoBehaviour
 
     private void updateScanningInterface()
     {
-        /*
         string response = "{\"detections\": " + currResponse + " }";
         ListOfDetections listOfDetections;
 
@@ -359,14 +353,14 @@ public class ScanningInterfaceButton : MonoBehaviour
         for (int i = 0; listOfDetections.detections.Count > i; i++)
         {
             ingredientList.addToList(listOfDetections.detections[i].label);
-        }*/
+        }
 
-        
+        /*
         List<String> test = new List<String>() { "cheese", "cheese", "eggs", "milk" };
         for (int i = 0; test.Count > i; i++)
         {
             ingredientList.addToList(test[i]);
-        }
+        }*/
 
         // remove any duplicates
         ingredientList.distinct();
@@ -444,8 +438,8 @@ public class ScanningInterfaceButton : MonoBehaviour
         WebClient myWebClient = new WebClient();
         myWebClient.Headers.Add("Content-Type", "binary/octet-stream");
         myWebClient.Encoding = Encoding.UTF8;
-        //byte[] responseArray = await myWebClient.UploadDataTaskAsync(uri, rawImage);  // send a byte array to the resource and returns a byte array containing any response
-        //currResponse = Encoding.UTF8.GetString(responseArray);
+        byte[] responseArray = await myWebClient.UploadDataTaskAsync(uri, rawImage);  // send a byte array to the resource and returns a byte array containing any response
+        currResponse = Encoding.UTF8.GetString(responseArray);
         updateScanningInterface();
     }
 
