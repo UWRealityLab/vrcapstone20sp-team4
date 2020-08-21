@@ -422,7 +422,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c472d39060c412b408b87b42e0812d3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RecipeSystem: {fileID: 0}
+  RecipeList: []
 --- !u!4 &211577238
 Transform:
   m_ObjectHideFlags: 0
@@ -15553,12 +15553,12 @@ PrefabInstance:
     - target: {fileID: 5619764785288450845, guid: 4b83d5952ef78964a987c932f7375418,
         type: 3}
       propertyPath: showStackTrace
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5619764785477124592, guid: 4b83d5952ef78964a987c932f7375418,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 155
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5619764785477124592, guid: 4b83d5952ef78964a987c932f7375418,
         type: 3}
