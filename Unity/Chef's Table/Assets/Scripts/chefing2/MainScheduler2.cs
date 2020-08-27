@@ -185,12 +185,11 @@ public class MainScheduler2 : MonoBehaviour
 
     public void PreviewAllTutorial()
     {
-        
         allTutorials = getRecipe.GetAllPreviews();
     }
 
     public Dictionary<string, Dictionary<string, List<string>>> GetAllTutorialPreview()
-    {
+    { 
         return allTutorials;
     }
 

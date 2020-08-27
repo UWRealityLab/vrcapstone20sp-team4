@@ -63,6 +63,7 @@ public class GetInstructions : MonoBehaviour
         if (ingredientList.Length > 0) {
             RecipeList = (await GetRecipes()).result;
         }
+        GetPreviewList();
     }
 
     // Get the preview info for all recipes
@@ -120,6 +121,7 @@ public class GetInstructions : MonoBehaviour
 
     private async Task<PreviewRecipeList> GetRecipes()
     {
+        Debug.Log("sending ingredient list " + ingredientList);
         HttpWebRequest request = (HttpWebRequest)WebRequest.Create(String.Format(
             "https://api.spoonacular.com/recipes/findByIngredients?ingredients={0}&number={1}&apiKey={2}",
             ingredientList, RECIPE_NUMBER, API_KEY));
@@ -127,6 +129,7 @@ public class GetInstructions : MonoBehaviour
         StreamReader reader = new StreamReader(response.GetResponseStream());
         string jsonResponse = reader.ReadToEnd();
         jsonResponse = "{\"result\":" + jsonResponse + "}";
+        Debug.Log(jsonResponse.Substring(0, 20));
         PreviewRecipeList info = JsonUtility.FromJson<PreviewRecipeList>(jsonResponse);
         return info;
     }
