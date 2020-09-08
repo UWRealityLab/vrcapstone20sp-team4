@@ -34,6 +34,11 @@ public class ScanningInterfaceButton : MonoBehaviour
     GameObject trashButton4;
     GameObject trashButton5;
     GameObject trashButton6;
+    GameObject backButton;
+    GameObject ingredientsButton;
+    GameObject getRecipeButton;
+    GameObject startScanningButton;
+    GameObject scanMoreButton;
     private string ingredientListString = "";
     private bool doneScanning = false;
     TextMeshPro ingredientNameText1;
@@ -43,6 +48,7 @@ public class ScanningInterfaceButton : MonoBehaviour
     TextMeshPro ingredientNameText5;
     TextMeshPro ingredientNameText6;
     private float timer = 1;
+    private int maxDetections = 6;
 
     // For image capture
     private bool _isCameraConnected = false;
@@ -92,6 +98,12 @@ public class ScanningInterfaceButton : MonoBehaviour
         trashButton4 = GameObject.Find("TrashButton 4");
         trashButton5 = GameObject.Find("TrashButton 5");
         trashButton6 = GameObject.Find("TrashButton 6");
+
+        backButton = GameObject.Find("BackButtonScript");
+        ingredientsButton = GameObject.Find("IngredientListButton");
+        getRecipeButton = GameObject.Find("GetRecipesButton");
+        startScanningButton = GameObject.Find("StartScanningButton");
+        scanMoreButton = GameObject.Find("ScanMoreItemsButton");
 
         interfaceManager = GameObject.Find("InterfaceManager").GetComponent<InterfaceManager>();
         buttonClip = GameObject.Find("Button_Click").GetComponent<AudioSource>();
@@ -153,7 +165,7 @@ public class ScanningInterfaceButton : MonoBehaviour
         }
         else if (name == "BackButtonScript")
         {
-            AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("BackButtonScript").transform.position);
+            AudioSource.PlayClipAtPoint(buttonClip.clip, backButton.transform.position);
             scanningConfirm.SetActive(true);
             scanningState.SetActive(false);
             scanningStart.SetActive(false);
@@ -161,12 +173,12 @@ public class ScanningInterfaceButton : MonoBehaviour
         }
         else if (name == "StartScanningButton")
         {
-            AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("StartScanningButton").transform.position);
+            AudioSource.PlayClipAtPoint(buttonClip.clip, startScanningButton.transform.position);
             scanningState.SetActive(true);
             scanningConfirm.SetActive(false);
             scanningStart.SetActive(false);
             scanningIngredientNamesDisplay.SetActive(false);
-
+            
                 // Before enabling the Camera, the scene must wait until the privilege has been granted.
                 MLResult result = MLPrivilegesStarterKit.Start();
 
@@ -176,6 +188,7 @@ public class ScanningInterfaceButton : MonoBehaviour
                     enabled = false;
                     return;
                 }
+                
                 result = MLPrivilegesStarterKit.RequestPrivilegesAsync(HandlePrivilegesDone, MLPrivileges.Id.CameraCapture);
 
                 if (!result.IsOk)
@@ -188,17 +201,10 @@ public class ScanningInterfaceButton : MonoBehaviour
 
                 _privilegesBeingRequested = true;
 
-                // disable camera now that capture is finished
-                if (_isCameraConnected)
-                {
-                    _isCapturing = false;
-                    DisableMLCamera();
-                }
-
         }
         else if (name == "IngredientListButton")
         {
-            AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("IngredientListButton").transform.position);
+            AudioSource.PlayClipAtPoint(buttonClip.clip, ingredientsButton.transform.position);
 
             // change the displayed text
             int size = 0;
@@ -305,7 +311,7 @@ public class ScanningInterfaceButton : MonoBehaviour
         }
         else if (name == "GetRecipesButton")
         {
-            AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("GetRecipesButton").transform.position);
+            AudioSource.PlayClipAtPoint(buttonClip.clip, getRecipeButton.transform.position);
             ingredientListString = string.Join(",", ingredientList.array());
             recipeApi.GetIngredientsList(ingredientListString);
             interfaceManager.setActiveOnboardingInterface(true);
@@ -313,7 +319,7 @@ public class ScanningInterfaceButton : MonoBehaviour
         }
         else if (name == "ScanMoreItemsButton")
         {
-            AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("ScanMoreItemsButton").transform.position);
+            AudioSource.PlayClipAtPoint(buttonClip.clip, scanMoreButton.transform.position);
             scanningState.SetActive(false);
             scanningConfirm.SetActive(false);
             scanningStart.SetActive(true);
@@ -350,7 +356,7 @@ public class ScanningInterfaceButton : MonoBehaviour
             return;
         }
 
-        for (int i = 0; listOfDetections.detections.Count > i; i++)
+        for (int i = 0; maxDetections > i; i++)
         {
             ingredientList.addToList(listOfDetections.detections[i].label);
         }
@@ -375,9 +381,13 @@ public class ScanningInterfaceButton : MonoBehaviour
     {
         if (_captureThread == null || (!_captureThread.IsAlive))
         {
+            Debug.Log("Before Capture thread worker.");
             ThreadStart captureThreadStart = new ThreadStart(CaptureThreadWorker);
+            Debug.Log("Capture thread worker start.");
             _captureThread = new Thread(captureThreadStart);
+            Debug.Log("Capture thread worker start 2.");
             _captureThread.Start();
+            Debug.Log("Capture thread worker Fin.");
         }
         else
         {
@@ -392,6 +402,7 @@ public class ScanningInterfaceButton : MonoBehaviour
             MLResult result = MLCamera.Start();
             if (result.IsOk)
             {
+                Debug.Log("Camera connected.");
                 result = MLCamera.Connect();
                 _isCameraConnected = true;
             }
@@ -413,6 +424,7 @@ public class ScanningInterfaceButton : MonoBehaviour
                 EnableMLCamera();
                 MLCamera.OnRawImageAvailable += OnCaptureRawImageComplete;
             }
+            Debug.Log("Capture started.");
             TriggerAsyncCapture();
             _hasStarted = true;
         }
@@ -438,8 +450,10 @@ public class ScanningInterfaceButton : MonoBehaviour
         WebClient myWebClient = new WebClient();
         myWebClient.Headers.Add("Content-Type", "binary/octet-stream");
         myWebClient.Encoding = Encoding.UTF8;
+
         byte[] responseArray = await myWebClient.UploadDataTaskAsync(uri, rawImage);  // send a byte array to the resource and returns a byte array containing any response
         currResponse = Encoding.UTF8.GetString(responseArray);
+        Debug.Log("FINISH");
         updateScanningInterface();
     }
 
@@ -449,8 +463,11 @@ public class ScanningInterfaceButton : MonoBehaviour
         lock (_cameraLockObject)
         {
             _isCapturing = false;
+            _hasStarted = false;
+            _isCapturing = false;
+            DisableMLCamera();
         }
-        Debug.Log("capture complete");
+        Debug.Log("Capture complete.");
 
         time_stamp++;
         UploadFile(url, imageData, time_stamp - 1);
@@ -517,6 +534,7 @@ public class ScanningInterfaceButton : MonoBehaviour
         {
             if (MLCamera.IsStarted && _isCameraConnected)
             {
+                Debug.Log("Capture thread worker.");
                 MLResult result = MLCamera.CaptureRawImageAsync();
                 if (result.IsOk)
                 {

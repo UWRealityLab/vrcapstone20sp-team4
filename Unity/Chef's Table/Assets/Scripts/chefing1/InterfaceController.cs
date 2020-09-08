@@ -10,7 +10,7 @@ public class InterfaceController : MonoBehaviour
 {
     // Start is called before the first frame update
     private GameObject onboarding;
-    private GameObject onboardingInterface;
+    public GameObject onboardingInterface;
     private GameObject recipePreview;
     private GameObject preview;
     public GameObject previewPrefab;
@@ -18,7 +18,7 @@ public class InterfaceController : MonoBehaviour
     private Dictionary<string, Dictionary<string, List<string>>> allTutorials = new Dictionary<string, Dictionary<string, List<string>>>();
     private List<string> recipe_names = new List<string>();
 
-    private float delayPreviewTime = 5 * 1.0f;
+    private float delayPreviewTime = 5f;
 
     public void loadPreview(string name)
     {
@@ -48,7 +48,28 @@ public class InterfaceController : MonoBehaviour
         }
     }
 
-    void Start()
+    public void loadOnboarding()
+    {
+        Invoke("loadOnboardingDelay", 5f);
+    }
+    public void loadOnboardingDelay() {
+        schedulerScript.PreviewAllTutorial();
+        allTutorials = schedulerScript.GetAllTutorialPreview();
+        recipe_names = new List<string>(allTutorials.Keys);
+        Debug.Log(recipe_names.Count + " & ");
+        for (int i = 0; i < recipe_names.Count; i++)
+        {
+            GameObject recipePlate = onboardingInterface.transform.Find("RecipePlate" + i).gameObject;
+           
+            TextMeshPro name = recipePlate.GetComponentInChildren<TextMeshPro>();
+            Debug.Log(recipe_names[i]);
+            name.text = recipe_names[i];
+            string pathToImage = allTutorials[name.text]["info"][2];
+            StartCoroutine(GetTexture(pathToImage, recipePlate));
+        }
+    }
+
+    void Awake()
     {
         schedulerScript = GameObject.Find("Scheduler").GetComponent<MainScheduler2>();
         // schedulerScript.PreviewAllTutorial();
@@ -58,22 +79,23 @@ public class InterfaceController : MonoBehaviour
         onboarding = GameObject.Find("Onboarding");
         onboardingInterface = onboarding.transform.Find("OnboardingInterface").gameObject;
         recipePreview = onboarding.transform.Find("OnboardingPreview").gameObject;
-        Invoke("delayStart", delayPreviewTime);
     }
 
-    void delayStart()
-    {
-        schedulerScript.PreviewAllTutorial();
-        allTutorials = schedulerScript.GetAllTutorialPreview();
-        recipe_names = new List<string>(allTutorials.Keys);
-        for (int i = 0; i < recipe_names.Count; i++) {
-            GameObject recipePlate = onboardingInterface.transform.Find("RecipePlate" + i).gameObject;
-            TextMeshPro name = recipePlate.GetComponentInChildren<TextMeshPro>();
-            name.text = recipe_names[i];
-            string pathToImage = allTutorials[name.text]["info"][2];
-            StartCoroutine(GetTexture(pathToImage, recipePlate));
-        }
-    }
+    //void Awake()
+    //{
+    //    Debug.Log("ingetface fontroller awake");
+    //    schedulerScript.PreviewAllTutorial();
+    //    allTutorials = schedulerScript.GetAllTutorialPreview();
+    //    recipe_names = new List<string>(allTutorials.Keys);
+    //    for (int i = 0; i < recipe_names.Count; i++)
+    //    {
+    //        GameObject recipePlate = onboardingInterface.transform.Find("RecipePlate" + i).gameObject;
+    //        TextMeshPro name = recipePlate.GetComponentInChildren<TextMeshPro>();
+    //        name.text = recipe_names[i];
+    //        string pathToImage = allTutorials[name.text]["info"][2];
+    //        StartCoroutine(GetTexture(pathToImage, recipePlate));
+    //    }
+    //}
 
     IEnumerator GetTexture(string url, GameObject obj)
     {

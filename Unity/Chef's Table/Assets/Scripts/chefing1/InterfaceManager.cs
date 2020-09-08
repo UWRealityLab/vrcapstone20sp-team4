@@ -119,15 +119,18 @@ public class InterfaceManager : MonoBehaviour
         
         if (b)
         {
+            onboarding.SetActive(true);
+            onboardingInterface.SetActive(true);
             
             onboardingPreview.SetActive(false);
-            onboardingInterface.SetActive(true);
+            onboarding.GetComponent<InterfaceController>().loadOnboarding();
             StartCoroutine(animator.FadeIn(onboarding));
         }
         else
         {
             onboardingPreview.SetActive(false);
             onboardingInterface.SetActive(false);
+            onboarding.SetActive(false);
             StartCoroutine(animator.FadeOut(onboarding));
         }
     }

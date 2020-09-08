@@ -8,7 +8,8 @@ public class ApplicationState : MonoBehaviour
 {
 
     private Dictionary<string, Vector3> item2Location = new Dictionary<string, Vector3>();
-    private List<string> impEquipments = new List<string>() { "oven", "microwave oven", "cutting board", "sink", "gas stove" };
+    private List<string> impEquipments = new List<string>() { "oven", "microwave oven", "cutting board", "sink", "gas stove", "frying pan" };
+    private List<string> utensilAllowMultiple = new List<string>() { "plate", "bowl", ""};
 
     // in the future, we might need 
     // list of all current animation
