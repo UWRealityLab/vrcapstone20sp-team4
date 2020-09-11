@@ -1,0 +1,249 @@
+{
+   "name":"",
+   "steps":[
+      {
+         "action":"cut",
+         "number":1,
+         "step":"Cut out a 3-inch hole at the center of your bread.",
+         "ingredients":[
+            {
+               "id":18064,
+               "name":"bread",
+               "localizedName":"bread",
+               "image":"white-bread.jpg"
+            }
+         ],
+         "equipment":[
+            {
+               "id":404645,
+               "name":"cutting board",
+               "localizedName":"cutting board",
+               "image":"pan.png"
+            },
+            {
+               "id":404645,
+               "name":"kitchen knife",
+               "localizedName":"kitchen knife",
+               "image":"pan.png"
+            }
+         ]
+      },
+      {
+         "action":"melt",
+         "number":2,
+         "step":"Melt the butter over medium heat in a frying pan. Once the butter is melted, add to your outer piece of bread.",
+         "ingredients":[
+            {
+               "id":1001,
+               "name":"butter",
+               "localizedName":"butter",
+               "image":"butter-sliced.jpg"
+            },
+            {
+               "id":18064,
+               "name":"bread",
+               "localizedName":"bread",
+               "image":"white-bread.jpg"
+            }
+         ],
+         "equipment":[
+            {
+               "id":404645,
+               "name":"frying pan",
+               "localizedName":"frying pan",
+               "image":"pan.png"
+            },
+            {
+               "id":404645,
+               "name":"gas stove",
+               "localizedName":"gas stove",
+               "image":"pan.png"
+            }
+         ]
+      },
+      {
+         "action":"crack",
+         "number":3,
+         "step":"Put the outer bread onto the frying pan. Crack the egg and drop it into the hole in your bread.",
+         "ingredients":[
+            {
+               "id":18070,
+               "name":"toast",
+               "localizedName":"toast",
+               "image":"toast"
+            },
+            {
+               "id":1123,
+               "name":"egg",
+               "localizedName":"egg",
+               "image":"egg.png"
+            }
+         ],
+         "equipment":[
+            {
+               "id":404645,
+               "name":"frying pan",
+               "localizedName":"frying pan",
+               "image":"pan.png"
+            },
+            {
+               "id":404645,
+               "name":"gas stove",
+               "localizedName":"gas stove",
+               "image":"pan.png"
+            }
+         ]
+      },
+      {
+         "action":"heat",
+         "number":4,
+         "step":"Let cook for 2 to 3 minutes, until the egg is almost completely set. Use a spatula to flip the toast over in the pan, to lightly toast the other side and set the top of the egg. Place your egg toast on a plate.",
+         "ingredients":[
+            {
+               "id":18070,
+               "name":"toast",
+               "localizedName":"toast",
+               "image":"toast"
+            }
+         ],
+         "equipment":[
+            {
+               "id":404645,
+               "name":"plate",
+               "localizedName":"plate",
+               "image":"pan.png"
+            },
+            {
+               "id":404642,
+               "name":"spatula",
+               "localizedName":"spatula",
+               "image":"spatula-or-turner.jpg"
+            },
+            {
+               "id":404645,
+               "name":"frying pan",
+               "localizedName":"frying pan",
+               "image":"pan.png"
+            },
+            {
+               "id":404645,
+               "name":"gas stove",
+               "localizedName":"gas stove",
+               "image":"pan.png"
+            }
+         ],
+         "length":{
+            "number":3,
+            "unit":"minutes"
+         }
+      },
+      {
+         "action":"heat",
+         "number":5,
+         "step":"Place your inner piece of bread in the frying pan to lightly toast it on both sides. You can turn off the stove once you've completed this step.",
+         "ingredients":[
+            {
+               "id":18064,
+               "name":"bread",
+               "localizedName":"bread",
+               "image":"white-bread.jpg"
+            },
+            {
+               "id":18070,
+               "name":"toast",
+               "localizedName":"toast",
+               "image":"toast"
+            }
+         ],
+         "equipment":[
+            {
+               "id":404645,
+               "name":"frying pan",
+               "localizedName":"frying pan",
+               "image":"pan.png"
+            },
+            {
+               "id":404794,
+               "Name":"gas stove",
+               "localizedName":"gas stove",
+               "image":"oven.jpg"
+            }
+         ]
+      },
+      {
+         "action":"mash",
+         "number":6,
+         "step":"Remove the avocado from the peel, and mash it up in a bowl.",
+         "ingredients":[
+            {
+               "id":9037,
+               "name":"avocado",
+               "localizedName":"avocado",
+               "image":"avocado.jpg"
+            }
+         ],
+         "equipment":[
+            {
+               "id":404783,
+               "name":"bowl",
+               "localizedName":"bowl",
+               "image":"bowl.jpg"
+            }
+         ]
+      },
+      {
+         "action":"spread",
+         "number":7,
+         "step":"Put your inner toast on the plate. Dump the mashed avocado onto the inner toast and use your fork to spread it out so it covers the toast completely.",
+         "ingredients":[
+            {
+               "id":9037,
+               "name":"avocado",
+               "localizedName":"avocado",
+               "image":"avocado.jpg"
+            },
+            {
+               "id":18070,
+               "name":"toast",
+               "localizedName":"toast",
+               "image":"toast"
+            }
+         ],
+         "equipment":[
+            {
+               "id":404783,
+               "name":"plate",
+               "localizedName":"plate",
+               "image":"bowl.jpg"
+            }
+         ]
+      },
+      {
+         "action":"sprinkle",
+         "number":8,
+         "step":"Arrange your avocado toast and egg toast on your plate. Sprinkle a couple pinches of salt and pepper on both the egg and the avocado.",
+         "ingredients":[
+            {
+               "id":1123,
+               "name":"egg",
+               "localizedName":"egg",
+               "image":"egg.png"
+            },
+            {
+               "id":1102047,
+               "name":"salt and pepper",
+               "localizedName":"salt and pepper",
+               "image":"salt-and-pepper.jpg"
+            }
+         ],
+         "Equipment":[
+            {
+               "id":404783,
+               "name":"plate",
+               "localizedName":"plate",
+               "image":"bowl.jpg"
+            }
+         ]
+      }
+   ]
+}
