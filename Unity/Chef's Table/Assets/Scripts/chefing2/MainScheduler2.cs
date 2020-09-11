@@ -248,9 +248,5 @@ public class MainScheduler2 : MonoBehaviour
         return interval.ToString();
     }
 
-    public Vector3 getTimerLocation()
-    {
-        return As.criticalEquipmentLocation(tutorial[stepIndex].equipment);
-    }
 
 }

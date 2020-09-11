@@ -7,68 +7,46 @@ using UnityEngine;
 public class ApplicationState : MonoBehaviour
 {
 
-    private Dictionary<string, Vector3> item2Location = new Dictionary<string, Vector3>();
-    private List<string> impEquipments = new List<string>() { "oven", "microwave oven", "cutting board", "sink", "gas stove", "frying pan" };
-    private List<string> utensilAllowMultiple = new List<string>() { "plate", "bowl", ""};
+    private int timeStamp = 0;
+    private List<string> singletonEquipments = new List<string>() { "microwave oven", "gas stove", "oven", "frying pan", "cutting board", "kitchen knife" };
+    private List<string> multiEquipments = new List<string>() { "bottle", "bowl", "blate" };
+    private Dictionary<string, Vector3> singleEquipMap = new Dictionary<string, Vector3>();
+    private Dictionary<string, Vector3> multiEquipMap = new Dictionary<string, Vector3>();
+    private Dictionary<string, Vector3> ingredientsMap = new Dictionary<string, Vector3>();
 
-    // in the future, we might need 
-    // list of all current animation
-    // more...
+    public bool isIngredients(string name)
+    {
+        return !singletonEquipments.Contains(name) && !multiEquipments.Contains(name);
+    }
+    
     public bool contains(string name)
     {
-        return item2Location.ContainsKey(name.ToLower());
+        return singleEquipMap.ContainsKey(name) || multiEquipMap.ContainsKey(name) || ingredientsMap.ContainsKey(name);
     }
 
-    // contains should be called before this
-    public Vector3 getItemLocation(string name)
-    {
-        return item2Location[name.ToLower()];
-    }
 
-    public void setLocation(string name, Vector3 location)
+    public void setLocation(string name, Vector3 position)
     {
-        if (name.ToLower().Equals("oven"))
+        if (singletonEquipments.Contains(name))
         {
-            Debug.Log("oven location updated " + location);
+            singleEquipMap[name] = position;
+        } else if (multiEquipments.Contains(name))
+        {
+
+            multiEquipMap[name] = position;
+        } else
+        {
+            ingredientsMap[name] = position;
         }
-        item2Location[name.ToLower()] = location;
-       
     }
+
+
 
     public void Clear()
     {
-        item2Location.Clear();
-    }
-
-    public Vector3 criticalEquipmentLocation(List<Equipment> equipments)
-    {
-        //foreach(var equip in equipments)
-        //{
-        //    if (impEquipments.Contains(equip.name.ToLower()))
-        //    {
-        //        if (item2Location.ContainsKey(equip.name.ToLower()))
-        //        {
-        //            return item2Location[equip.name.ToLower()];
-        //        }
-        //    }
-        //}
-        //string temp = "";
-        //foreach(var s in item2Location.Keys)
-        //{
-        //    temp += " " + s;
-           
-        //}
-        //Debug.Log(temp);
-        if (item2Location.ContainsKey("oven"))
-        {
-            return item2Location["oven"];
-        }
-        //foreach (var equip in equipments)
-        //{
-                
-            
-        //}
-        return Vector3.zero;
+        singleEquipMap.Clear();
+        multiEquipMap.Clear();
+        ingredientsMap.Clear();
     }
 
 }

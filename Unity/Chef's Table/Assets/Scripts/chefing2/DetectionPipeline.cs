@@ -6,7 +6,6 @@ using System.Threading;
 using MagicLeap.Core.StarterKit;
 using System.Net;
 using System.Text;
-using TMPro;
 using System.Linq;
 
 public class DetectionPipeline : MonoBehaviour
@@ -26,24 +25,21 @@ public class DetectionPipeline : MonoBehaviour
 
     private string currResponse = "";
     private int time_stamp = 0;
-    // private Matrix4x4 intrinsicCameraMatrix = new Matrix4x4();
     private float Cx = 949.5f;
     private float Cy = 539.1f;
     private float Fx = 1400f;
     private float Fy = 1399.5f;
     public Transform ctransform;
-    private string url = "http://35.233.198.97:5000/predict";
+    private string url_tutorial = "http://35.233.198.97:5000/predict";
+    private string url_suggest = "http://35.233.198.97:5000/detect_one";
     private Raycast rc;
     public GameObject copy_prefab;
     private Dictionary<int, GameObject> stamp2Copy = new Dictionary<int, GameObject>();
-    private byte[] currImage;
     private object _cameraLockObject = new object();
     private MainScheduler2 mainScheduler;
-
-    //controller testing
-    private MLInput.Controller controller;
-    private bool pressed = false;
-
+    private bool makingSuggestion = true;  // true for recipe suggestion, false for tutorial
+    public GameObject scanningInterfaceContainer;
+    private bool STARTCAPTURE = false;
     private void Start()
     {
 
@@ -55,29 +51,47 @@ public class DetectionPipeline : MonoBehaviour
 
     void Update()
     {
-        //if (mainScheduler.tutorialStarts && !mainScheduler.tutorialFinish)
-        //{
+        if (STARTCAPTURE)
+        {
             timer -= Time.deltaTime;
+
             if (timer < 0)
             {
                 // stamp2Copy[time_stamp] = Instantiate(copy_prefab, ctransform.position, ctransform.rotation);
                 timer = 3;
                 TriggerAsyncCapture();
-                findDetectedObjects();
+                if (!makingSuggestion)
+                {
+                    findDetectedObjects();
+                }
+                
             }
-        //} else
-        //{
-        //    resetState();
-        //}
+
+        } else
+        {
+            timer = 3;
+        }
 
     }
 
+    public void startPipeline(bool suggestionMode)
+    {
+        this.makingSuggestion = suggestionMode;
+        this.STARTCAPTURE = true;
+    }
+
+    public void stopPipeline()
+    {
+        this.makingSuggestion = false;
+        this.STARTCAPTURE = false;
+    }
     private void resetState()
     {
         timer = 3;
         time_stamp = 0;
         stamp2Copy.Clear();
         currResponse = "";
+        stopPipeline();
     }
 
     // parses detection result and find their location in by raycasting
@@ -85,15 +99,17 @@ public class DetectionPipeline : MonoBehaviour
     {
         string response = "{\"detections\": " + currResponse + " }";
         DetectionList DL;
-        try {
-           DL = JsonUtility.FromJson<DetectionList>(response);
-        } catch (Exception e)
+        try
+        {
+            DL = JsonUtility.FromJson<DetectionList>(response);
+        }
+        catch (Exception e)
         {
             return;
         }
         Dictionary<string, Vector3> rays = new Dictionary<string, Vector3>();
         int stamp = DL.detections[0].stamp;
-        if (!stamp2Copy.ContainsKey(stamp)) return; 
+        if (!stamp2Copy.ContainsKey(stamp)) return;
         foreach (var detection in DL.detections)
         {
             int x1, y1, x2, y2;
@@ -125,15 +141,33 @@ public class DetectionPipeline : MonoBehaviour
         return stamp2Copy[time_stamp].transform.TransformPoint(new Vector3(x, y, z));
     }
 
-    private async void UploadFile(string uri, byte[] rawImage, int stamp)
+    private async void UploadFile(byte[] rawImage, int stamp)
     {
+        Debug.Log("sending to cloud");
         WebClient myWebClient = new WebClient();
         myWebClient.Headers.Add("Content-Type", "binary/octet-stream");
         myWebClient.Encoding = Encoding.UTF8;
-        byte[] timeByte = BitConverter.GetBytes(stamp);  // in little Endian
-        byte[] imageInfo = rawImage.Concat(timeByte).ToArray();
-        byte[] responseArray = await myWebClient.UploadDataTaskAsync(uri, imageInfo); ;  // send a byte array to the resource and returns a byte array containing any response
-        currResponse = Encoding.UTF8.GetString(responseArray);
+        if (makingSuggestion)
+        {
+            try
+            {
+                byte[] responseArray = await myWebClient.UploadDataTaskAsync(url_suggest, rawImage);
+                currResponse = Encoding.UTF8.GetString(responseArray);
+                scanningInterfaceContainer.GetComponent<ScanningInterfaceController>().updateIngredientList(currResponse);
+            } catch (Exception e)
+            {
+                scanningInterfaceContainer.GetComponent<ScanningInterfaceController>().updateIngredientList("error");
+            }
+            
+        }
+        else
+        {
+            byte[] timeByte = BitConverter.GetBytes(stamp);
+            byte[] imageInfo = rawImage.Concat(timeByte).ToArray();
+            byte[] responseArray = await myWebClient.UploadDataTaskAsync(url_tutorial, imageInfo);
+            currResponse = Encoding.UTF8.GetString(responseArray);
+        }
+
     }
 
 
@@ -239,7 +273,7 @@ public class DetectionPipeline : MonoBehaviour
         }
         MLInput.Stop();
     }
-    
+
     public void TriggerAsyncCapture()
     {
         if (_captureThread == null || (!_captureThread.IsAlive))
@@ -253,7 +287,6 @@ public class DetectionPipeline : MonoBehaviour
             Debug.Log("Previous thread has not finished, unable to begin a new capture just yet.");
         }
     }
-
 
     private void EnableMLCamera()
     {
@@ -335,7 +368,7 @@ public class DetectionPipeline : MonoBehaviour
     {
         if (button == MLInput.Controller.Button.Bumper)
         {
-            
+
         }
     }
 
@@ -345,10 +378,16 @@ public class DetectionPipeline : MonoBehaviour
         {
             _isCapturing = false;
         }
-        stamp2Copy[time_stamp] = Instantiate(copy_prefab, ctransform.position, ctransform.rotation);
-        time_stamp++;
-        currImage = imageData;
-        UploadFile(url, imageData, time_stamp - 1);
+        if (stamp2Copy.ContainsKey(time_stamp))
+        {
+            return;
+        }
+        if (!makingSuggestion)
+        {
+            stamp2Copy[time_stamp] = Instantiate(copy_prefab, ctransform.position, ctransform.rotation);
+            time_stamp++;
+        }
+        UploadFile(imageData, time_stamp - 1);
     }
 
     private void CaptureThreadWorker()

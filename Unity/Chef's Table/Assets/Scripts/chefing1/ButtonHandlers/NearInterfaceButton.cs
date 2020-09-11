@@ -38,8 +38,9 @@ public class NearInterfaceButton : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Hand")
+        if (other.tag == "Hand" && interfaceManager.clickOk())
         {
+            interfaceManager.clickButton();
             GetComponent<Button>().onClick.Invoke();
             if (name == "Start") return;
             if (name == "Exit")

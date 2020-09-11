@@ -18,26 +18,22 @@ public class InterfaceManager : MonoBehaviour
     GameObject headLockCanvas;
     GameObject wrappingSimulation;
     GameObject scanningInterface;
-    GameObject scanningStart;
-    GameObject scanningState;
-    GameObject scanningConfirm;
+
     GameObject scanningIngredientNamesDisplay;
-    GameObject brackets;
     GameObject welcomeInterface;
     private bool startCountDown = false;
     private float completeRedirectTimer = 10;
+    private float clickCountDown = 1f;
 
     private void Awake()
     {
         
-        scanningStart = GameObject.Find("StartScreen");
-        scanningState = GameObject.Find("ScanningText");
-        scanningConfirm = GameObject.Find("IngredientScanGet");
+
         scanningIngredientNamesDisplay = GameObject.Find("Ingredients");
-        brackets = GameObject.Find("Brackets");
+
 
         welcomeInterface = GameObject.Find("WelcomeInterface");
-        scanningInterface = GameObject.Find("ScanningInterface");
+        scanningInterface = GameObject.Find("ScanningContainer");
         
         nearInterface = GameObject.Find("NearInterface");
         simulationInterface = GameObject.Find("SimulationInterface");
@@ -51,6 +47,16 @@ public class InterfaceManager : MonoBehaviour
         summary = GameObject.Find("summary");
         headLockCanvas = GameObject.Find("HeadLockCanvas");
         
+    }
+
+    public bool clickOk()
+    {
+        return clickCountDown == 0;
+    }
+
+    public void clickButton()
+    {
+        clickCountDown = 1.5f;
     }
 
     // Start is called before the first frame update
@@ -150,19 +156,17 @@ public class InterfaceManager : MonoBehaviour
     {
         if (b)
         {
-            scanningStart.SetActive(true);
-            scanningState.SetActive(false);
-            scanningConfirm.SetActive(false);
-            brackets.SetActive(true);
-            scanningIngredientNamesDisplay.SetActive(false);
+;
+            scanningIngredientNamesDisplay.SetActive(true);
+            for (int i = 0; i < scanningIngredientNamesDisplay.transform.childCount; i++)
+            {
+                scanningIngredientNamesDisplay.transform.GetChild(i).gameObject.SetActive(false);
+            }
             StartCoroutine(animator.FadeIn(scanningInterface));
         }
         else
         {
-            scanningStart.SetActive(false);
-            scanningState.SetActive(false);
-            scanningConfirm.SetActive(false);
-            brackets.SetActive(false);
+
             scanningIngredientNamesDisplay.SetActive(false);
             StartCoroutine(animator.FadeOut(scanningInterface));
         }
@@ -253,6 +257,7 @@ public class InterfaceManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        clickCountDown = Mathf.Max(0, clickCountDown - Time.deltaTime);
         if (startCountDown)
         {
             Debug.Log("reach here");

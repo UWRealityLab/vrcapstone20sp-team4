@@ -96,17 +96,17 @@ public class UpdateInGameInterface : MonoBehaviour
             }
 
             // update the spatial timer:
-            Vector3 timerLocation = mainScheduler.getTimerLocation();
-            if (timerLocation != Vector3.zero)
-            {
-                Debug.Log("spaitail timer activated");
-                timer.SetActive(true);
-                timer.transform.position = timerLocation;
-                timer.transform.FindChild("Canvas/Text").GetComponent<Text>().text = info["timer"][0];
-            } else
-            {
-                timer.SetActive(false);
-            }
+           
+            //if (timerLocation != Vector3.zero)
+            //{
+            //    Debug.Log("spaitail timer activated");
+            //    timer.SetActive(true);
+            //    timer.transform.position = timerLocation;
+            //    timer.transform.FindChild("Canvas/Text").GetComponent<Text>().text = info["timer"][0];
+            //} else
+            //{
+            //    timer.SetActive(false);
+            //}
         }
         /*
         if (gameInterface.activeSelf) {

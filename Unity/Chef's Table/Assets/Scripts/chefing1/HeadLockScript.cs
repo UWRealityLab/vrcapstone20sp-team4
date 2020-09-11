@@ -9,7 +9,7 @@ public class HeadLockScript : MonoBehaviour
     #endregion
 
     #region Private Variables
-    private const float _distance = 0.5f;
+    private const float _distance = 0.8f;
     #endregion
 
     #region Public Methods
@@ -27,6 +27,11 @@ public class HeadLockScript : MonoBehaviour
         obj.transform.rotation = Quaternion.Slerp(obj.transform.rotation, rotTo, speed);
     }
     #endregion
+
+    private void Update()
+    {
+        HeadLock(gameObject, 1f);
+    }
 
 }
 
