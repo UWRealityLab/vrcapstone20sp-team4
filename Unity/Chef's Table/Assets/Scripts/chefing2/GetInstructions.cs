@@ -79,7 +79,7 @@ public class GetInstructions : MonoBehaviour
                 info.Add(recipe.id.ToString());
                 info.Add(recipe.title);
                 info.Add(recipe.image);
-                info.Add(recipe.imgeType);  // typo
+                info.Add(recipe.imageType);
                 info.Add(recipe.likes.ToString());
                 recipeDict.Add("info", info);
 

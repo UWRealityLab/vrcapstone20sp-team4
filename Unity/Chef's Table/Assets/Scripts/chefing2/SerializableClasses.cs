@@ -29,7 +29,7 @@ public class PreviewRecipe
 	public int id;
 	public string title;
 	public string image;
-	public string imgeType;
+	public string imageType;
 	public int usedIngredientCount;
 	public int missedIngredientCount;
 	public List<MissedIngredients> missedIngredients;
@@ -71,6 +71,7 @@ public class TimePeriod
 [Serializable]
 public class Instruction
 {
+	public string action;
 	public int number;
 	public string step;
 	public List<Ingredients> ingredients;
