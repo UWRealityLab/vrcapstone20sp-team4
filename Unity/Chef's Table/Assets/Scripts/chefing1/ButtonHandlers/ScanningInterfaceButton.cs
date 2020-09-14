@@ -61,13 +61,13 @@ public class ScanningInterfaceButton : MonoBehaviour
         else if (name == "StartScanningButton")
         {
             AudioSource.PlayClipAtPoint(buttonClip.clip, startScanningButton.transform.position);
+            controller.clearMemory();
             controller.handleResponseStatus();
             GameObject ing = GameObject.Find("Ingredients");
             ing.SetActive(true);
             for (int i = 0; i < ing.transform.childCount; i++)
             {
-                Debug.Log(ing.transform.GetChild(i).gameObject.name);
-                if (ing.transform.GetChild(i).gameObject.name == "YourIngredientsText" || ing.transform.GetChild(i).gameObject.name == "Status")
+                if (ing.transform.GetChild(i).gameObject.name == "title" || ing.transform.GetChild(i).gameObject.name == "Status")
                 {
                     ing.transform.GetChild(i).gameObject.SetActive(true);
                 } else
@@ -89,7 +89,7 @@ public class ScanningInterfaceButton : MonoBehaviour
             interfaceManager.setActiveScanningInterface(false);
             pipeline.stopPipeline();
         } 
-        else if (name == "clearAllButtonScript") {
+        else if (name == "ClearAllButtonScript") {
             AudioSource.PlayClipAtPoint(buttonClip.clip, this.transform.parent.position);
             controller.clearMemory();
         }

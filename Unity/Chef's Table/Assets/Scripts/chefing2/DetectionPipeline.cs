@@ -31,7 +31,7 @@ public class DetectionPipeline : MonoBehaviour
     private float Fy = 1399.5f;
     public Transform ctransform;
     private string url_tutorial = "http://35.233.198.97:5000/predict";
-    private string url_suggest = "http://35.233.198.97:5000/detect_one";
+    private string url_suggest = "http://35.233.198.97:5000/get_ingredients";
     private Raycast rc;
     public GameObject copy_prefab;
     private Dictionary<int, GameObject> stamp2Copy = new Dictionary<int, GameObject>();

@@ -86,7 +86,7 @@ public class ScanningInterfaceController : MonoBehaviour
         Debug.Log("limit = " + limit);
         for (int i = 0; i < limit; i++)
         {
-            string label = listOfDetections.detections[i].label;
+            string label = listOfDetections.detections[i];
             if (currentLabels.Contains(label)) continue;
             if (!ignore.Contains(label))
             {
@@ -110,16 +110,10 @@ public class ScanningInterfaceController : MonoBehaviour
     [Serializable]
     public class ListOfDetections
     {
-        public List<Det> detections;
+        public List<string> detections;
     }
 
-    [Serializable]
-    public class Det
-    {
-        public List<int> boxes;
-        public string label;
-        public float confidence;
-    }
+
     // this script controls rendering of the scanning interface
 
 }
