@@ -174,7 +174,7 @@ public class MainScheduler2 : MonoBehaviour
         getRecipe.GetRecipeSteps(recipeId);
         Invoke("delayStartTutorial", 3f);
         */
-        startAvocadoTutorial();
+        Invoke("startAvocadoTutorial", 1.0f);
     }
 
     public void startAvocadoTutorial()

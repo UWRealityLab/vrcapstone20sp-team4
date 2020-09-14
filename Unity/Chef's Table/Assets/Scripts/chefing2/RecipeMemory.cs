@@ -40,10 +40,9 @@ public class RecipeMemory : MonoBehaviour
     private void loadPreview()
     {
         // fetch preview json
-        string path = "Assets/Memory/avocado_toast_preview_json.txt";
-        StreamReader reader = new StreamReader(path);
-        string content = reader.ReadToEnd();
-        reader.Close();
+        string path = "Memory/avocado_toast_preview_json.txt";
+        TextAsset file = Resources.Load<TextAsset>(path);
+        string content = file.text;
         PreviewRecipe recipe = JsonUtility.FromJson<PreviewRecipe>(content);
 
         // construct dictionary for preview
@@ -120,9 +119,8 @@ public class RecipeMemory : MonoBehaviour
     private void loadInstructions()
     {
         string path = "Assets/Memory/avocado_toast_instruction_json.txt";
-        StreamReader reader = new StreamReader(path);
-        string content = reader.ReadToEnd();
-        reader.Close();
+        TextAsset file = Resources.Load<TextAsset>(path);
+        string content = file.text;
         InstructionList info = JsonUtility.FromJson<InstructionList>(content);
         steps = info.steps;
     }
