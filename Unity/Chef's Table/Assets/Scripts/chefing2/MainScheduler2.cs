@@ -33,6 +33,8 @@ public class MainScheduler2 : MonoBehaviour
 
     private List<Texture> imagesCurrentStep = new List<Texture>();
 
+    // store the preview info
+    private Dictionary<string, Dictionary<string, List<string>>> allTutorials = new Dictionary<string, Dictionary<string, List<string>>>();
 
     private void Start()
     {
@@ -41,8 +43,6 @@ public class MainScheduler2 : MonoBehaviour
         getRecipe = recipeAPI.GetComponent<GetInstructions>();
     }
 
-    // store the preview info
-    private Dictionary<string, Dictionary<string, List<string>>> allTutorials = new Dictionary<string, Dictionary<string, List<string>>>();
 
 
     // simply reset everything.
