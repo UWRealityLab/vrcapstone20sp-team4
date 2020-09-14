@@ -28,8 +28,12 @@ public class MainScheduler2 : MonoBehaviour
     public bool tutorialFinish = false;
 
     private ApplicationState As;
+    // for instructions from the API
     GameObject recipeAPI;
     GetInstructions getRecipe;
+    // for instructions from the memory
+    GameObject memory;
+    RecipeMemory getMemory;
 
     private List<Texture> imagesCurrentStep = new List<Texture>();
 
@@ -41,6 +45,8 @@ public class MainScheduler2 : MonoBehaviour
         As = GameObject.Find("ApplicationState").GetComponent<ApplicationState>();
         recipeAPI = GameObject.Find("RecipeAPI");
         getRecipe = recipeAPI.GetComponent<GetInstructions>();
+        memory = GameObject.Find("RecipeMemory");
+        getMemory = memory.GetComponent<RecipeMemory>();
     }
 
 
@@ -163,9 +169,25 @@ public class MainScheduler2 : MonoBehaviour
             Debug.LogError("invalid recipe entry");
             return;
         }
+        /*
         int recipeId = Int32.Parse(allTutorials[name]["info"][0]);
         getRecipe.GetRecipeSteps(recipeId);
         Invoke("delayStartTutorial", 3f);
+        */
+        startAvocadoTutorial();
+    }
+
+    public void startAvocadoTutorial()
+    {
+        try {
+            tutorial = getMemory.RecipeSteps();
+            // GetImagesForEachStep();
+            tutorialStarts = true;
+            resetTimerRecord();
+        }
+        catch (NullReferenceException e) {
+            Debug.LogWarning(e);
+        }
     }
 
     // for user interface to call when a user select a recipe
@@ -196,6 +218,7 @@ public class MainScheduler2 : MonoBehaviour
     // construct a list of images of ingredient for the current step(stepIndex)
     public void GetImagesForEachStep()
     {
+        // for previous test purposes only
         List<Ingredients> li = tutorial[1].ingredients;
         for (int i = 0; i < li.Count; i++) {
             // https://spoonacular.com/cdn/ingredients_100x100/ranch-dressing.jpg

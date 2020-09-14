@@ -123,8 +123,8 @@ public class RecipeMemory : MonoBehaviour
         StreamReader reader = new StreamReader(path);
         string content = reader.ReadToEnd();
         reader.Close();
-        StepsList info = JsonUtility.FromJson<StepsList>(content);
-        steps = info.result[0].steps;
+        InstructionList info = JsonUtility.FromJson<InstructionList>(content);
+        steps = info.steps;
     }
 
     public List<Instruction> RecipeSteps()
