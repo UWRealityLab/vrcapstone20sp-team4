@@ -15,8 +15,7 @@ public class UpdateInGameInterface : MonoBehaviour
     //private GameObject gameInterface;
     private GameObject nearInterface;
     private GameObject exitIcon;
-    public GameObject spaitialTimerPrefab;
-    private GameObject timer;
+
     private Material exitMat;
     private Material completeMat;
     private int step;
@@ -47,8 +46,6 @@ public class UpdateInGameInterface : MonoBehaviour
         lockIcons.Add(lockIcon);
         lockMat = Resources.Load("Mat/ButtonLockMat", typeof(Material)) as Material;
         unlockMat = Resources.Load("Mat/ButtonUnlockMat", typeof(Material)) as Material;
-        timer = Instantiate(spaitialTimerPrefab, this.transform);
-        timer.SetActive(false);
     }
 
     public void updateLock(bool islocked)
@@ -65,6 +62,7 @@ public class UpdateInGameInterface : MonoBehaviour
     {
         Dictionary<string, List<string>> info = mainScheduler.getCurrentStepInfo();
         if (info == null) {
+            Debug.Log("no info");
             return;
         }
         if (nearInterface.activeSelf)

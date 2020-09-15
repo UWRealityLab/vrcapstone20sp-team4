@@ -9,14 +9,14 @@ using UnityEngine.XR.MagicLeap;
 
 public class Raycast : MonoBehaviour
 {
-    // Camera's transform
-   // public GameObject prefab;    // Cube prefab
+    private bool debug = true;   
     private Vector3 cPosition;
     private int timeStamp = 0;
     private bool prevDone = false;
     private string currClass = "";
     private Queue<container> detectionQueue = new Queue<container>();
     ApplicationState As;
+    public GameObject debugPrefab;
     //[Range(0, 1)] public float x_ = 0.5f;
     //[Range(0, 1)] public float y_ = 0.5f;
 
@@ -27,13 +27,19 @@ public class Raycast : MonoBehaviour
 
     public void setCpoition(Vector3 cPosition)
     {
+        if (detectionQueue.Count > 0 && debug)
+        {
+            Debug.Log("constraints violated, leftover job: " + detectionQueue.Count);
+        }
+        detectionQueue.Clear();
         this.cPosition = cPosition;
     }
 
     private void Update()
     {
-        if (prevDone)
+        if (prevDone && detectionQueue.Count > 0)
         {
+           
             prevDone = false;
             container con = detectionQueue.Dequeue();
             currClass = con.name;
@@ -72,6 +78,7 @@ public class Raycast : MonoBehaviour
         {
             detectionQueue.Enqueue(new container(detection.Key, detection.Value));
         }
+        if (debug) Debug.Log("raycast request made: " + detectionQueue.Count);
         prevDone = true;
         
 
@@ -85,8 +92,15 @@ public class Raycast : MonoBehaviour
 
     private void updateObjects(Vector3 point, Vector3 normal)
     {
+        if (debug)
+        {
+            As.setLocation(currClass, point);
+            GameObject debugObject = Instantiate(debugPrefab, point, Quaternion.identity);
+            debugObject.transform.LookAt(cPosition);
+            debugObject.transform.FindChild("Canvas").FindChild("Text").gameObject.GetComponent<Text>().text = currClass;
+            Destroy(debugObject, 3f);
+        }
         prevDone = true;
-        As.setLocation(currClass, point);
     }
 
     // Use a callback to know when to run the NormalMaker() coroutine.

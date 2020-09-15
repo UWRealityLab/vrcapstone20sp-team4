@@ -491,6 +491,50 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &175400008
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 175400010}
+  - component: {fileID: 175400009}
+  m_Layer: 0
+  m_Name: RecipeMemory
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &175400009
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 175400008}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 640518c7b9281a3499af494f686787a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  steps: []
+--- !u!4 &175400010
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 175400008}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.15261948, y: -0.11734545, z: 0.51989144}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 19
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &231516213
 GameObject:
   m_ObjectHideFlags: 0
@@ -1832,8 +1876,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: daa5f3b3e66fa8a4d907b9e634ffd679, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spaitialTimerPrefab: {fileID: 7120915567923100916, guid: 697e7436df6fa1b4c9583c7ec2f816a9,
-    type: 3}
 --- !u!4 &647748246
 Transform:
   m_ObjectHideFlags: 0
@@ -6288,12 +6330,12 @@ PrefabInstance:
     - target: {fileID: 5619764785158044116, guid: 4b83d5952ef78964a987c932f7375418,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 320
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5619764785158044116, guid: 4b83d5952ef78964a987c932f7375418,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 10
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5619764785288450835, guid: 4b83d5952ef78964a987c932f7375418,
         type: 3}
@@ -6303,7 +6345,7 @@ PrefabInstance:
     - target: {fileID: 5619764785288450835, guid: 4b83d5952ef78964a987c932f7375418,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5619764785288450844, guid: 4b83d5952ef78964a987c932f7375418,
         type: 3}
@@ -6373,7 +6415,7 @@ PrefabInstance:
     - target: {fileID: 5619764785288450845, guid: 4b83d5952ef78964a987c932f7375418,
         type: 3}
       propertyPath: warnings
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5619764785288450845, guid: 4b83d5952ef78964a987c932f7375418,
         type: 3}
@@ -6393,22 +6435,22 @@ PrefabInstance:
     - target: {fileID: 5619764785477124592, guid: 4b83d5952ef78964a987c932f7375418,
         type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5619764785477124592, guid: 4b83d5952ef78964a987c932f7375418,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5619764785477124592, guid: 4b83d5952ef78964a987c932f7375418,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5619764785477124592, guid: 4b83d5952ef78964a987c932f7375418,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 11.474999
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4b83d5952ef78964a987c932f7375418, type: 3}
@@ -18352,7 +18394,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1779473596
 MonoBehaviour:
   m_ObjectHideFlags: 0

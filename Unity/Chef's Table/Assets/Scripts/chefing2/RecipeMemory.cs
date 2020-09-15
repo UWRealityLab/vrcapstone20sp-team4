@@ -40,7 +40,7 @@ public class RecipeMemory : MonoBehaviour
     private void loadPreview()
     {
         // fetch preview json
-        string path = "Memory/avocado_toast_preview_json.txt";
+        string path = "Memory/avocado_toast_preview_json";
         TextAsset file = Resources.Load<TextAsset>(path);
         string content = file.text;
         PreviewRecipe recipe = JsonUtility.FromJson<PreviewRecipe>(content);
@@ -118,7 +118,7 @@ public class RecipeMemory : MonoBehaviour
 
     private void loadInstructions()
     {
-        string path = "Assets/Memory/avocado_toast_instruction_json.txt";
+        string path = "Memory/avocado_toast_instruction_json";
         TextAsset file = Resources.Load<TextAsset>(path);
         string content = file.text;
         InstructionList info = JsonUtility.FromJson<InstructionList>(content);

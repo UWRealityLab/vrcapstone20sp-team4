@@ -137,7 +137,7 @@ public class MainScheduler2 : MonoBehaviour
     // proceed to the next task in the list
     public void toNextStep()
     {
-        
+        Debug.Log("to next received");
         if (stepIndex + 1 >= timerRecord.Count) {
             tutorialFinish = true;
         }
@@ -165,22 +165,30 @@ public class MainScheduler2 : MonoBehaviour
 
     public void startTutorial(string name)
     {
-        if (!allTutorials.ContainsKey(name)) {
-            Debug.LogError("invalid recipe entry");
-            return;
+        if (!name.ToLower().Contains("avocado"))
+        {
+            Debug.Log("not avocado");
+            if (!allTutorials.ContainsKey(name))
+            {
+                Debug.LogError("invalid recipe entry");
+                return;
+            }
+            int recipeId = Int32.Parse(allTutorials[name]["info"][0]);
+            getRecipe.GetRecipeSteps(recipeId);
+            Invoke("delayStartTutorial", 3f);
+        } else
+        {
+            Debug.Log("avocado");
+            Invoke("startAvocadoTutorial", 1.0f);
         }
-        /*
-        int recipeId = Int32.Parse(allTutorials[name]["info"][0]);
-        getRecipe.GetRecipeSteps(recipeId);
-        Invoke("delayStartTutorial", 3f);
-        */
-        Invoke("startAvocadoTutorial", 1.0f);
+
     }
 
     public void startAvocadoTutorial()
     {
         try {
             tutorial = getMemory.RecipeSteps();
+            Debug.Log("Tutorial length is " + tutorial.Count);
             // GetImagesForEachStep();
             tutorialStarts = true;
             resetTimerRecord();

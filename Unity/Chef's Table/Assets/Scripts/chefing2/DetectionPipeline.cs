@@ -36,7 +36,6 @@ public class DetectionPipeline : MonoBehaviour
     public GameObject copy_prefab;
     private Dictionary<int, GameObject> stamp2Copy = new Dictionary<int, GameObject>();
     private object _cameraLockObject = new object();
-    private MainScheduler2 mainScheduler;
     private bool makingSuggestion = true;  // true for recipe suggestion, false for tutorial
     public GameObject scanningInterfaceContainer;
     private bool STARTCAPTURE = false;
@@ -45,7 +44,7 @@ public class DetectionPipeline : MonoBehaviour
 
 
         rc = GameObject.Find("RaycastNode").GetComponent<Raycast>();
-        mainScheduler = GameObject.Find("MainScheduler").GetComponent<MainScheduler2>();
+        //mainScheduler = GameObject.Find("MainScheduler").GetComponent<MainScheduler2>();
 
     }
 
@@ -97,18 +96,19 @@ public class DetectionPipeline : MonoBehaviour
     // parses detection result and find their location in by raycasting
     public void findDetectedObjects()
     {
-        string response = "{\"detections\": " + currResponse + " }";
+        string response = currResponse;
         DetectionList DL;
         try
         {
             DL = JsonUtility.FromJson<DetectionList>(response);
+
         }
         catch (Exception e)
         {
             return;
         }
         Dictionary<string, Vector3> rays = new Dictionary<string, Vector3>();
-        int stamp = DL.detections[0].stamp;
+        int stamp = DL.stamp;
         if (!stamp2Copy.ContainsKey(stamp)) return;
         foreach (var detection in DL.detections)
         {
@@ -174,6 +174,7 @@ public class DetectionPipeline : MonoBehaviour
     [Serializable]
     public class DetectionList
     {
+        public int stamp;
         public List<Detection> detections;
     }
 
