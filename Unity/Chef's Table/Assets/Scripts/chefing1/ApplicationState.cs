@@ -9,7 +9,7 @@ public class ApplicationState : MonoBehaviour
 
     private int timeStamp = 0;
     private List<string> singletonEquipments = new List<string>() { "microwave oven", "gas stove", "oven", "frying pan", "cutting board", "kitchen knife" };
-    private List<string> multiEquipments = new List<string>() { "bottle", "bowl", "blate" };
+    private List<string> multiEquipments = new List<string>() { "bottle", "bowl", "plate" };
     private Dictionary<string, Vector3> singleEquipMap = new Dictionary<string, Vector3>();
     private Dictionary<string, Vector3> multiEquipMap = new Dictionary<string, Vector3>();
     private Dictionary<string, Vector3> ingredientsMap = new Dictionary<string, Vector3>();

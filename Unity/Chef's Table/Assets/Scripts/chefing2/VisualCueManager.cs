@@ -17,14 +17,14 @@ public class VisualCueManager : MonoBehaviour
     void Start()
     {
         appState = GameObject.Find("ApplicationState").GetComponent<ApplicationState>();
-        actionsCues["cut"] = Resources.Load<VideoClip>("cutting");
-        actionsCues["crack"] = Resources.Load<VideoClip>("egg_cracking");
-        actionsCues["heat"] = Resources.Load<VideoClip>("heating");
-        actionsCues["melt"] = Resources.Load<VideoClip>("melting");
-        actionsCues["mix"] = Resources.Load<VideoClip>("mixing");
-        actionsCues["slice"] = Resources.Load<VideoClip>("slicing");
-        actionsCues["spread"] = Resources.Load<VideoClip>("spread");
-        actionsCues["sprinkle"] = Resources.Load<VideoClip>("sprinkle");
+        actionsCues["cut"] = Resources.Load<VideoClip>("actions/cutting");
+        actionsCues["crack"] = Resources.Load<VideoClip>("actions/egg_cracking");
+        actionsCues["heat"] = Resources.Load<VideoClip>("actions/heating");
+        actionsCues["melt"] = Resources.Load<VideoClip>("actions/melting");
+        actionsCues["mix"] = Resources.Load<VideoClip>("actions/mixing");
+        actionsCues["slice"] = Resources.Load<VideoClip>("actions/slicing");
+        actionsCues["spread"] = Resources.Load<VideoClip>("actions/spread");
+        actionsCues["sprinkle"] = Resources.Load<VideoClip>("actions/sprinkle");
     }
 
 
