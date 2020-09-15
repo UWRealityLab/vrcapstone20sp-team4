@@ -69,10 +69,32 @@ public class UpdateInGameInterface : MonoBehaviour
         }
         if (nearInterface.activeSelf)
         {
-            instructionTextNearMenu.text = info["description"][0];
+            // display instruction text
+            string instructionText = info["description"][0] + "\n\n";
+
+            instructionText += "Ingredients:\n";
+            List<string> ingredients = info["ingredients"];
+            for (int i = 0; i < ingredients.Count - 1; i++) {
+                instructionText += ingredients[i] + ", ";
+            }
+            instructionText += ingredients[ingredients.Count - 1] + ".\n";
+
+            instructionText += "Equipment:\n";
+            List<string> equipment = info["equipment"];
+            for (int i = 0; i < equipment.Count - 1; i++) {
+                instructionText += equipment[i] + ", ";
+            }
+            instructionText += equipment[equipment.Count - 1] + ".\n";
+
+            instructionTextNearMenu.text = instructionText;
+
+            // set time
             clockNearMenu.text = info["timer"][0];
+
+            /*
             Renderer temp = ImagePlane.GetComponent<Renderer>();
             temp.material.mainTexture = mainScheduler.getCurrentStepImage();
+            */
             //int currentStep = int.Parse(info["stepIndex"][0]);
             //if (step != currentStep)
             //{

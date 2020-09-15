@@ -107,13 +107,27 @@ public class MainScheduler2 : MonoBehaviour
     public Dictionary<string, List<string>> getCurrentStepInfo()
     {
         if (!tutorialStarts) return null;
+        Instruction cur = tutorial[stepIndex];
         Dictionary<string, List<string>> dic = new Dictionary<string, List<string>>();
-        // TODO: add utensils and ingredients
-        
-       // dic.Add("utensils", tutorial.steps[stepIndex].equipment);
-        //dic.Add("ingredients", s.getIngredientsSet());
-        dic.Add("description", new List<string>() { tutorial[stepIndex].step});
-        
+
+        // add description
+        dic.Add("description", new List<string>() { cur.step });
+
+        // add ingredients
+        List<string> ingredients = new List<string>();
+        foreach (Ingredients ingre in cur.ingredients) {
+            ingredients.Add(ingre.name);
+        }
+        dic.Add("ingredients", ingredients);
+
+        // add equipment
+        List<string> equipment = new List<string>();
+        foreach (Equipment equip in cur.equipment) {
+            equipment.Add(equip.name);
+        }
+        dic.Add("equipment", equipment);
+
+        // add timer
         float seconds = tutorial[stepIndex].length.number;
         string unit = tutorial[stepIndex].length.unit;
         if (seconds != 0)
