@@ -110,6 +110,9 @@ public class MainScheduler2 : MonoBehaviour
         Instruction cur = tutorial[stepIndex];
         Dictionary<string, List<string>> dic = new Dictionary<string, List<string>>();
 
+        // add action
+        dic.Add("action", new List<string>() { cur.action });
+
         // add description
         dic.Add("description", new List<string>() { cur.step });
 

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Video;
 
 // This class is for keeping and updating important states info 
 // that other program will want to acquire
@@ -24,7 +25,6 @@ public class ApplicationState : MonoBehaviour
         return singleEquipMap.ContainsKey(name) || multiEquipMap.ContainsKey(name) || ingredientsMap.ContainsKey(name);
     }
 
-
     public void setLocation(string name, Vector3 position)
     {
         if (singletonEquipments.Contains(name))
@@ -32,7 +32,6 @@ public class ApplicationState : MonoBehaviour
             singleEquipMap[name] = position;
         } else if (multiEquipments.Contains(name))
         {
-
             multiEquipMap[name] = position;
         } else
         {
@@ -40,7 +39,16 @@ public class ApplicationState : MonoBehaviour
         }
     }
 
-
+    public Vector3 GetLocation(string name)
+    {
+        if (singleEquipMap.ContainsKey(name)) {
+            return singleEquipMap[name];
+        } else if (multiEquipMap.ContainsKey(name)) {
+            return multiEquipMap[name];
+        } else {
+            return Vector3.zero;
+        }
+    }
 
     public void Clear()
     {

@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using UnityEngine.Video;
 
 public class UpdateInGameInterface : MonoBehaviour
 {
     private MainScheduler2 mainScheduler;
+    private VisualCueManager visualCueManager;
     //private TextMeshProUGUI instructionTextFloatingInterf;
     private TextMeshPro instructionTextNearMenu;
     //private TextMeshProUGUI clockFloatingInterf;
@@ -28,6 +28,7 @@ public class UpdateInGameInterface : MonoBehaviour
     void Awake()
     {
         mainScheduler = GameObject.Find("Scheduler").GetComponent<MainScheduler2>();
+        visualCueManager = GameObject.Find("VisualCueManager").GetComponent<VisualCueManager>();
         nearInterface = GameObject.Find("NearInterface");
         instructionTextNearMenu = GameObject.Find("NearInterface/InstructionCanvas/Instruction").GetComponent<TextMeshPro>();
         clockNearMenu = GameObject.Find("NearInterface/InterfaceTimer/ClockText").GetComponent<TextMeshPro>();
@@ -89,21 +90,15 @@ public class UpdateInGameInterface : MonoBehaviour
             // set time
             clockNearMenu.text = info["timer"][0];
 
+            // display video
+            string action = info["action"][0];
+            visualCueManager.DisplayVideo(equipment[0], action);  // the first equipment as the main equipment
+
             /*
             Renderer temp = ImagePlane.GetComponent<Renderer>();
             temp.material.mainTexture = mainScheduler.getCurrentStepImage();
             */
-            //int currentStep = int.Parse(info["stepIndex"][0]);
-            //if (step != currentStep)
-            //{
-            //    string name = info["recipe"][0];
-            //    string pathToVideo = "Videos/" + name + "/step_" + (currentStep + 1) + "_video";
-            //    VideoClip video = Resources.Load<VideoClip>(pathToVideo) as VideoClip;
-            //    Debug.Log("video = " + video + ", step = " + currentStep + ", name = " + name);
-            //    videoPlayer.clip = video;
-            //    videoPlayer.Play();
-            //    step = currentStep;
-            //}
+            
             // TODO: add done and exit switch
             
             if (mainScheduler.isTutorialDone())
