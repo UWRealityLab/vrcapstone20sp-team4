@@ -68,7 +68,7 @@ public class VisualCueManager : MonoBehaviour
             return;
         }
 
-        Vector3 loc = appState.GetLocation(name);
+        Vector3 loc = appState.GetLocation(utensil);
         if (loc == Vector3.zero) {
             Debug.Log("Cannot get location info for: " + utensil);
             return;
