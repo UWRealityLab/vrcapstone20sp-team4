@@ -10,6 +10,7 @@ public class UpdateInGameInterface : MonoBehaviour
     private VisualCueManager visualCueManager;
     //private TextMeshProUGUI instructionTextFloatingInterf;
     private TextMeshPro instructionTextNearMenu;
+    private TextMeshPro detailTextNearMenu;
     //private TextMeshProUGUI clockFloatingInterf;
     private TextMeshPro clockNearMenu;
     //private GameObject gameInterface;
@@ -22,7 +23,7 @@ public class UpdateInGameInterface : MonoBehaviour
     private List<GameObject> lockIcons;
     private Material lockMat;
     private Material unlockMat;
-    private GameObject ImagePlane;
+    // private GameObject ImagePlane;
 
     // Start is called before the first frsame update
     void Awake()
@@ -31,11 +32,12 @@ public class UpdateInGameInterface : MonoBehaviour
         visualCueManager = GameObject.Find("VisualCueManager").GetComponent<VisualCueManager>();
         nearInterface = GameObject.Find("NearInterface");
         instructionTextNearMenu = GameObject.Find("NearInterface/InstructionCanvas/Instruction").GetComponent<TextMeshPro>();
+        detailTextNearMenu = GameObject.Find("NearInterface/InstructionCanvas/Detail").GetComponent<TextMeshPro>();
         clockNearMenu = GameObject.Find("NearInterface/InterfaceTimer/ClockText").GetComponent<TextMeshPro>();
         exitIcon = GameObject.Find("NearInterface/ExitOrComplete/IconAndText/Icon");
         exitMat = Resources.Load("Mat/ExitButton", typeof(Material)) as Material;
         completeMat = Resources.Load("Mat/CompleteButton", typeof(Material)) as Material;
-        ImagePlane = GameObject.Find("NearInterface/GameInterfaceScreen/InterfaceScreen");
+        // ImagePlane = GameObject.Find("NearInterface/GameInterfaceScreen/InterfaceScreen");
         step = -1;
         lockIcons = new List<GameObject>();
         GameObject lockIcon;
@@ -63,36 +65,46 @@ public class UpdateInGameInterface : MonoBehaviour
     {
         Dictionary<string, List<string>> info = mainScheduler.getCurrentStepInfo();
         if (info == null) {
-            Debug.Log("no info");
+            // Debug.Log("no info");
             return;
         }
         if (nearInterface.activeSelf)
         {
             // display instruction text
-            string instructionText = info["description"][0] + "\n\n";
+            string instructionText = info["description"][0];
 
-            instructionText += "Ingredients:\n";
+            string detailText = "Ingredients:\n";
             List<string> ingredients = info["ingredients"];
-            for (int i = 0; i < ingredients.Count - 1; i++) {
-                instructionText += ingredients[i] + ", ";
+            if (ingredients.Count == 0) {
+                detailText += "-\n";
+            } else {
+                for (int i = 0; i < ingredients.Count; i++) {
+                    detailText += ingredients[i] + "\n";
+                }
             }
-            instructionText += ingredients[ingredients.Count - 1] + ".\n";
+            detailText += "\n";
 
-            instructionText += "Equipment:\n";
+            detailText += "Equipment:\n";
             List<string> equipment = info["equipment"];
-            for (int i = 0; i < equipment.Count - 1; i++) {
-                instructionText += equipment[i] + ", ";
+            if (equipment.Count == 0) {
+                detailText += "-\n";
+            } else {
+                for (int i = 0; i < equipment.Count; i++) {
+                    detailText += equipment[i] + "\n";
+                }
             }
-            instructionText += equipment[equipment.Count - 1] + ".\n";
 
             instructionTextNearMenu.text = instructionText;
+            detailTextNearMenu.text = detailText;
 
             // set time
             clockNearMenu.text = info["timer"][0];
 
             // display video
             string action = info["action"][0];
-            visualCueManager.DisplayVideo(equipment[0], action);  // the first equipment as the main equipment
+            if (equipment.Count > 0) {
+                visualCueManager.DisplayVideo(equipment[0], action);
+            }
 
             /*
             Renderer temp = ImagePlane.GetComponent<Renderer>();

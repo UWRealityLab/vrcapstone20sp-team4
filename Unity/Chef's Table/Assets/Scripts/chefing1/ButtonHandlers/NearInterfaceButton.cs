@@ -78,7 +78,7 @@ public class NearInterfaceButton : MonoBehaviour
     {
         if (name == "Next")
         {
-            Debug.Log("Next Button, " + name);
+            // Debug.Log("Next Button, " + name);
             scheduler.toNextStep();
             AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("Next").transform.position);
         }

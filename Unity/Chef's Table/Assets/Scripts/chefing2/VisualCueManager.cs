@@ -70,7 +70,7 @@ public class VisualCueManager : MonoBehaviour
 
         Vector3 loc = appState.GetLocation(utensil);
         if (loc == Vector3.zero) {
-            Debug.Log("Cannot get location info for: " + utensil);
+            // Debug.Log("Cannot get location info for: " + utensil);
             return;
         }
 
