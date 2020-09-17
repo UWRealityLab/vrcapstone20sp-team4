@@ -70,12 +70,12 @@ public class VisualCueManager : MonoBehaviour
 
         Vector3 loc = appState.GetLocation(utensil);
         if (loc == Vector3.zero) {
-            // Debug.Log("Cannot get location info for: " + utensil);
+            Debug.Log("Cannot get location info for: " + utensil);
             return;
         }
 
         // set the location of videoInterface
-        loc += new Vector3(loc.x, loc.y, loc.z + 5.0f);
+        // loc += new Vector3(loc.x, loc.y, loc.z + 5.0f);
         videoPlayer.transform.position = loc;
 
         // set the video clip and play

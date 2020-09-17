@@ -551,7 +551,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 122500336}
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0.3, y: -0.0001, z: 0}
+  m_LocalPosition: {x: 0.5, y: -0.0001, z: 0}
   m_LocalScale: {x: 0.02, y: 0.01, z: 0.01}
   m_Children: []
   m_Father: {fileID: 92062335}
@@ -3233,6 +3233,11 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 8355584999582346402, guid: 4950a3ec9eb5f3b459cf62a98d341c47,
+        type: 3}
+      propertyPath: m_Texture
+      value: 
+      objectReference: {fileID: 2800000, guid: 62c089eff67d7d347916155b0a3fbd7f, type: 3}
     - target: {fileID: 8355584999590367840, guid: 4950a3ec9eb5f3b459cf62a98d341c47,
         type: 3}
       propertyPath: m_fontAsset
@@ -3480,17 +3485,17 @@ PrefabInstance:
     - target: {fileID: 8355584999927900055, guid: 4950a3ec9eb5f3b459cf62a98d341c47,
         type: 3}
       propertyPath: m_textInfo.characterCount
-      value: 4
+      value: 38
       objectReference: {fileID: 0}
     - target: {fileID: 8355584999927900055, guid: 4950a3ec9eb5f3b459cf62a98d341c47,
         type: 3}
       propertyPath: m_textInfo.wordCount
-      value: 1
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8355584999927900055, guid: 4950a3ec9eb5f3b459cf62a98d341c47,
         type: 3}
       propertyPath: m_textInfo.lineCount
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8355584999927900055, guid: 4950a3ec9eb5f3b459cf62a98d341c47,
         type: 3}
@@ -3507,6 +3512,16 @@ PrefabInstance:
       propertyPath: m_fontSizeBase
       value: 0.03
       objectReference: {fileID: 0}
+    - target: {fileID: 8355584999927900055, guid: 4950a3ec9eb5f3b459cf62a98d341c47,
+        type: 3}
+      propertyPath: m_text
+      value: Strawberry, Avocado, and Cheddar Toast
+      objectReference: {fileID: 0}
+    - target: {fileID: 8355584999927900055, guid: 4950a3ec9eb5f3b459cf62a98d341c47,
+        type: 3}
+      propertyPath: m_textInfo.spaceCount
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 8355584999989130537, guid: 4950a3ec9eb5f3b459cf62a98d341c47,
         type: 3}
       propertyPath: m_fontAsset
@@ -3521,17 +3536,17 @@ PrefabInstance:
     - target: {fileID: 8355584999989130537, guid: 4950a3ec9eb5f3b459cf62a98d341c47,
         type: 3}
       propertyPath: m_textInfo.characterCount
-      value: 4
+      value: 28
       objectReference: {fileID: 0}
     - target: {fileID: 8355584999989130537, guid: 4950a3ec9eb5f3b459cf62a98d341c47,
         type: 3}
       propertyPath: m_textInfo.wordCount
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8355584999989130537, guid: 4950a3ec9eb5f3b459cf62a98d341c47,
         type: 3}
       propertyPath: m_textInfo.lineCount
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8355584999989130537, guid: 4950a3ec9eb5f3b459cf62a98d341c47,
         type: 3}
@@ -3557,6 +3572,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_fontSizeBase
       value: 0.03
+      objectReference: {fileID: 0}
+    - target: {fileID: 8355584999989130537, guid: 4950a3ec9eb5f3b459cf62a98d341c47,
+        type: 3}
+      propertyPath: m_text
+      value: Healthier Raspberry Truffles
+      objectReference: {fileID: 0}
+    - target: {fileID: 8355584999989130537, guid: 4950a3ec9eb5f3b459cf62a98d341c47,
+        type: 3}
+      propertyPath: m_textInfo.spaceCount
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8355584999989130538, guid: 4950a3ec9eb5f3b459cf62a98d341c47,
         type: 3}
@@ -3672,7 +3697,7 @@ PrefabInstance:
     - target: {fileID: 8355585000068644467, guid: 4950a3ec9eb5f3b459cf62a98d341c47,
         type: 3}
       propertyPath: m_Name
-      value: RecipePlate2
+      value: RecipePlate1
       objectReference: {fileID: 0}
     - target: {fileID: 8355585000068644467, guid: 4950a3ec9eb5f3b459cf62a98d341c47,
         type: 3}
@@ -3809,6 +3834,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8355585000457188019, guid: 4950a3ec9eb5f3b459cf62a98d341c47,
+        type: 3}
+      propertyPath: m_Texture
+      value: 
+      objectReference: {fileID: 2800000, guid: 8610df57b10bc2b459ae89c2216abeb6, type: 3}
     - target: {fileID: 8355585000505785081, guid: 4950a3ec9eb5f3b459cf62a98d341c47,
         type: 3}
       propertyPath: m_fontAsset
@@ -3823,17 +3853,17 @@ PrefabInstance:
     - target: {fileID: 8355585000505785081, guid: 4950a3ec9eb5f3b459cf62a98d341c47,
         type: 3}
       propertyPath: m_textInfo.characterCount
-      value: 4
+      value: 19
       objectReference: {fileID: 0}
     - target: {fileID: 8355585000505785081, guid: 4950a3ec9eb5f3b459cf62a98d341c47,
         type: 3}
       propertyPath: m_textInfo.spaceCount
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8355585000505785081, guid: 4950a3ec9eb5f3b459cf62a98d341c47,
         type: 3}
       propertyPath: m_textInfo.wordCount
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8355585000505785081, guid: 4950a3ec9eb5f3b459cf62a98d341c47,
         type: 3}
@@ -3848,7 +3878,7 @@ PrefabInstance:
     - target: {fileID: 8355585000505785081, guid: 4950a3ec9eb5f3b459cf62a98d341c47,
         type: 3}
       propertyPath: m_text
-      value: Name
+      value: Pumpkin Cheese Cake
       objectReference: {fileID: 0}
     - target: {fileID: 8355585000505785081, guid: 4950a3ec9eb5f3b459cf62a98d341c47,
         type: 3}
@@ -4064,7 +4094,7 @@ PrefabInstance:
     - target: {fileID: 8355585000954922236, guid: 4950a3ec9eb5f3b459cf62a98d341c47,
         type: 3}
       propertyPath: m_Name
-      value: RecipePlate3
+      value: RecipePlate2
       objectReference: {fileID: 0}
     - target: {fileID: 8355585000954922236, guid: 4950a3ec9eb5f3b459cf62a98d341c47,
         type: 3}
@@ -4146,17 +4176,17 @@ PrefabInstance:
     - target: {fileID: 8355585001035930885, guid: 4950a3ec9eb5f3b459cf62a98d341c47,
         type: 3}
       propertyPath: m_textInfo.characterCount
-      value: 4
+      value: 26
       objectReference: {fileID: 0}
     - target: {fileID: 8355585001035930885, guid: 4950a3ec9eb5f3b459cf62a98d341c47,
         type: 3}
       propertyPath: m_textInfo.wordCount
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8355585001035930885, guid: 4950a3ec9eb5f3b459cf62a98d341c47,
         type: 3}
       propertyPath: m_textInfo.lineCount
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8355585001035930885, guid: 4950a3ec9eb5f3b459cf62a98d341c47,
         type: 3}
@@ -4172,6 +4202,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_fontSizeBase
       value: 0.03
+      objectReference: {fileID: 0}
+    - target: {fileID: 8355585001035930885, guid: 4950a3ec9eb5f3b459cf62a98d341c47,
+        type: 3}
+      propertyPath: m_text
+      value: Super Strawberry Smoothies
+      objectReference: {fileID: 0}
+    - target: {fileID: 8355585001035930885, guid: 4950a3ec9eb5f3b459cf62a98d341c47,
+        type: 3}
+      propertyPath: m_textInfo.spaceCount
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8355585001035930886, guid: 4950a3ec9eb5f3b459cf62a98d341c47,
         type: 3}
@@ -4354,6 +4394,11 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 0.02
       objectReference: {fileID: 0}
+    - target: {fileID: 8355585001415023733, guid: 4950a3ec9eb5f3b459cf62a98d341c47,
+        type: 3}
+      propertyPath: m_Texture
+      value: 
+      objectReference: {fileID: 2800000, guid: fabd1a74ed0a09342a4ab3305020b2a7, type: 3}
     - target: {fileID: 8364064893722334075, guid: 4950a3ec9eb5f3b459cf62a98d341c47,
         type: 3}
       propertyPath: m_Mesh
