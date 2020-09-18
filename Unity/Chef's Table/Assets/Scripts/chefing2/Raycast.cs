@@ -37,9 +37,10 @@ public class Raycast : MonoBehaviour
 
     private void Update()
     {
+        // Debug.Log("update raycast");
         if (prevDone && detectionQueue.Count > 0)
         {
-           
+            Debug.Log("update");
             prevDone = false;
             container con = detectionQueue.Dequeue();
             currClass = con.name;
@@ -53,6 +54,7 @@ public class Raycast : MonoBehaviour
                 Width = 1,
                 Height = 1
             };
+            Debug.Log("handle on receive raycast");
             MLRaycast.Raycast(_raycastParams, HandleOnReceiveRaycast);
         }
     }
@@ -92,9 +94,11 @@ public class Raycast : MonoBehaviour
 
     private void updateObjects(Vector3 point, Vector3 normal)
     {
+        Debug.Log("update objects");
+        As.setLocation(currClass, point);
         if (debug)
         {
-            As.setLocation(currClass, point);
+            // As.setLocation(currClass, point);
             GameObject debugObject = Instantiate(debugPrefab, point, Quaternion.identity);
             debugObject.transform.LookAt(cPosition);
             debugObject.transform.FindChild("Canvas").FindChild("Text").gameObject.GetComponent<Text>().text = currClass;
@@ -106,9 +110,11 @@ public class Raycast : MonoBehaviour
     // Use a callback to know when to run the NormalMaker() coroutine.
     void HandleOnReceiveRaycast(MLRaycast.ResultState state, UnityEngine.Vector3 point, Vector3 normal, float confidence)
     {
+        Debug.Log("call handle");
         if (state == MLRaycast.ResultState.HitObserved)
         {
             //StartCoroutine(NormalMarker(point, normal));
+            Debug.Log("call update objects");
             updateObjects(point, normal);
         }
     }

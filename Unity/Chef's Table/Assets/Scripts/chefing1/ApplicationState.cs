@@ -27,6 +27,7 @@ public class ApplicationState : MonoBehaviour
 
     public void setLocation(string name, Vector3 position)
     {
+        Debug.Log("set location for: " + name);
         if (singletonEquipments.Contains(name))
         {
             singleEquipMap[name] = position;

@@ -35,6 +35,7 @@ public class MainScheduler2 : MonoBehaviour
     // for instructions from the memory
     GameObject memory;
     RecipeMemory getMemory;
+    DetectionPipeline pipeline;
 
     private List<Texture> imagesCurrentStep = new List<Texture>();
 
@@ -48,6 +49,7 @@ public class MainScheduler2 : MonoBehaviour
         getRecipe = recipeAPI.GetComponent<GetInstructions>();
         memory = GameObject.Find("RecipeMemory");
         getMemory = memory.GetComponent<RecipeMemory>();
+        pipeline = GameObject.Find("pipeline").GetComponent<DetectionPipeline>();
     }
 
 
@@ -206,6 +208,7 @@ public class MainScheduler2 : MonoBehaviour
 
     public void startAvocadoTutorial()
     {
+        pipeline.startPipeline(false);
         try {
             tutorial = getMemory.RecipeSteps();
             Debug.Log("Tutorial length is " + tutorial.Count);

@@ -18,7 +18,7 @@ public class VisualCueManager : MonoBehaviour
     void Start()
     {
         appState = GameObject.Find("ApplicationState").GetComponent<ApplicationState>();
-        videoPlayer = GameObject.Find("NearInterface/GameInterfaceScreen/VideoInterface").GetComponent<VideoPlayer>();
+        videoPlayer = GameObject.Find("NearInterface/GameInterfaceScreen/InterfaceScreen").GetComponent<VideoPlayer>();
         actionsCues["cut"] = Resources.Load<VideoClip>("actions/cutting");
         actionsCues["crack"] = Resources.Load<VideoClip>("actions/egg_cracking");
         actionsCues["heat"] = Resources.Load<VideoClip>("actions/heating");
@@ -67,17 +67,17 @@ public class VisualCueManager : MonoBehaviour
             Debug.Log("No such action: " + action);
             return;
         }
-
+        
         Vector3 loc = appState.GetLocation(utensil);
         if (loc == Vector3.zero) {
             Debug.Log("Cannot get location info for: " + utensil);
-            return;
+        } else {
+            // set the location of videoInterface
+            loc += new Vector3(loc.x, loc.y, loc.z + 0.5f);
+            Debug.Log("location is: (" + loc.x + ", " + loc.y + ", " + loc.z + ")");
+            videoPlayer.transform.position = loc;
         }
-
-        // set the location of videoInterface
-        // loc += new Vector3(loc.x, loc.y, loc.z + 5.0f);
-        videoPlayer.transform.position = loc;
-
+        
         // set the video clip and play
         VideoClip video = actionsCues[action];
         videoPlayer.clip = video;
