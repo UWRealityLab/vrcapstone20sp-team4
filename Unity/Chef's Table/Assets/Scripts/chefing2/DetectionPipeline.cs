@@ -41,11 +41,8 @@ public class DetectionPipeline : MonoBehaviour
     private bool STARTCAPTURE = false;
     private void Start()
     {
-
-
-        rc = GameObject.Find("RaycastNode").GetComponent<Raycast>();
+        rc = GameObject.Find("Raycast").GetComponent<Raycast>();
         //mainScheduler = GameObject.Find("MainScheduler").GetComponent<MainScheduler2>();
-
     }
 
     void Update()
@@ -77,6 +74,7 @@ public class DetectionPipeline : MonoBehaviour
     {
         this.makingSuggestion = suggestionMode;
         this.STARTCAPTURE = true;
+        Debug.Log("pipeline started");
     }
 
     public void stopPipeline()

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.Video;
 
 public class UpdateInGameInterface : MonoBehaviour
 {
@@ -25,6 +26,11 @@ public class UpdateInGameInterface : MonoBehaviour
     private Material unlockMat;
     // private GameObject ImagePlane;
 
+    private ApplicationState appState;
+    private VideoPlayer videoPlayer;
+    private Dictionary<string, VideoClip> actionsCues;
+    private float criticalEquipmentUpdateTimer = 0;
+
     // Start is called before the first frsame update
     void Awake()
     {
@@ -37,7 +43,6 @@ public class UpdateInGameInterface : MonoBehaviour
         exitIcon = GameObject.Find("NearInterface/ExitOrComplete/IconAndText/Icon");
         exitMat = Resources.Load("Mat/ExitButton", typeof(Material)) as Material;
         completeMat = Resources.Load("Mat/CompleteButton", typeof(Material)) as Material;
-        // ImagePlane = GameObject.Find("NearInterface/GameInterfaceScreen/InterfaceScreen");
         step = -1;
         lockIcons = new List<GameObject>();
         GameObject lockIcon;
@@ -49,6 +54,11 @@ public class UpdateInGameInterface : MonoBehaviour
         lockIcons.Add(lockIcon);
         lockMat = Resources.Load("Mat/ButtonLockMat", typeof(Material)) as Material;
         unlockMat = Resources.Load("Mat/ButtonUnlockMat", typeof(Material)) as Material;
+
+        appState = GameObject.Find("ApplicationState").GetComponent<ApplicationState>();
+        videoPlayer = GameObject.Find("NearInterface/GameInterfaceScreen/InterfaceScreen").GetComponent<VideoPlayer>();
+        actionsCues = new Dictionary<string, VideoClip>();
+        uploadVideos();
     }
 
     public void updateLock(bool islocked)
@@ -60,12 +70,23 @@ public class UpdateInGameInterface : MonoBehaviour
         }
     }
 
+    private void uploadVideos()
+    {
+        actionsCues["cut"] = Resources.Load<VideoClip>("actions/cutting");
+        actionsCues["crack"] = Resources.Load<VideoClip>("actions/egg_cracking");
+        actionsCues["heat"] = Resources.Load<VideoClip>("actions/heating");
+        actionsCues["melt"] = Resources.Load<VideoClip>("actions/melting");
+        actionsCues["mix"] = Resources.Load<VideoClip>("actions/mixing");
+        actionsCues["slice"] = Resources.Load<VideoClip>("actions/slicing");
+        actionsCues["spread"] = Resources.Load<VideoClip>("actions/spread");
+        actionsCues["sprinkle"] = Resources.Load<VideoClip>("actions/sprinkle");
+    }
+
     // Update is called once per frame
     void Update()
     {
         Dictionary<string, List<string>> info = mainScheduler.getCurrentStepInfo();
         if (info == null) {
-            // Debug.Log("no info");
             return;
         }
         if (nearInterface.activeSelf)
@@ -103,8 +124,18 @@ public class UpdateInGameInterface : MonoBehaviour
             // display video
             string action = info["action"][0];
             if (equipment.Count > 0) {
-                visualCueManager.DisplayVideo(equipment[0], action);
+                string utensil = equipment[0];
+                Vector3 loc = appState.GetLocation(utensil);
+                if (loc != Vector3.zero) {
+                    loc += new Vector3(loc.x, loc.y, loc.z + 0.5f);
+                    Debug.Log("location is: (" + loc.x + ", " + loc.y + ", " + loc.z + ")");
+                    videoPlayer.transform.position = loc;
+                }
             }
+            // set the video clip and play
+            VideoClip video = actionsCues[action];
+            videoPlayer.clip = video;
+            videoPlayer.Play();
 
             /*
             Renderer temp = ImagePlane.GetComponent<Renderer>();

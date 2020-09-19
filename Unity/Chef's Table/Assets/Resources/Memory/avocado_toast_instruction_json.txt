@@ -29,7 +29,7 @@
          ]
       },
       {
-         "action":"melt",
+         "action":"heat",
          "number":2,
          "step":"Melt the butter over medium heat in a frying pan. Once the butter is melted, add to your outer piece of bread.",
          "ingredients":[

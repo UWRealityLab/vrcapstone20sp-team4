@@ -14,6 +14,10 @@ public class ApplicationState : MonoBehaviour
     private Dictionary<string, Vector3> singleEquipMap = new Dictionary<string, Vector3>();
     private Dictionary<string, Vector3> multiEquipMap = new Dictionary<string, Vector3>();
     private Dictionary<string, Vector3> ingredientsMap = new Dictionary<string, Vector3>();
+    void Start()
+    {
+        Debug.Log("start application state");
+    }
 
     public bool isIngredients(string name)
     {

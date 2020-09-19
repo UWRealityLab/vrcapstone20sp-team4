@@ -22,6 +22,7 @@ public class Raycast : MonoBehaviour
 
     private void Start()
     {
+        Debug.Log("start raycast");
         As = GameObject.Find("ApplicationState").GetComponent<ApplicationState>();
     }
 
@@ -37,7 +38,6 @@ public class Raycast : MonoBehaviour
 
     private void Update()
     {
-        // Debug.Log("update raycast");
         if (prevDone && detectionQueue.Count > 0)
         {
             Debug.Log("update");
@@ -81,6 +81,7 @@ public class Raycast : MonoBehaviour
             detectionQueue.Enqueue(new container(detection.Key, detection.Value));
         }
         if (debug) Debug.Log("raycast request made: " + detectionQueue.Count);
+        Debug.Log("raycast request made: " + detectionQueue.Count);
         prevDone = true;
         
 
