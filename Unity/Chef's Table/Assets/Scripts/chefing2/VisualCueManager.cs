@@ -7,18 +7,22 @@ using UnityEngine.Video;
 public class VisualCueManager : MonoBehaviour
 {
     // Start is called before the first frame update
-    // private VisualCueTask currTask;
+    /*
+    private VisualCueTask currTask;
     private ApplicationState appState;
     private VideoPlayer videoPlayer;
     private Dictionary<string, VideoClip> actionsCues;
     private float criticalEquipmentUpdateTimer = 0;
     // public Dictionary<string, GameObject> nameToObject = new Dictionary<string, GameObject>();
+    */
     void Start()
     {
+        /*
         appState = GameObject.Find("ApplicationState").GetComponent<ApplicationState>();
         videoPlayer = GameObject.Find("NearInterface/GameInterfaceScreen/InterfaceScreen").GetComponent<VideoPlayer>();
         actionsCues = new Dictionary<string, VideoClip>();
         uploadVideos();
+        */
     }
 
     // Update is called once per frame
@@ -59,6 +63,7 @@ public class VisualCueManager : MonoBehaviour
     }
     */
 
+    /*
     private void uploadVideos()
     {
         actionsCues["cut"] = Resources.Load<VideoClip>("actions/cutting");
@@ -79,14 +84,7 @@ public class VisualCueManager : MonoBehaviour
         }
         Vector3 loc = Vector3.zero;
         while (loc == Vector3.zero) {
-            /*
-            criticalEquipmentUpdateTimer += Time.deltaTime;
-            if (criticalEquipmentUpdateTimer > 10.0f) {
-                Debug.Log("Cannot get location for " + utensil);
-                break;
-            }
-            */
-            loc = appState.GetLocation(utensil);
+
         }
         Debug.Log("location set at " + criticalEquipmentUpdateTimer + " second(s)");
         loc += new Vector3(loc.x, loc.y, loc.z + 0.5f);
@@ -98,5 +96,5 @@ public class VisualCueManager : MonoBehaviour
         videoPlayer.clip = video;
         videoPlayer.Play();
     }
-
+    */
 }

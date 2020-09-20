@@ -8,7 +8,7 @@ using UnityEngine.Video;
 public class UpdateInGameInterface : MonoBehaviour
 {
     private MainScheduler2 mainScheduler;
-    private VisualCueManager visualCueManager;
+    // private VisualCueManager visualCueManager;
     //private TextMeshProUGUI instructionTextFloatingInterf;
     private TextMeshPro instructionTextNearMenu;
     private TextMeshPro detailTextNearMenu;
@@ -29,13 +29,13 @@ public class UpdateInGameInterface : MonoBehaviour
     private ApplicationState appState;
     private VideoPlayer videoPlayer;
     private Dictionary<string, VideoClip> actionsCues;
-    private float criticalEquipmentUpdateTimer = 0;
+    // private float criticalEquipmentUpdateTimer = 0;
 
     // Start is called before the first frsame update
     void Awake()
     {
         mainScheduler = GameObject.Find("Scheduler").GetComponent<MainScheduler2>();
-        visualCueManager = GameObject.Find("VisualCueManager").GetComponent<VisualCueManager>();
+        // visualCueManager = GameObject.Find("VisualCueManager").GetComponent<VisualCueManager>();
         nearInterface = GameObject.Find("NearInterface");
         instructionTextNearMenu = GameObject.Find("NearInterface/InstructionCanvas/Instruction").GetComponent<TextMeshPro>();
         detailTextNearMenu = GameObject.Find("NearInterface/InstructionCanvas/Detail").GetComponent<TextMeshPro>();

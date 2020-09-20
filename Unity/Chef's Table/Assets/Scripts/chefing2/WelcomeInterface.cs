@@ -13,16 +13,12 @@ public class WelcomeInterface : MonoBehaviour
 
     private void Awake()
     {
-        Debug.Log("welcome interface awake 1");
         NIControl = GameObject.Find("HeadLockCanvas").GetComponent<NIThresholdControl>();
         buttonClip = GameObject.Find("Button_Click").GetComponent<AudioSource>();
         interfaceManager = GameObject.Find("InterfaceManager").GetComponent<InterfaceManager>();
-        Debug.Log("welcome interface awake 2");
         if (name == "BrowseRecipeButton" || name == "ScanMyIngredientsButton" || name == "WelcomeInterface") return;
-        Debug.Log("welcome interface awake 3");
         GameObject iconText = transform.parent.transform.Find("IconAndText").gameObject;
         icon = iconText.transform.Find("Icon").gameObject;
-        Debug.Log("welcome interface awake 4");
     }
 
     private IEnumerator ShowFeedback()

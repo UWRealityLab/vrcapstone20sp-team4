@@ -94,6 +94,7 @@ public class DetectionPipeline : MonoBehaviour
     // parses detection result and find their location in by raycasting
     public void findDetectedObjects()
     {
+        // Debug.Log("findDetectedObjects");
         string response = currResponse;
         DetectionList DL;
         try
@@ -132,7 +133,7 @@ public class DetectionPipeline : MonoBehaviour
     // calculate reference point to do raycast from a point on the image
     public Vector3 getRaycastPointWorldSpace(float u, float v, int time_stamp)
     {
-
+        // Debug.Log("getraycastPointerWorldSpace");
         float z = 1;
         float x = (u - Cx) / Fx;
         float y = (v - Cy) / Fy;
@@ -373,19 +374,23 @@ public class DetectionPipeline : MonoBehaviour
 
     private void OnCaptureRawImageComplete(byte[] imageData)
     {
+        Debug.Log("on capture raw image complete");
         lock (_cameraLockObject)
         {
             _isCapturing = false;
         }
+        
         if (stamp2Copy.ContainsKey(time_stamp))
         {
             return;
         }
+        
         if (!makingSuggestion)
         {
             stamp2Copy[time_stamp] = Instantiate(copy_prefab, ctransform.position, ctransform.rotation);
             time_stamp++;
         }
+        Debug.Log("upload file?");
         UploadFile(imageData, time_stamp - 1);
     }
 
