@@ -23,6 +23,8 @@ public class MainScheduler2 : MonoBehaviour
     private string chosenRecipe = "";
     private float totalTime = 0;
 
+    private int debug_print = 10;
+
 
     // global states
     public bool tutorialStarts = false; // indicate if a user has choosen a tutorial
@@ -200,7 +202,6 @@ public class MainScheduler2 : MonoBehaviour
         } else
         {
             Debug.Log("avocado");
-            // Invoke("startAvocadoTutorial", 1.0f);
             startAvocadoTutorial();
         }
 
@@ -213,7 +214,6 @@ public class MainScheduler2 : MonoBehaviour
             tutorial = getMemory.RecipeSteps();
             Debug.Log("Tutorial length is " + tutorial.Count);
             totalStepNum = tutorial.Count;
-            // GetImagesForEachStep();
             tutorialStarts = true;
             resetTimerRecord();
         }

@@ -12,10 +12,10 @@ public class UpdateInGameInterface : MonoBehaviour
     //private TextMeshProUGUI instructionTextFloatingInterf;
     private TextMeshPro instructionTextNearMenu;
     private TextMeshPro detailTextNearMenu;
+    private GameObject nearInterface;
     //private TextMeshProUGUI clockFloatingInterf;
     private TextMeshPro clockNearMenu;
     //private GameObject gameInterface;
-    private GameObject nearInterface;
     private GameObject exitIcon;
 
     private Material exitMat;
@@ -40,6 +40,7 @@ public class UpdateInGameInterface : MonoBehaviour
         instructionTextNearMenu = GameObject.Find("NearInterface/InstructionCanvas/Instruction").GetComponent<TextMeshPro>();
         detailTextNearMenu = GameObject.Find("NearInterface/InstructionCanvas/Detail").GetComponent<TextMeshPro>();
         clockNearMenu = GameObject.Find("NearInterface/InterfaceTimer/ClockText").GetComponent<TextMeshPro>();
+        
         exitIcon = GameObject.Find("NearInterface/ExitOrComplete/IconAndText/Icon");
         exitMat = Resources.Load("Mat/ExitButton", typeof(Material)) as Material;
         completeMat = Resources.Load("Mat/CompleteButton", typeof(Material)) as Material;
@@ -54,7 +55,7 @@ public class UpdateInGameInterface : MonoBehaviour
         lockIcons.Add(lockIcon);
         lockMat = Resources.Load("Mat/ButtonLockMat", typeof(Material)) as Material;
         unlockMat = Resources.Load("Mat/ButtonUnlockMat", typeof(Material)) as Material;
-
+        
         appState = GameObject.Find("ApplicationState").GetComponent<ApplicationState>();
         videoPlayer = GameObject.Find("NearInterface/GameInterfaceScreen/InterfaceScreen").GetComponent<VideoPlayer>();
         actionsCues = new Dictionary<string, VideoClip>();
@@ -75,7 +76,7 @@ public class UpdateInGameInterface : MonoBehaviour
         actionsCues["cut"] = Resources.Load<VideoClip>("actions/cutting");
         actionsCues["crack"] = Resources.Load<VideoClip>("actions/egg_cracking");
         actionsCues["heat"] = Resources.Load<VideoClip>("actions/heating");
-        actionsCues["melt"] = Resources.Load<VideoClip>("actions/melting");
+        // actionsCues["melt"] = Resources.Load<VideoClip>("actions/melting");
         actionsCues["mix"] = Resources.Load<VideoClip>("actions/mixing");
         actionsCues["slice"] = Resources.Load<VideoClip>("actions/slicing");
         actionsCues["spread"] = Resources.Load<VideoClip>("actions/spread");
@@ -121,22 +122,24 @@ public class UpdateInGameInterface : MonoBehaviour
             // set time
             clockNearMenu.text = info["timer"][0];
 
-            // display video
-            string action = info["action"][0];
+            // find location of the main equipment
+            Vector3 timerLocation;
             if (equipment.Count > 0) {
-                string utensil = equipment[0];
-                Vector3 loc = appState.GetLocation(utensil);
-                if (loc != Vector3.zero) {
-                    loc += new Vector3(loc.x, loc.y, loc.z + 0.5f);
-                    Debug.Log("location is: (" + loc.x + ", " + loc.y + ", " + loc.z + ")");
-                    videoPlayer.transform.position = loc;
+                // string utensil = equipment[0];
+                string utensil = "bowl";
+                timerLocation = appState.GetLocation(utensil);
+                if (timerLocation != Vector3.zero) {
+                    timerLocation += new Vector3(timerLocation.x, timerLocation.y + 0.7f, timerLocation.z);
+                    videoPlayer.transform.position = timerLocation;
                 }
             }
+
+            // display video
+            string action = info["action"][0];
             // set the video clip and play
             VideoClip video = actionsCues[action];
             videoPlayer.clip = video;
             videoPlayer.Play();
-
             /*
             Renderer temp = ImagePlane.GetComponent<Renderer>();
             temp.material.mainTexture = mainScheduler.getCurrentStepImage();

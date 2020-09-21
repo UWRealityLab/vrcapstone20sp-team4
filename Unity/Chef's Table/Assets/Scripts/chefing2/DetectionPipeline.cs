@@ -36,7 +36,7 @@ public class DetectionPipeline : MonoBehaviour
     public GameObject copy_prefab;
     private Dictionary<int, GameObject> stamp2Copy = new Dictionary<int, GameObject>();
     private object _cameraLockObject = new object();
-    private bool makingSuggestion = true;  // true for recipe suggestion, false for tutorial
+    private bool makingSuggestion = false;  // true for recipe suggestion, false for tutorial
     public GameObject scanningInterfaceContainer;
     private bool STARTCAPTURE = false;
     private void Start()
@@ -94,7 +94,6 @@ public class DetectionPipeline : MonoBehaviour
     // parses detection result and find their location in by raycasting
     public void findDetectedObjects()
     {
-        // Debug.Log("findDetectedObjects");
         string response = currResponse;
         DetectionList DL;
         try
@@ -104,6 +103,7 @@ public class DetectionPipeline : MonoBehaviour
         }
         catch (Exception e)
         {
+            Debug.Log(e);
             return;
         }
         Dictionary<string, Vector3> rays = new Dictionary<string, Vector3>();
@@ -155,6 +155,7 @@ public class DetectionPipeline : MonoBehaviour
                 scanningInterfaceContainer.GetComponent<ScanningInterfaceController>().updateIngredientList(currResponse);
             } catch (Exception e)
             {
+                Debug.Log(e);
                 scanningInterfaceContainer.GetComponent<ScanningInterfaceController>().updateIngredientList("error");
             }
             
@@ -166,7 +167,6 @@ public class DetectionPipeline : MonoBehaviour
             byte[] responseArray = await myWebClient.UploadDataTaskAsync(url_tutorial, imageInfo);
             currResponse = Encoding.UTF8.GetString(responseArray);
         }
-
     }
 
 
@@ -374,23 +374,19 @@ public class DetectionPipeline : MonoBehaviour
 
     private void OnCaptureRawImageComplete(byte[] imageData)
     {
-        Debug.Log("on capture raw image complete");
         lock (_cameraLockObject)
         {
             _isCapturing = false;
         }
-        
         if (stamp2Copy.ContainsKey(time_stamp))
         {
             return;
         }
-        
         if (!makingSuggestion)
         {
             stamp2Copy[time_stamp] = Instantiate(copy_prefab, ctransform.position, ctransform.rotation);
             time_stamp++;
         }
-        Debug.Log("upload file?");
         UploadFile(imageData, time_stamp - 1);
     }
 

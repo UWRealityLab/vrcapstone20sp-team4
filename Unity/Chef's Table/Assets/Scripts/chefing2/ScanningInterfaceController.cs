@@ -79,6 +79,7 @@ public class ScanningInterfaceController : MonoBehaviour
         }
         catch (Exception e)
         {
+            Debug.Log(e);
             return;
         }
 
