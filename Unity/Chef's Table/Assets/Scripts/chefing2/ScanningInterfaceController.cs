@@ -11,9 +11,21 @@ public class ScanningInterfaceController : MonoBehaviour
     public List<GameObject> ingredients = new List<GameObject>();
     private HashSet<string> currentLabels = new HashSet<string>();
     public GameObject statusPanel;
+    public GameObject virtualKeyboardText;
     private bool networkErrorOccured = false;
+
+
     public string[] array()
     {
+        if (virtualKeyboardText.activeSelf)
+        {
+            string[] keyboardInputs = virtualKeyboardText.GetComponent<TextMeshPro>().text.Split(',');
+            foreach(string s in keyboardInputs)
+            {
+                string ss = s.Trim();
+                if (ss.Length > 0) currentLabels.Add(ss);
+            }
+        }
         String[] stringArray = new String[currentLabels.Count];
         currentLabels.CopyTo(stringArray);
         return stringArray;
@@ -31,7 +43,7 @@ public class ScanningInterfaceController : MonoBehaviour
             go.SetActive(false);
             
         }
-        handleResponseStatus();
+        handleRender();
     }
 
     public void clearMemory()
@@ -44,9 +56,9 @@ public class ScanningInterfaceController : MonoBehaviour
         currentLabels.Clear();
     }
 
-    public void handleResponseStatus() {
+    public void handleRender()
+    {
         if (networkErrorOccured) {
-            clearMemory();
             statusPanel.SetActive(true);
             statusPanel.transform.FindChild("ErrorMessage").gameObject.SetActive(true);
             statusPanel.transform.FindChild("loading").gameObject.SetActive(false);
@@ -59,6 +71,13 @@ public class ScanningInterfaceController : MonoBehaviour
                 statusPanel.SetActive(false);
             }
         }
+    }
+
+    public void handleResponseStatus() {
+        if (networkErrorOccured) {
+            clearMemory();
+        }
+        handleRender();
     }
 
     public void updateIngredientList(string response)

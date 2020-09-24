@@ -36,9 +36,9 @@ public class DetectionPipeline : MonoBehaviour
     public GameObject copy_prefab;
     private Dictionary<int, GameObject> stamp2Copy = new Dictionary<int, GameObject>();
     private object _cameraLockObject = new object();
-    private bool makingSuggestion = true;  // true for recipe suggestion, false for tutorial
+    private bool makingSuggestion = false;  // true for recipe suggestion, false for tutorial
     public GameObject scanningInterfaceContainer;
-    private bool STARTCAPTURE = false;
+    private bool STARTCAPTURE = true;
     private void Start()
     {
 
