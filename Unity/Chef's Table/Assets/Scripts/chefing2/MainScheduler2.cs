@@ -17,10 +17,13 @@ public class MainScheduler2 : MonoBehaviour
     private int stepIndex = 0;
     private List<float> timerRecord = new List<float>();
     private bool timerPause = true;
+    private int totalStepNum = 0;
 
     // for statistic
     private string chosenRecipe = "";
     private float totalTime = 0;
+
+    private int debug_print = 10;
 
 
     // global states
@@ -34,6 +37,7 @@ public class MainScheduler2 : MonoBehaviour
     // for instructions from the memory
     GameObject memory;
     RecipeMemory getMemory;
+    DetectionPipeline pipeline;
 
     private List<Texture> imagesCurrentStep = new List<Texture>();
 
@@ -47,6 +51,7 @@ public class MainScheduler2 : MonoBehaviour
         getRecipe = recipeAPI.GetComponent<GetInstructions>();
         memory = GameObject.Find("RecipeMemory");
         getMemory = memory.GetComponent<RecipeMemory>();
+        pipeline = GameObject.Find("pipeline").GetComponent<DetectionPipeline>();
     }
 
 
@@ -106,9 +111,12 @@ public class MainScheduler2 : MonoBehaviour
     // return a map of all info of the current step, null if no tutorial is selected
     public Dictionary<string, List<string>> getCurrentStepInfo()
     {
-        if (!tutorialStarts) return null;
+        if (!tutorialStarts || stepIndex >= tutorial.Count) return null;
         Instruction cur = tutorial[stepIndex];
         Dictionary<string, List<string>> dic = new Dictionary<string, List<string>>();
+
+        // add action
+        dic.Add("action", new List<string>() { cur.action });
 
         // add description
         dic.Add("description", new List<string>() { cur.step });
@@ -151,7 +159,7 @@ public class MainScheduler2 : MonoBehaviour
     // proceed to the next task in the list
     public void toNextStep()
     {
-        Debug.Log("to next received");
+        // Debug.Log("to next received");
         if (stepIndex + 1 >= timerRecord.Count) {
             tutorialFinish = true;
         }
@@ -179,6 +187,7 @@ public class MainScheduler2 : MonoBehaviour
 
     public void startTutorial(string name)
     {
+        
         if (!name.ToLower().Contains("avocado"))
         {
             Debug.Log("not avocado");
@@ -193,17 +202,18 @@ public class MainScheduler2 : MonoBehaviour
         } else
         {
             Debug.Log("avocado");
-            Invoke("startAvocadoTutorial", 1.0f);
+            startAvocadoTutorial();
         }
 
     }
 
     public void startAvocadoTutorial()
     {
+        pipeline.startPipeline(false);
         try {
             tutorial = getMemory.RecipeSteps();
             Debug.Log("Tutorial length is " + tutorial.Count);
-            // GetImagesForEachStep();
+            totalStepNum = tutorial.Count;
             tutorialStarts = true;
             resetTimerRecord();
         }

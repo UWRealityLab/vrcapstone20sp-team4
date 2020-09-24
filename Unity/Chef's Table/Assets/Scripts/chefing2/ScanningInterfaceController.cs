@@ -13,8 +13,7 @@ public class ScanningInterfaceController : MonoBehaviour
     public GameObject statusPanel;
     public GameObject virtualKeyboardText;
     private bool networkErrorOccured = false;
-
-
+    private bool isPaused = false;
     public string[] array()
     {
         if (virtualKeyboardText.activeSelf)
@@ -36,7 +35,7 @@ public class ScanningInterfaceController : MonoBehaviour
         GameObject go = ingredients[index];
         if (go.activeSelf)
         {
-            GameObject textObject = go.transform.FindChild("IngredientNameText").FindChild("IngredientName").gameObject;
+            GameObject textObject = go.transform.Find("IngredientNameText").Find("IngredientName").gameObject;
             ignore.Add(textObject.GetComponent<TextMeshPro>().text);
             currentLabels.Remove(textObject.GetComponent<TextMeshPro>().text);
             textObject.GetComponent<TextMeshPro>().text = "none";
@@ -56,17 +55,26 @@ public class ScanningInterfaceController : MonoBehaviour
         currentLabels.Clear();
     }
 
-    public void handleRender()
+    public void pause()
     {
+        isPaused = true;
+    }
+
+    public void play()
+    {
+        isPaused = false;
+    }
+
+    public void handleResponseStatus() {
         if (networkErrorOccured) {
             statusPanel.SetActive(true);
-            statusPanel.transform.FindChild("ErrorMessage").gameObject.SetActive(true);
-            statusPanel.transform.FindChild("loading").gameObject.SetActive(false);
+            statusPanel.transform.Find("ErrorMessage").gameObject.SetActive(true);
+            statusPanel.transform.Find("loading").gameObject.SetActive(false);
         } else {
             if (currentLabels.Count == 0) {
                 statusPanel.SetActive(true);
-                statusPanel.transform.FindChild("ErrorMessage").gameObject.SetActive(false);
-                statusPanel.transform.FindChild("loading").gameObject.SetActive(true);
+                statusPanel.transform.Find("ErrorMessage").gameObject.SetActive(false);
+                statusPanel.transform.Find("loading").gameObject.SetActive(true);
             } else {
                 statusPanel.SetActive(false);
             }
@@ -86,6 +94,8 @@ public class ScanningInterfaceController : MonoBehaviour
             networkErrorOccured = true;
             handleResponseStatus();
             return;
+        } else if (isPaused) {
+            return;
         } else {
             networkErrorOccured = false;
         }
@@ -98,6 +108,7 @@ public class ScanningInterfaceController : MonoBehaviour
         }
         catch (Exception e)
         {
+            Debug.Log(e);
             return;
         }
 
@@ -116,7 +127,7 @@ public class ScanningInterfaceController : MonoBehaviour
                     if (!go.activeSelf)
                     {
                         go.SetActive(true);
-                        go.transform.FindChild("IngredientNameText").FindChild("IngredientName").gameObject.GetComponent<TextMeshPro>().text = label;
+                        go.transform.Find("IngredientNameText").Find("IngredientName").gameObject.GetComponent<TextMeshPro>().text = label;
                         currentLabels.Add(label);
                         break;
                     }

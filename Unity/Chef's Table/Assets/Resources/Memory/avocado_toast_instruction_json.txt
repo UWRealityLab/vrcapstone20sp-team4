@@ -16,20 +16,20 @@
          "equipment":[
             {
                "id":404645,
-               "name":"cutting board",
-               "localizedName":"cutting board",
+               "name":"kitchen knife",
+               "localizedName":"kitchen knife",
                "image":"pan.png"
             },
             {
                "id":404645,
-               "name":"kitchen knife",
-               "localizedName":"kitchen knife",
+               "name":"cutting board",
+               "localizedName":"cutting board",
                "image":"pan.png"
             }
          ]
       },
       {
-         "action":"melt",
+         "action":"heat",
          "number":2,
          "step":"Melt the butter over medium heat in a frying pan. Once the butter is melted, add to your outer piece of bread.",
          "ingredients":[
@@ -171,7 +171,7 @@
          ]
       },
       {
-         "action":"mash",
+         "action":"mix",
          "number":6,
          "step":"Remove the avocado from the peel, and mash it up in a bowl.",
          "ingredients":[

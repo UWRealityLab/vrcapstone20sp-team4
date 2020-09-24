@@ -41,11 +41,8 @@ public class DetectionPipeline : MonoBehaviour
     private bool STARTCAPTURE = true;
     private void Start()
     {
-
-
-        rc = GameObject.Find("RaycastNode").GetComponent<Raycast>();
+        rc = GameObject.Find("Raycast").GetComponent<Raycast>();
         //mainScheduler = GameObject.Find("MainScheduler").GetComponent<MainScheduler2>();
-
     }
 
     void Update()
@@ -77,6 +74,7 @@ public class DetectionPipeline : MonoBehaviour
     {
         this.makingSuggestion = suggestionMode;
         this.STARTCAPTURE = true;
+        Debug.Log("pipeline started");
     }
 
     public void stopPipeline()
@@ -105,6 +103,7 @@ public class DetectionPipeline : MonoBehaviour
         }
         catch (Exception e)
         {
+            Debug.Log(e);
             return;
         }
         Dictionary<string, Vector3> rays = new Dictionary<string, Vector3>();
@@ -134,7 +133,7 @@ public class DetectionPipeline : MonoBehaviour
     // calculate reference point to do raycast from a point on the image
     public Vector3 getRaycastPointWorldSpace(float u, float v, int time_stamp)
     {
-
+        // Debug.Log("getraycastPointerWorldSpace");
         float z = 1;
         float x = (u - Cx) / Fx;
         float y = (v - Cy) / Fy;
@@ -156,6 +155,7 @@ public class DetectionPipeline : MonoBehaviour
                 scanningInterfaceContainer.GetComponent<ScanningInterfaceController>().updateIngredientList(currResponse);
             } catch (Exception e)
             {
+                Debug.Log(e);
                 scanningInterfaceContainer.GetComponent<ScanningInterfaceController>().updateIngredientList("error");
             }
             
@@ -167,7 +167,6 @@ public class DetectionPipeline : MonoBehaviour
             byte[] responseArray = await myWebClient.UploadDataTaskAsync(url_tutorial, imageInfo);
             currResponse = Encoding.UTF8.GetString(responseArray);
         }
-
     }
 
 

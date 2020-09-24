@@ -16,13 +16,14 @@ public class Raycast : MonoBehaviour
     private string currClass = "";
     private Queue<container> detectionQueue = new Queue<container>();
     ApplicationState As;
-    public GameObject debugPrefab;
-    //[Range(0, 1)] public float x_ = 0.5f;
-    //[Range(0, 1)] public float y_ = 0.5f;
+    // public GameObject debugPrefab;
+    // [Range(0, 1)] public float x_ = 0.5f;
+    // [Range(0, 1)] public float y_ = 0.5f;
 
     private void Start()
     {
         As = GameObject.Find("ApplicationState").GetComponent<ApplicationState>();
+        cPosition = Vector3.zero;
     }
 
     public void setCpoition(Vector3 cPosition)
@@ -39,7 +40,6 @@ public class Raycast : MonoBehaviour
     {
         if (prevDone && detectionQueue.Count > 0)
         {
-           
             prevDone = false;
             container con = detectionQueue.Dequeue();
             currClass = con.name;
@@ -78,7 +78,7 @@ public class Raycast : MonoBehaviour
         {
             detectionQueue.Enqueue(new container(detection.Key, detection.Value));
         }
-        if (debug) Debug.Log("raycast request made: " + detectionQueue.Count);
+        if (debugMode) Debug.Log("raycast request made: " + detectionQueue.Count);
         prevDone = true;
         
 
@@ -92,13 +92,15 @@ public class Raycast : MonoBehaviour
 
     private void updateObjects(Vector3 point, Vector3 normal)
     {
+        As.setLocation(currClass, point);
         if (debug)
         {
-            As.setLocation(currClass, point);
+            /*
             GameObject debugObject = Instantiate(debugPrefab, point, Quaternion.identity);
             debugObject.transform.LookAt(cPosition);
             debugObject.transform.FindChild("Canvas").FindChild("Text").gameObject.GetComponent<Text>().text = currClass;
-            Destroy(debugObject, 3f);
+            Destroy(debugObject, 3f); 
+            */
         }
         prevDone = true;
     }

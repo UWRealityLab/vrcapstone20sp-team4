@@ -23,17 +23,21 @@ public class WelcomeInterface : MonoBehaviour
 
     private IEnumerator ShowFeedback()
     {
+        /*
         if (name != "Lock")
         {
             icon.GetComponent<Renderer>().material.SetColor("_Color", Color.red);
         }
+        */
         GetComponent<Collider>().enabled = false;
         yield return new WaitForSeconds(1.0f);
         GetComponent<Collider>().enabled = true;
+        /*
         if (name != "Lock")
         {
             icon.GetComponent<Renderer>().material.SetColor("_Color", Color.white);
         }
+        */
     }
 
     private void OnTriggerEnter(Collider other)
@@ -71,10 +75,12 @@ public class WelcomeInterface : MonoBehaviour
         }
         else if (name == "Lock")
         {
+            /*
             NIControl.changeLock();
             UpdateInGameInterface uii = GameObject.Find("InGameInterface").GetComponent<UpdateInGameInterface>();
             uii.updateLock(NIControl.getLock());
             AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("Lock").transform.position);
+            */
         }
     }
 }

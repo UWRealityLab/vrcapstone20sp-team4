@@ -53,7 +53,7 @@ public class OnboardingRecipeButton : MonoBehaviour
 
     public void clicked()
     {
-        Debug.Log("k");
+        // Debug.Log("k");
         if (name == "RecipeButton")
         {
             AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("RecipeButton").transform.position);

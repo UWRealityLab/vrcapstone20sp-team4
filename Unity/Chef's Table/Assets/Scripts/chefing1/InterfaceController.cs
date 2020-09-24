@@ -50,13 +50,13 @@ public class InterfaceController : MonoBehaviour
 
     public void loadOnboarding()
     {
-        Invoke("loadOnboardingDelay", 5f);
+        Invoke("loadOnboardingDelay", 3.0f);
     }
     public void loadOnboardingDelay() {
         schedulerScript.PreviewAllTutorial();
         allTutorials = schedulerScript.GetAllTutorialPreview();
         recipe_names = new List<string>(allTutorials.Keys);
-        Debug.Log(recipe_names.Count + " & ");
+        // Debug.Log(recipe_names.Count + " & ");
         for (int i = 0; i < recipe_names.Count; i++)
         {
             GameObject recipePlate = onboardingInterface.transform.Find("RecipePlate" + i).gameObject;

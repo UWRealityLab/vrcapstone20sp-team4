@@ -20,6 +20,8 @@ public class ScanningInterfaceButton : MonoBehaviour
     DetectionPipeline pipeline;
     GameObject getRecipeButton;
     GameObject startScanningButton;
+    GameObject pauseButton;
+    GameObject playButton;
 
     private string ingredientListString = "";
 
@@ -33,6 +35,9 @@ public class ScanningInterfaceButton : MonoBehaviour
 
         getRecipeButton = GameObject.Find("GetRecipesButton");
         startScanningButton = GameObject.Find("StartScanningButton");
+        pauseButton = GameObject.Find("PauseButton");
+        playButton = GameObject.Find("PlayButton");
+        playButton.SetActive(false);
 
         interfaceManager = GameObject.Find("InterfaceManager").GetComponent<InterfaceManager>();
         buttonClip = GameObject.Find("Button_Click").GetComponent<AudioSource>();
@@ -92,6 +97,20 @@ public class ScanningInterfaceButton : MonoBehaviour
         else if (name == "ClearAllButtonScript") {
             AudioSource.PlayClipAtPoint(buttonClip.clip, this.transform.parent.position);
             controller.clearMemory();
+        }
+        else if (name == "PauseButtonScript")
+        {
+            AudioSource.PlayClipAtPoint(buttonClip.clip, pauseButton.transform.position);
+            playButton.SetActive(true);
+            pauseButton.SetActive(false);
+            controller.pause();
+        }
+        else if (name == "PlayButtonScript")
+        {
+            AudioSource.PlayClipAtPoint(buttonClip.clip, playButton.transform.position);
+            playButton.SetActive(false);
+            pauseButton.SetActive(true);
+            controller.play();
         }
         else
         {
