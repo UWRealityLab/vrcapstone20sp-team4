@@ -38,7 +38,7 @@ public class DetectionPipeline : MonoBehaviour
     private object _cameraLockObject = new object();
     private bool makingSuggestion = false;  // true for recipe suggestion, false for tutorial
     public GameObject scanningInterfaceContainer;
-    private bool STARTCAPTURE = false;
+    private bool STARTCAPTURE = true;
     private void Start()
     {
         rc = GameObject.Find("Raycast").GetComponent<Raycast>();

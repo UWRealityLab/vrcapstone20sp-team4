@@ -23,7 +23,7 @@ public class InterfaceManager : MonoBehaviour
     GameObject welcomeInterface;
     private bool startCountDown = false;
     private float completeRedirectTimer = 10;
-    private float clickCountDown = 1f;
+    private float clickCountDown = 0.05f;
 
     private void Awake()
     {
