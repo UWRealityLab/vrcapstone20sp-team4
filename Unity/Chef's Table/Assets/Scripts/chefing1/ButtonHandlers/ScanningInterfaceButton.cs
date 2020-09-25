@@ -22,6 +22,8 @@ public class ScanningInterfaceButton : MonoBehaviour
     GameObject startScanningButton;
     GameObject pauseButton;
     GameObject playButton;
+    GameObject exitButton;
+    GameObject searchButton;
 
     private string ingredientListString = "";
 
@@ -35,9 +37,11 @@ public class ScanningInterfaceButton : MonoBehaviour
 
         getRecipeButton = GameObject.Find("GetRecipesButton");
         startScanningButton = GameObject.Find("StartScanningButton");
-        pauseButton = GameObject.Find("PauseButton");
-        playButton = GameObject.Find("PlayButton");
+        pauseButton = GameObject.Find("PauseButtonScript");
+        playButton = GameObject.Find("PlayButtonScript");
         playButton.SetActive(false);
+        exitButton = GameObject.Find("ExitScript");
+        searchButton = GameObject.Find("KeyboardSearchScript");
 
         interfaceManager = GameObject.Find("InterfaceManager").GetComponent<InterfaceManager>();
         buttonClip = GameObject.Find("Button_Click").GetComponent<AudioSource>();
@@ -111,6 +115,18 @@ public class ScanningInterfaceButton : MonoBehaviour
             playButton.SetActive(false);
             pauseButton.SetActive(true);
             controller.play();
+        }
+        else if (name == "ExitScript")
+        {
+            AudioSource.PlayClipAtPoint(buttonClip.clip, exitButton.transform.position);
+            interfaceManager.setActiveWelcomeInterface(true);
+            interfaceManager.setActiveScanningInterface(false);
+            pipeline.stopPipeline();
+        }
+        else if (name == "KeyboardScriptSearch")
+        {
+            AudioSource.PlayClipAtPoint(buttonClip.clip, searchButton.transform.position);
+            // TODO: show keyboard and hide ingredients
         }
         else
         {

@@ -11,6 +11,8 @@ public class ScanningInterfaceController : MonoBehaviour
     public List<GameObject> ingredients = new List<GameObject>();
     private HashSet<string> currentLabels = new HashSet<string>();
     public GameObject statusPanel;
+    private int currentNotification = 0;
+    private int lastNotification = 0;
     private bool networkErrorOccured = false;
     private bool isPaused = false;
     public string[] array()
@@ -72,6 +74,42 @@ public class ScanningInterfaceController : MonoBehaviour
         }
     }
 
+    void Update()
+    {
+        // Notification Label Management
+        if (GameObject.Find("Notification " + currentNotification).gameObject.GetComponent<Renderer>().material.color.a < 0)
+        {
+            for (int i = currentNotification; i < 6; i++)
+            {
+                if (GameObject.Find("Notification " + i).activeSelf)
+                {
+                    GameObject.Find("Notification " + i).transform.position = new Vector3(0, 0.5f, 0);
+                }
+            }
+
+            if (GameObject.Find("MaxNotification").gameObject.activeSelf)
+            {
+                GameObject.Find("MaxNotification").transform.position = new Vector3(0, 0.5f, 0);
+            }
+
+            currentNotification++;
+        }
+
+        if (currentNotification < 7)
+        {
+            Color color = GameObject.Find("Notification " + currentNotification).gameObject.GetComponent<Renderer>().material.color;
+            GameObject.Find("Notification " + currentNotification).gameObject.GetComponent<TextMeshPro>().alpha -= 0.3f;
+            color.a -= 0.3f;
+            GameObject.Find("Notification " + currentNotification).gameObject.GetComponent<Renderer>().material.color = color;
+        } else
+        {
+            Color color = GameObject.Find("MaxNotification").gameObject.GetComponent<Renderer>().material.color;
+            GameObject.Find("MaxNotification").gameObject.GetComponent<TextMeshPro>().alpha -= 0.3f;
+            color.a -= 0.3f;
+            GameObject.Find("MaxNotification").gameObject.GetComponent<Renderer>().material.color = color;
+        }
+    }
+
     public void updateIngredientList(string response)
     {
         if (response.Equals("error")) {
@@ -112,6 +150,17 @@ public class ScanningInterfaceController : MonoBehaviour
                     {
                         go.SetActive(true);
                         go.transform.Find("IngredientNameText").Find("IngredientName").gameObject.GetComponent<TextMeshPro>().text = label;
+                        
+                        GameObject notification = GameObject.Find("Notification " + lastNotification);
+                        notification.SetActive(true);
+                        notification.gameObject.GetComponent<TextMeshPro>().text = label + " detected";
+                        lastNotification++;
+                        if (limit == 6)
+                        {
+                            GameObject maxNotification = GameObject.Find("MaxNotification");
+                            maxNotification.SetActive(true);
+                        }
+
                         currentLabels.Add(label);
                         break;
                     }
