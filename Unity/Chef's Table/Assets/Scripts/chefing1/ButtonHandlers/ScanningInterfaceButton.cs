@@ -35,13 +35,12 @@ public class ScanningInterfaceButton : MonoBehaviour
     {
         pipeline = GameObject.Find("pipeline").GetComponent<DetectionPipeline>();
 
-        getRecipeButton = GameObject.Find("GetRecipesButton");
-        startScanningButton = GameObject.Find("StartScanningButton");
-        pauseButton = GameObject.Find("PauseButtonScript");
-        playButton = GameObject.Find("PlayButtonScript");
-        playButton.SetActive(false);
-        exitButton = GameObject.Find("ExitScript");
-        searchButton = GameObject.Find("KeyboardSearchScript");
+        getRecipeButton = GameObject.Find("GetRecipes");
+        startScanningButton = GameObject.Find("StartScanning");
+        pauseButton = GameObject.Find("Pause");
+        playButton = GameObject.Find("Play");
+        exitButton = GameObject.Find("Exit");
+        searchButton = GameObject.Find("KeyboardSearch");
 
         interfaceManager = GameObject.Find("InterfaceManager").GetComponent<InterfaceManager>();
         buttonClip = GameObject.Find("Button_Click").GetComponent<AudioSource>();
@@ -70,6 +69,9 @@ public class ScanningInterfaceButton : MonoBehaviour
         else if (name == "StartScanningButton")
         {
             AudioSource.PlayClipAtPoint(buttonClip.clip, startScanningButton.transform.position);
+            GameObject.Find("BeginScanScreen").SetActive(false);
+            interfaceManager.setActiveScanningActive(true);
+            /*
             controller.clearMemory();
             controller.handleResponseStatus();
             GameObject ing = GameObject.Find("Ingredients");
@@ -83,11 +85,11 @@ public class ScanningInterfaceButton : MonoBehaviour
                 {
                     ing.transform.GetChild(i).gameObject.SetActive(false);
                 }
-                
+
             }
-     
+
             pipeline.startPipeline(true);
-            
+            */
         }
         else if (name == "GetRecipesButton")
         {
@@ -104,6 +106,7 @@ public class ScanningInterfaceButton : MonoBehaviour
         }
         else if (name == "PauseButtonScript")
         {
+            Debug.Log("enter script");
             AudioSource.PlayClipAtPoint(buttonClip.clip, pauseButton.transform.position);
             playButton.SetActive(true);
             pauseButton.SetActive(false);
@@ -111,6 +114,7 @@ public class ScanningInterfaceButton : MonoBehaviour
         }
         else if (name == "PlayButtonScript")
         {
+            Debug.Log("enter script  play");
             AudioSource.PlayClipAtPoint(buttonClip.clip, playButton.transform.position);
             playButton.SetActive(false);
             pauseButton.SetActive(true);

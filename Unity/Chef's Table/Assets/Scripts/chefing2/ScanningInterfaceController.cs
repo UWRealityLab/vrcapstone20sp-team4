@@ -13,6 +13,7 @@ public class ScanningInterfaceController : MonoBehaviour
     private HashSet<string> currentLabels = new HashSet<string>();
     public GameObject statusPanel;
     public GameObject virtualKeyboardText;
+    public GameObject scanningActive;
     private bool networkErrorOccured = false;
     private bool isPaused = false;
     private int currentNotification = 0;
@@ -43,7 +44,12 @@ public class ScanningInterfaceController : MonoBehaviour
             currentLabels.Remove(textObject.GetComponent<TextMeshPro>().text);
             textObject.GetComponent<TextMeshPro>().text = "none";
             go.SetActive(false);
-
+        }
+        lastNotification--;
+        if (lastNotification == 6)
+        {
+            // remove max notification warning
+            lastNotification--;
         }
         handleRender();
     }
@@ -54,6 +60,8 @@ public class ScanningInterfaceController : MonoBehaviour
         {
             removeIngredient(i);
         }
+        currentNotification = 0;
+        lastNotification = 0;
         ignore.Clear();
         currentLabels.Clear();
     }
@@ -103,38 +111,38 @@ public class ScanningInterfaceController : MonoBehaviour
     void Update()
     {
         // Notification Label Management
-        if (GameObject.Find("Notification " + currentNotification).gameObject.GetComponent<Renderer>().material.color.a < 0)
+        if (scanningActive.activeSelf &&
+            scanningActive.transform.Find("Notification " + currentNotification).gameObject.activeSelf &&
+            scanningActive.transform.Find("Notification " + currentNotification).
+            transform.Find("BackPlate").GetComponent<MeshRenderer>().material.color.a < 0f)
         {
-            for (int i = currentNotification; i < 6; i++)
+            for (int i = currentNotification; i < 7; i++)
             {
-                if (GameObject.Find("Notification " + i).activeSelf)
+                if (scanningActive.transform.Find("Notification " + i).gameObject.activeSelf)
                 {
-                    GameObject.Find("Notification " + i).transform.position = new Vector3(0, 0.5f, 0);
+                    //Debug.Log("position untransformed " + i + " " + scanningActive.transform.Find("Notification " + i).transform.localPosition.y);
+                    scanningActive.transform.Find("Notification " + i).transform.localPosition = new Vector3(
+                        scanningActive.transform.Find("Notification " + i).transform.localPosition.x,
+                        scanningActive.transform.Find("Notification " + i).transform.localPosition.y + 0.015f,
+                        scanningActive.transform.Find("Notification " + i).transform.localPosition.z);
+                    //Debug.Log("position " + i + " " + scanningActive.transform.Find("Notification " + i).transform.localPosition.y);
                 }
             }
-
-            if (GameObject.Find("MaxNotification").gameObject.activeSelf)
-            {
-                GameObject.Find("MaxNotification").transform.position = new Vector3(0, 0.5f, 0);
-            }
-
+            scanningActive.transform.Find("Notification " + currentNotification).gameObject.SetActive(false);
             currentNotification++;
         }
 
-        if (currentNotification < 7)
+        if (scanningActive.transform.Find("Notification " + currentNotification).gameObject.activeSelf)
         {
-            Color color = GameObject.Find("Notification " + currentNotification).gameObject.GetComponent<Renderer>().material.color;
-            GameObject.Find("Notification " + currentNotification).gameObject.GetComponent<TextMeshPro>().alpha -= 0.3f;
-            color.a -= 0.3f;
-            GameObject.Find("Notification " + currentNotification).gameObject.GetComponent<Renderer>().material.color = color;
+            scanningActive.transform.Find("Notification " + currentNotification).transform.Find("IconAndText").Find("Text").gameObject.GetComponent<TextMeshPro>().alpha -= 0.03f;
+            Color backPlate = scanningActive.transform.Find("Notification " + currentNotification).transform.Find("BackPlate").gameObject.GetComponent<MeshRenderer>().material.color;
+            Color icon = scanningActive.transform.Find("Notification " + currentNotification).transform.Find("IconAndText").Find("Icon").gameObject.GetComponent<MeshRenderer>().material.color; 
+            icon.a -= 0.03f;
+            backPlate.a -= 0.03f;
+            scanningActive.transform.Find("Notification " + currentNotification).transform.Find("IconAndText").Find("Icon").gameObject.GetComponent<MeshRenderer>().material.color = icon;
+            scanningActive.transform.Find("Notification " + currentNotification).transform.Find("BackPlate").gameObject.GetComponent<MeshRenderer>().material.color = backPlate;
         }
-        else
-        {
-            Color color = GameObject.Find("MaxNotification").gameObject.GetComponent<Renderer>().material.color;
-            GameObject.Find("MaxNotification").gameObject.GetComponent<TextMeshPro>().alpha -= 0.3f;
-            color.a -= 0.3f;
-            GameObject.Find("MaxNotification").gameObject.GetComponent<Renderer>().material.color = color;
-        }
+
     }
 
     public void updateIngredientList(string response)
@@ -143,6 +151,9 @@ public class ScanningInterfaceController : MonoBehaviour
         {
             networkErrorOccured = true;
             handleResponseStatus();
+            return;
+        } else if (isPaused)
+        {
             return;
         }
         else
@@ -184,7 +195,7 @@ public class ScanningInterfaceController : MonoBehaviour
                         lastNotification++;
                         if (limit == 6)
                         {
-                            GameObject maxNotification = GameObject.Find("MaxNotification");
+                            GameObject maxNotification = GameObject.Find("Notification " + lastNotification);
                             maxNotification.SetActive(true);
                         }
 
