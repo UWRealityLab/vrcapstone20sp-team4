@@ -7,7 +7,6 @@ using System;
 
 public class KeyBoardButton : MonoBehaviour
 {
-    AudioSource buttonClip;
     InterfaceManager interfaceManager;
     private GameObject target;
     private GameObject targetPlaceholder;
