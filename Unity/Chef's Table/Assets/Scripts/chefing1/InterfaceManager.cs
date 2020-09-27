@@ -18,6 +18,8 @@ public class InterfaceManager : MonoBehaviour
     GameObject headLockCanvas;
     GameObject wrappingSimulation;
     GameObject scanningInterface;
+    GameObject scanningActive;
+    GameObject beginScan;
 
     GameObject scanningIngredientNamesDisplay;
     GameObject welcomeInterface;
@@ -27,10 +29,9 @@ public class InterfaceManager : MonoBehaviour
 
     private void Awake()
     {
-        
-
-        scanningIngredientNamesDisplay = GameObject.Find("Ingredients");
-
+        //scanningIngredientNamesDisplay = GameObject.Find("Ingredients");
+        scanningActive = GameObject.Find("ScanningActive");
+        beginScan = GameObject.Find("BeginScanScreen");
 
         welcomeInterface = GameObject.Find("WelcomeInterface");
         scanningInterface = GameObject.Find("ScanningContainer");
@@ -157,20 +158,43 @@ public class InterfaceManager : MonoBehaviour
         if (b)
         {
 ;
-            scanningIngredientNamesDisplay.SetActive(true);
+            /*scanningIngredientNamesDisplay.SetActive(true);
             for (int i = 0; i < scanningIngredientNamesDisplay.transform.childCount; i++)
             {
                 scanningIngredientNamesDisplay.transform.GetChild(i).gameObject.SetActive(false);
-            }
+            }*/
+            beginScan.SetActive(true);
+            scanningActive.SetActive(false);
             StartCoroutine(animator.FadeIn(scanningInterface));
         }
         else
         {
-
-            scanningIngredientNamesDisplay.SetActive(false);
+            beginScan.SetActive(false);
+            scanningActive.SetActive(false);
+            //scanningIngredientNamesDisplay.SetActive(false);
             StartCoroutine(animator.FadeOut(scanningInterface));
         }
     }
+
+    public void setActiveScanningActive(bool b)
+    {
+        if (b)
+        {
+            scanningActive.SetActive(true);
+            GameObject.Find("Play").SetActive(false);
+            for (int i = 0; i < 7; i++)
+            {
+                GameObject.Find("Notification " + i).SetActive(false);
+            }
+            StartCoroutine(animator.FadeIn(scanningActive));
+        }
+        else
+        {
+            scanningActive.SetActive(false);
+            StartCoroutine(animator.FadeOut(scanningActive));
+        }
+    }
+
     public bool isActiveHeadLockCanvas()
     {
         return headLockCanvas.activeSelf;
