@@ -45,14 +45,7 @@ public class NearInterfaceButton : MonoBehaviour
             if (name == "Start") return;
             if (name == "Exit")
             {
-                if (interfaceManager.isActiveSimulationInterface())
-                {
-                    interfaceManager.exitSimulation();
-                }
-                else
-                {
-                    interfaceManager.endTutorialGeneral();
-                }
+                interfaceManager.endTutorialGeneral();
                 return;
             }
             StartCoroutine(ShowFeedback());

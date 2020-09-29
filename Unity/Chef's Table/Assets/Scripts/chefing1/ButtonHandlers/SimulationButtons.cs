@@ -50,8 +50,6 @@ public class SimulationButtons : MonoBehaviour
         }
         if (name == "Exit")
         {
-            interfaceManager.setActiveCuttingSimulation(false);
-            interfaceManager.setActiveSimulationInterface(false);
             interfaceManager.setActiveOnboardingInterface(true);
         }
     }

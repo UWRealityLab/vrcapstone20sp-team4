@@ -11,13 +11,14 @@ public class KeyBoardButton : MonoBehaviour
     private GameObject target;
     private GameObject targetPlaceholder;
 
+    private ScanningInterfaceController controller;
+
     private void Awake()
     {
+        controller = GameObject.Find("ScanningContainer").GetComponent<ScanningInterfaceController>();
         GameObject.Find("Button_Click").GetComponent<AudioSource>();
         target = transform.parent.parent.Find("Input/Text").gameObject;
         targetPlaceholder = transform.parent.parent.Find("Input/Placeholder").gameObject;
-        Debug.Log(target == null);
-        Debug.Log(targetPlaceholder == null);
         interfaceManager = GameObject.Find("InterfaceManager").GetComponent<InterfaceManager>();
     }
 
@@ -41,7 +42,6 @@ public class KeyBoardButton : MonoBehaviour
     public void clicked()
     {
         //AudioSource.PlayClipAtPoint(buttonClip.clip, this.transform.position);
-        
         if (name == "backspace")
         {
             try {
@@ -60,7 +60,25 @@ public class KeyBoardButton : MonoBehaviour
                 targetPlaceholder.SetActive(true);
                 target.SetActive(false);
             }
-        } else
+        }
+        else if (name == "confirm") 
+        {
+            if (!target.activeSelf) {
+                controller.updateIngredientListByInput(new List<string>());
+            } else {
+                List<string> res = new List<string>();
+                string[] keyboardInputs = target.GetComponent<TextMeshPro>().text.Split(',');
+                foreach (string s in keyboardInputs)
+                {
+                    string ss = s.Trim();
+                    if (ss.Length > 0) res.Add(ss);
+                }
+                controller.updateIngredientListByInput(res);
+            }
+            // ewwwww, really bad style. Find a random instance of scanning interface button
+            GameObject.Find("ScanningContainer/KeepInFront/Exit/ExitScript").GetComponent<ScanningInterfaceButton>().keyboardSwitchFunc(false);
+        } 
+        else
         {
             targetPlaceholder.SetActive(false);
             target.SetActive(true);

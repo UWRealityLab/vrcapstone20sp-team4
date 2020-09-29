@@ -57,8 +57,6 @@ public class WelcomeInterface : MonoBehaviour
             AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("ScanMyIngredientsButton").transform.position);
             interfaceManager.setActiveNearInterface(false);
             interfaceManager.setActiveOnboardingInterface(false);
-            interfaceManager.setActiveCuttingSimulation(false);
-            interfaceManager.setActiveSimulationInterface(false);
             interfaceManager.setActiveWelcomeInterface(false);
             interfaceManager.setActiveScanningInterface(true);
 
@@ -67,8 +65,6 @@ public class WelcomeInterface : MonoBehaviour
         {
             AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("BrowseRecipeButton").transform.position);
             interfaceManager.setActiveNearInterface(false);
-            interfaceManager.setActiveCuttingSimulation(false);
-            interfaceManager.setActiveSimulationInterface(false);
             interfaceManager.setActiveScanningInterface(false);
             interfaceManager.setActiveWelcomeInterface(false);
             interfaceManager.setActiveOnboardingInterface(true);

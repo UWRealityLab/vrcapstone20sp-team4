@@ -46,8 +46,6 @@ public class RecipeConfirmButton : MonoBehaviour
             AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("CuttingButton").transform.position);
             interfaceManager.setActiveNearInterface(false);
             interfaceManager.setActiveOnboardingInterface(false);
-            interfaceManager.setActiveCuttingSimulation(true);
-            interfaceManager.setActiveSimulationInterface(true);
 
         } else if (name == "Back")
         {

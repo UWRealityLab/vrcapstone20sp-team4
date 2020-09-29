@@ -71,15 +71,11 @@ public class OnboardingRecipeButton : MonoBehaviour
             AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("Simulation").transform.position);
             interfaceManager.setActiveNearInterface(false);
             interfaceManager.setActiveOnboardingInterface(false);
-            interfaceManager.setActiveCuttingSimulation(true);
-            interfaceManager.setActiveSimulationInterface(true);
         } else if (name == "OnBoardingBackButtonScript")
         {
             AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("OnBoardingBackButtonScript").transform.position);
             interfaceManager.setActiveNearInterface(false);
             interfaceManager.setActiveOnboardingInterface(false);
-            interfaceManager.setActiveCuttingSimulation(false);
-            interfaceManager.setActiveSimulationInterface(false);
             interfaceManager.setActiveWelcomeInterface(true);
         }
     }

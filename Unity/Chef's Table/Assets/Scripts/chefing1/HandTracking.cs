@@ -38,7 +38,7 @@ namespace MagicLeap
         private MainScheduler2 mainScheduler;
         private GameObject movingPoint;
         private InterfaceManager interfaceManager;
-        public GameObject wrappingSimulation;
+
         private Material movingPointNormalMat;
         private Material movingPointHighlightMat;
 
@@ -217,17 +217,6 @@ namespace MagicLeap
                 _indexFinger.position = Hand.Index.KeyPoints[2].Position;
                 _indexFinger.gameObject.SetActive(Hand.IsVisible);
 
-                if (interfaceManager.isActiveCuttingSimulation())
-                {
-                    if (wrappingSimulation.activeSelf)
-                    {
-                        _thumb.position = Hand.Thumb.KeyPoints[2].Position;
-                        _thumb.gameObject.SetActive(Hand.IsVisible);
-                        _middle.position = Hand.Middle.KeyPoints[2].Position;
-                        _middle.gameObject.SetActive(Hand.IsVisible);
-                        return;
-                    }
-                }
                 _thumb.gameObject.SetActive(false);
                 _middle.gameObject.SetActive(false);
 

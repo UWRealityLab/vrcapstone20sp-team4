@@ -7,10 +7,8 @@ using System.Threading.Tasks;
 public class InterfaceManager : MonoBehaviour
 {
     GameObject nearInterface;
-    GameObject simulationInterface;
     GameObject onboardingInterface;
     GameObject onboarding;
-    GameObject cuttingSimulation;
     GameObject summary; // for completion page
     MainScheduler2 ms;
     UIFadingAnimation animator;
@@ -20,7 +18,7 @@ public class InterfaceManager : MonoBehaviour
     GameObject scanningInterface;
     GameObject scanningActive;
     GameObject beginScan;
-
+    GameObject VirtualHandKeyboard;
     GameObject scanningIngredientNamesDisplay;
     GameObject welcomeInterface;
     private bool startCountDown = false;
@@ -30,17 +28,13 @@ public class InterfaceManager : MonoBehaviour
     private void Awake()
     {
         //scanningIngredientNamesDisplay = GameObject.Find("Ingredients");
-        scanningActive = GameObject.Find("ScanningActive");
-        beginScan = GameObject.Find("BeginScanScreen");
-
+        scanningActive = GameObject.Find("KeepInFront");
+        beginScan = GameObject.Find("ScanScreen");
+        VirtualHandKeyboard = GameObject.Find("VirtualHandKeyboard");
         welcomeInterface = GameObject.Find("WelcomeInterface");
         scanningInterface = GameObject.Find("ScanningContainer");
-        
         nearInterface = GameObject.Find("NearInterface");
-        simulationInterface = GameObject.Find("SimulationInterface");
         onboarding = GameObject.Find("Onboarding");
-        wrappingSimulation = GameObject.Find("wrappingSimulation");
-        cuttingSimulation = GameObject.Find("CuttingSimulation");
         onboardingPreview = GameObject.Find("Onboarding").transform.Find("OnboardingPreview").gameObject;
         onboardingInterface = GameObject.Find("Onboarding").transform.Find("OnboardingInterface").gameObject;
         animator = GameObject.Find("FadingAnimation").GetComponent<UIFadingAnimation>();
@@ -65,17 +59,11 @@ public class InterfaceManager : MonoBehaviour
     {
         summary.SetActive(false);
         setActiveNearInterface(false);
-        setActiveSimulationInterface(false);
-        setActiveCuttingSimulation(false);
         setActiveScanningInterface(false);
         setActiveOnboardingInterface(false);
         setActiveWelcomeInterface(true);
     }
 
-    public void setActiveCuttingSimulation(bool b)
-    {
-        cuttingSimulation.SetActive(b);
-    }
 
     public async void setActiveNearInterface(bool b)
     {
@@ -95,19 +83,6 @@ public class InterfaceManager : MonoBehaviour
         completeRedirectTimer = 10;
     }
 
-    public void setActiveSimulationInterface(bool b)
-    {
-        
-        if (b)
-        {
-            StartCoroutine(animator.FadeIn(simulationInterface));
-        }
-        else
-        {
-            StartCoroutine(animator.FadeOut(simulationInterface));
-        }
-        //simulationInterface.SetActive(b);
-    }
 
     public void setActiveWelcomeInterface(bool b)
     {
@@ -157,57 +132,26 @@ public class InterfaceManager : MonoBehaviour
     {
         if (b)
         {
-;
-            /*scanningIngredientNamesDisplay.SetActive(true);
-            for (int i = 0; i < scanningIngredientNamesDisplay.transform.childCount; i++)
-            {
-                scanningIngredientNamesDisplay.transform.GetChild(i).gameObject.SetActive(false);
-            }*/
+            scanningInterface.SetActive(true);
             beginScan.SetActive(true);
-            scanningActive.SetActive(false);
+            beginScan.transform.Find("PauseScanning").gameObject.SetActive(false);
+            scanningActive.SetActive(true);
+            VirtualHandKeyboard.SetActive(false);
             StartCoroutine(animator.FadeIn(scanningInterface));
         }
         else
         {
             beginScan.SetActive(false);
             scanningActive.SetActive(false);
-            //scanningIngredientNamesDisplay.SetActive(false);
+            VirtualHandKeyboard.SetActive(false);
+            scanningInterface.SetActive(false);
             StartCoroutine(animator.FadeOut(scanningInterface));
-        }
-    }
-
-    public void setActiveScanningActive(bool b)
-    {
-        if (b)
-        {
-            scanningActive.SetActive(true);
-            GameObject.Find("Play").SetActive(false);
-            for (int i = 0; i < 7; i++)
-            {
-                GameObject.Find("Notification " + i).SetActive(false);
-            }
-            StartCoroutine(animator.FadeIn(scanningActive));
-        }
-        else
-        {
-            scanningActive.SetActive(false);
-            StartCoroutine(animator.FadeOut(scanningActive));
         }
     }
 
     public bool isActiveHeadLockCanvas()
     {
         return headLockCanvas.activeSelf;
-    }
-
-    public bool isActiveSimulationInterface()
-    {
-        return simulationInterface.activeSelf;
-    }
-
-    public bool isActiveCuttingSimulation()
-    {
-        return cuttingSimulation.activeSelf;
     }
 
     public bool isActiveOnboardingInterface()
@@ -234,16 +178,6 @@ public class InterfaceManager : MonoBehaviour
         return welcomeInterface.activeSelf;
     }
 
-    public void exitSimulation()
-    {
-        // to avoid bug, set everything
-        setActiveCuttingSimulation(false);
-        setActiveOnboardingInterface(true);
-        setActiveSimulationInterface(false);
-        setActiveNearInterface(false);
-        setActiveScanningInterface(false);
-        setActiveWelcomeInterface(false);
-    }
 
     public void endTutorialGeneral()
     {
@@ -268,9 +202,7 @@ public class InterfaceManager : MonoBehaviour
 
     void exitTutorial() // bring up a confirm message
     {
-        setActiveCuttingSimulation(false);
         setActiveOnboardingInterface(true);
-        setActiveSimulationInterface(false);
         setActiveNearInterface(false);
         setActiveScanningInterface(false);
         setActiveWelcomeInterface(false);

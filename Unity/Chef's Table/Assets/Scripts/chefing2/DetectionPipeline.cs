@@ -152,11 +152,11 @@ public class DetectionPipeline : MonoBehaviour
             {
                 byte[] responseArray = await myWebClient.UploadDataTaskAsync(url_suggest, rawImage);
                 currResponse = Encoding.UTF8.GetString(responseArray);
-                scanningInterfaceContainer.GetComponent<ScanningInterfaceController>().updateIngredientList(currResponse);
+                scanningInterfaceContainer.GetComponent<ScanningInterfaceController>().updateIngredientListByScanning(currResponse);
             } catch (Exception e)
             {
                 Debug.Log(e);
-                scanningInterfaceContainer.GetComponent<ScanningInterfaceController>().updateIngredientList("error");
+                scanningInterfaceContainer.GetComponent<ScanningInterfaceController>().updateIngredientListByScanning("error");
             }
             
         }
