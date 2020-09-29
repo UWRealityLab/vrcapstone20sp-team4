@@ -14,12 +14,11 @@ public class AIManager : MonoBehaviour
     private List<AI> AIs;
     public float speed = 0.02f;
     public float offsetZ = 1f;
-    public GameObject testTarget;
+
 
     void Start()
     {
         AIs = new List<AI>();
-        StartCoroutine(addNewAI(testTarget.transform.position, 2));
     }
 
     // Update is called once per frame
@@ -35,17 +34,17 @@ public class AIManager : MonoBehaviour
                 {
                     A.getGo().SetActive(true);
                 }
-                //if (Vector3.Distance(A.getTarget(), A.getGo().transform.position) < 0.1f)
-                //{
-                //    toRemove.Add(A);
-                //}
-                //else
-                //{
-                //    transformAI(A);
-                //}
+                if (Vector3.Distance(A.getTarget(), A.getGo().transform.position) < 0.1f)
+                {
+                   toRemove.Add(A);
+                }
+                else
+                {
+                   transformAI(A);
+                }
                 transformAI(A);
             }
-            // completeAndDelete(toRemove);
+            completeAndDelete(toRemove);
         } else
         {
             foreach (AI A in AIs)
@@ -79,12 +78,10 @@ public class AIManager : MonoBehaviour
         Vector3 initPosition = mainCam.transform.forward + mainCam.transform.position; // 1 meter in front of the camera
         GameObject instance = Instantiate(AIPrefab, initPosition, Quaternion.identity);
         AIs.Add(new AI(targetPosition, instance));
-        AIs[0].setTarget(testTarget.transform.position);
     }
 
     private void transformAI(AI A)
     {
-        A.setTarget(testTarget.transform.position);
         GameObject go = A.getGo();
         Vector3 velocity = currentVelocity(A);
         go.transform.Translate(velocity * speed, Space.World);
