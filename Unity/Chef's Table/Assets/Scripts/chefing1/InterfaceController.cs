@@ -24,21 +24,43 @@ public class InterfaceController : MonoBehaviour
     {
         if (allTutorials.ContainsKey(name)) {
             //preview.SetActive(true);
-            TextMeshPro usedText = recipePreview.transform.Find("UsedIngredientsCanvas").Find("Names").GetComponent<TextMeshPro>();
             string temp = "";
+            TextMeshPro ingreText = recipePreview.transform.Find("UsedIngredientsCanvas").Find("Names").GetComponent<TextMeshPro>();
             List<string> usedList = allTutorials[name]["used"];
             foreach (string ingredient in usedList) {
                 temp += ingredient + "\r\n";
             }
-            usedText.text = temp;
-
-            temp = "";
-            TextMeshPro missedText = recipePreview.transform.Find("MissedIngredientsCanvas").Find("Names").GetComponent<TextMeshPro>();
             List<string> missedList = allTutorials[name]["missed"];
             foreach (string ingredient in missedList) {
                 temp += ingredient + "\r\n";
             }
-            missedText.text = temp;
+            ingreText.text = temp;
+
+            /*
+            string temp = "";
+            TextMeshPro usedText = recipePreview.transform.Find("UsedIngredientsCanvas").Find("Names").GetComponent<TextMeshPro>();
+            List<string> usedList = allTutorials[name]["used"];
+            if (usedList.Count == 0) {
+                usedText.text = "-\r\n";
+            } else {
+                foreach (string ingredient in usedList) {
+                    temp += ingredient + "\r\n";
+                }
+                usedText.text = temp;
+            }
+
+            temp = "";
+            TextMeshPro missedText = recipePreview.transform.Find("MissedIngredientsCanvas").Find("Names").GetComponent<TextMeshPro>();
+            List<string> missedList = allTutorials[name]["missed"];
+            if (missedList.Count == 0) {
+                missedText.text = "-\r\n";
+            } else {
+                foreach (string ingredient in missedList) {
+                    temp += ingredient + "\r\n";
+                }
+                missedText.text = temp;
+            }
+            */
 
             TextMeshPro recipeName = recipePreview.transform.Find("Canvas").Find("RecipeName").GetComponent<TextMeshPro>();
             recipeName.text = name;

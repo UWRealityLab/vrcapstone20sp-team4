@@ -74,7 +74,6 @@ public class DetectionPipeline : MonoBehaviour
     {
         this.makingSuggestion = suggestionMode;
         this.STARTCAPTURE = true;
-        Debug.Log("pipeline started");
     }
 
     public void stopPipeline()

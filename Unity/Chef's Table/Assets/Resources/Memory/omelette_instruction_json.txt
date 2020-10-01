@@ -1,0 +1,168 @@
+{
+   "name":"Omelette in a Bowl",
+   "steps":[
+      {
+         "action":"cutting",
+         "number":1,
+         "step":"Chop 1/2 of a red bell pepper, dice 2 slices of ham, and chop the spinach.",
+         "ingredients":[
+            {
+               "name":"red bell pepper",
+               "measurement":"half"
+            },
+            {
+               "name":"ham",
+               "measurement":"two slices"
+            },
+            {
+               "name":"spinach",
+               "measurement":""
+            }
+         ],
+         "equipment":[
+            {
+               "name":"knife"
+            }
+         ]
+      },
+      {
+         "action":"coating",
+         "number":2,
+         "step":"Coat the inside of a large, microwave-safe bowl with olive oil.",
+         "ingredients":[
+            {
+               "name":"cooking oil",
+               "measurement":""
+            }
+         ],
+         "equipment":[
+            {
+               "name":"bowl"
+            }
+         ]
+      },
+      {
+         "action":"cracking",
+         "number":3,
+         "step":"Crack 2 eggs into the bowl, add 1 tablespoon of milk, and beat together with a fork.",
+         "ingredients":[
+            {
+               "name":"egg",
+               "measurement":"two"
+            },
+            {
+               "name":"milk",
+               "measurement":"one tablespoon"
+            }
+         ],
+         "equipment":[
+            {
+               "name":"bowl"
+            },
+            {
+               "name":"spoon"
+            },
+            {
+               "name":"fork"
+            }
+         ]
+      },
+      {
+         "action":"",
+         "number":4,
+         "step":"Add grated cheese, chopped red bell pepper, ham, and spinach to the bowl.",
+         "ingredients":[
+            {
+               "name":"red bell pepper",
+               "measurement":"half"
+            },
+            {
+               "name":"cheese",
+               "measurement":""
+            },
+            {
+               "name":"ham",
+               "measurement":"two slices"
+            },
+            {
+               "name":"spinach",
+               "measurement":""
+            }
+         ],
+         "equipment":[
+            {
+               "name":"bowl"
+            }
+         ]
+      },
+      {
+         "action":"mixing",
+         "number":5,
+         "step":"Add a sprinkle of salt and pepper. Stir with a fork until mixed well.",
+         "ingredients":[
+            {
+               "name":"salt and pepper",
+               "measurement":"a sprinkle"
+            }
+         ],
+         "equipment":[
+            {
+               "name":"fork"
+            }
+         ]
+      },
+      {
+         "action":"microwaving",
+         "number":6,
+         "step":"Put the bowl into the microwave for 1 minute.",
+         "ingredients":[
+            
+         ],
+         "equipment":[
+            {
+               "name":"microwave oven"
+            }
+         ],
+         "length":{
+            "number":1,
+            "unit":"minute(s)"
+         }
+      },
+      {
+         "action":"microwaving",
+         "number":7,
+         "step":"Take the bowl out. Use a fork to stir it and then put it back into the microwave for 1 more minute.",
+         "ingredients":[
+            
+         ],
+         "equipment":[
+            {
+               "name":"microwave oven"
+            },
+            {
+               "name":"bowl"
+            },
+            {
+               "name":"fork"
+            }
+         ],
+         "length":{
+            "number":1,
+            "unit":"minute(s)"
+         }
+      },
+      {
+         "action":"",
+         "number":8,
+         "step":"Take the bowl out. Omelette is complete.",
+         "ingredients":[
+            
+         ],
+         "equipment":[
+            {
+               "name":"microwave oven"
+            }
+         ]
+      }
+   ]
+}

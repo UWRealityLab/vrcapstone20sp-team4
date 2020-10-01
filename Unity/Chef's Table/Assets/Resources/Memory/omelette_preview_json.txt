@@ -1,0 +1,48 @@
+{
+   "id":1078976,
+   "title":"Omelette in a Bowl",
+   "image":"https://spoonacular.com/recipeImages/1078976-556x370.jpg",
+   "imageType":"jpg",
+   "usedIngredientCount":8,
+   "missedIngredientCount":0,
+   "missedIngredients":[
+   ],
+   "usedIngredients":[
+      {
+         "name":"red bell pepper",
+         "original":"half of a red bell pepper"
+      },
+      {
+         "name":"ham",
+         "original":"two slices of ham"
+      },
+      {
+         "name":"spinach",
+         "original":"spinach"
+      },
+      {
+         "name":"cooking oil",
+         "original":"cooking oil"
+      },
+      {
+         "name":"egg",
+         "original":"two eggs"
+      },
+      {
+         "name":"milk",
+         "original":"one tablespoon of milk"
+      },
+      {
+         "name":"cheese",
+         "original":"grated cheese"
+      },
+      {
+         "name":"salt and pepper",
+         "original":"a sprinkle of salt and pepper"
+      }
+   ],
+   "unusedIngredients":[
+      
+   ],
+   "likes":1
+}

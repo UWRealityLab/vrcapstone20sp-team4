@@ -12,7 +12,7 @@ public class RecipeMemory : MonoBehaviour
     private GameObject onboardingInterface;
     private GameObject recipePreview;
 
-    private string default_recipe_name = "Healthy Breakfast Avocado Toast and Egg";
+    private string default_recipe_name = "Omelette in a Bowl";
 
     public List<Instruction> steps = null;
     private Dictionary<string, List<string>> recipeDict = null;
@@ -40,7 +40,7 @@ public class RecipeMemory : MonoBehaviour
     private void loadPreview()
     {
         // fetch preview json
-        string path = "Memory/avocado_toast_preview_json";
+        string path = "Memory/omelette_preview_json";
         TextAsset file = Resources.Load<TextAsset>(path);
         string content = file.text;
         PreviewRecipe recipe = JsonUtility.FromJson<PreviewRecipe>(content);
@@ -82,19 +82,27 @@ public class RecipeMemory : MonoBehaviour
         string temp = "";
         TextMeshPro usedText = recipePreview.transform.Find("UsedIngredientsCanvas").Find("Names").GetComponent<TextMeshPro>();
         List<string> usedList = recipeDict["used"];
-        foreach (string ingredient in usedList) {
-            temp += ingredient + "\r\n";
+        if (usedList.Count == 0) {
+            usedText.text = "-\r\n";
+        } else {
+            foreach (string ingredient in usedList) {
+                temp += ingredient + "\r\n";
+            }
+            usedText.text = temp;
         }
-        usedText.text = temp;
 
         // display missed ingredients list
         temp = "";
         TextMeshPro missedText = recipePreview.transform.Find("MissedIngredientsCanvas").Find("Names").GetComponent<TextMeshPro>();
         List<string> missedList = recipeDict["missed"];
-        foreach (string ingredient in missedList) {
-            temp += ingredient + "\r\n";
+        if (missedList.Count == 0) {
+            missedText.text = "-\r\n";
+        } else {
+            foreach (string ingredient in missedList) {
+                temp += ingredient + "\r\n";
+            }
+            missedText.text = temp;
         }
-        missedText.text = temp;
 
         // display recipe name in preview
         TextMeshPro recipeName = recipePreview.transform.Find("Canvas").Find("RecipeName").GetComponent<TextMeshPro>();
@@ -118,7 +126,7 @@ public class RecipeMemory : MonoBehaviour
 
     private void loadInstructions()
     {
-        string path = "Memory/avocado_toast_instruction_json";
+        string path = "Memory/omelette_instruction_json";
         TextAsset file = Resources.Load<TextAsset>(path);
         string content = file.text;
         InstructionList info = JsonUtility.FromJson<InstructionList>(content);

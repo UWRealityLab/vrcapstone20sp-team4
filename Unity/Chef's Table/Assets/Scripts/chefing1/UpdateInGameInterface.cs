@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.Video;
+using System;
 
 public class UpdateInGameInterface : MonoBehaviour
 {
@@ -12,6 +13,7 @@ public class UpdateInGameInterface : MonoBehaviour
     //private TextMeshProUGUI instructionTextFloatingInterf;
     private TextMeshPro instructionTextNearMenu;
     private TextMeshPro detailTextNearMenu;
+    private TextMeshPro stepNumberNearMenu;
     private GameObject nearInterface;
     //private TextMeshProUGUI clockFloatingInterf;
     private TextMeshPro clockNearMenu;
@@ -31,6 +33,8 @@ public class UpdateInGameInterface : MonoBehaviour
     private Dictionary<string, VideoClip> actionsCues;
     // private float criticalEquipmentUpdateTimer = 0;
 
+    public GameObject ParticleSystem;
+
     // Start is called before the first frsame update
     void Awake()
     {
@@ -39,12 +43,14 @@ public class UpdateInGameInterface : MonoBehaviour
         nearInterface = GameObject.Find("NearInterface");
         instructionTextNearMenu = GameObject.Find("NearInterface/InstructionCanvas/Instruction").GetComponent<TextMeshPro>();
         detailTextNearMenu = GameObject.Find("NearInterface/InstructionCanvas/Detail").GetComponent<TextMeshPro>();
+        stepNumberNearMenu = GameObject.Find("NearInterface/InstructionCanvas/StepNumber").GetComponent<TextMeshPro>();
         clockNearMenu = GameObject.Find("NearInterface/InterfaceTimer/ClockText").GetComponent<TextMeshPro>();
         
-        exitIcon = GameObject.Find("NearInterface/ExitOrComplete/IconAndText/Icon");
+        exitIcon = GameObject.Find("NearInterface/ExitOrComplete/IconAndText/Icon"); 
+
         exitMat = Resources.Load("Mat/ExitButton", typeof(Material)) as Material;
         completeMat = Resources.Load("Mat/CompleteButton", typeof(Material)) as Material;
-        step = -1;
+        step = 0;
         lockIcons = new List<GameObject>();
         GameObject lockIcon;
         lockIcon = GameObject.Find("HeadLockCanvas/SimulationInterface/Lock/IconAndText/Icon");
@@ -73,14 +79,15 @@ public class UpdateInGameInterface : MonoBehaviour
 
     private void uploadVideos()
     {
-        actionsCues["cut"] = Resources.Load<VideoClip>("actions/cutting");
-        actionsCues["crack"] = Resources.Load<VideoClip>("actions/egg_cracking");
+        actionsCues["cutting"] = Resources.Load<VideoClip>("actions/cutting");
+        actionsCues["cracking"] = Resources.Load<VideoClip>("actions/egg_cracking");
+        actionsCues["mixing"] = Resources.Load<VideoClip>("actions/mixing");
+        /*
         actionsCues["heat"] = Resources.Load<VideoClip>("actions/heating");
-        // actionsCues["melt"] = Resources.Load<VideoClip>("actions/melting");
-        actionsCues["mix"] = Resources.Load<VideoClip>("actions/mixing");
         actionsCues["slice"] = Resources.Load<VideoClip>("actions/slicing");
         actionsCues["spread"] = Resources.Load<VideoClip>("actions/spread");
         actionsCues["sprinkle"] = Resources.Load<VideoClip>("actions/sprinkle");
+        */
     }
 
     // Update is called once per frame
@@ -92,16 +99,27 @@ public class UpdateInGameInterface : MonoBehaviour
         }
         if (nearInterface.activeSelf)
         {
+            int currentStepNum = Int32.Parse(info["StepNum"][0]);
+
+            // display step number
+            string stepNumberText = "Step #" + currentStepNum;
+            stepNumberNearMenu.text = stepNumberText;
+
             // display instruction text
             string instructionText = info["description"][0];
 
             string detailText = "Ingredients:\n";
             List<string> ingredients = info["ingredients"];
+            List<string> measurement = info["measurement"];
             if (ingredients.Count == 0) {
                 detailText += "-\n";
             } else {
                 for (int i = 0; i < ingredients.Count; i++) {
-                    detailText += ingredients[i] + "\n";
+                    detailText += ingredients[i];
+                    if (measurement[i].Length != 0) {
+                        detailText += " - " + measurement[i];
+                    }
+                    detailText += "\n";
                 }
             }
             detailText += "\n";
@@ -119,27 +137,33 @@ public class UpdateInGameInterface : MonoBehaviour
             instructionTextNearMenu.text = instructionText;
             detailTextNearMenu.text = detailText;
 
-            // set time
-            clockNearMenu.text = info["timer"][0];
-
             // find location of the main equipment
             Vector3 timerLocation;
             if (equipment.Count > 0) {
-                // string utensil = equipment[0];
-                string utensil = "bowl";
+                string utensil = equipment[0];
                 timerLocation = appState.GetLocation(utensil);
                 if (timerLocation != Vector3.zero) {
-                    timerLocation += new Vector3(timerLocation.x, timerLocation.y + 0.7f, timerLocation.z);
+                    ParticleSystem.transform.position = timerLocation;
+                    ParticleSystem.SetActive(true);
+                    timerLocation = new Vector3(timerLocation.x, timerLocation.y + 0.2f, timerLocation.z);
                     videoPlayer.transform.position = timerLocation;
+                    // step = currentStepNum;
+                } else {
+                    ParticleSystem.SetActive(false);
                 }
             }
 
             // display video
             string action = info["action"][0];
-            // set the video clip and play
-            VideoClip video = actionsCues[action];
-            videoPlayer.clip = video;
-            videoPlayer.Play();
+            if (actionsCues.ContainsKey(action)) {
+                VideoClip video = actionsCues[action];
+                videoPlayer.clip = video;
+                videoPlayer.gameObject.SetActive(true);
+                videoPlayer.Play();
+            } else {
+                videoPlayer.gameObject.SetActive(false);
+            }
+            
             /*
             Renderer temp = ImagePlane.GetComponent<Renderer>();
             temp.material.mainTexture = mainScheduler.getCurrentStepImage();
@@ -156,8 +180,11 @@ public class UpdateInGameInterface : MonoBehaviour
                 exitIcon.GetComponent<Renderer>().material = exitMat;
             }
 
+            // set time
+            clockNearMenu.text = info["timer"][0];
+
             // update the spatial timer:
-           
+
             //if (timerLocation != Vector3.zero)
             //{
             //    Debug.Log("spaitail timer activated");

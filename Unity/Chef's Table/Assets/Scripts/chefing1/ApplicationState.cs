@@ -31,7 +31,7 @@ public class ApplicationState : MonoBehaviour
     public void setLocation(string name, Vector3 position)
     {
         name = name.ToLower();
-        Debug.Log("set location for: " + name);
+        // Debug.Log("set location for: " + name);
         if (singletonEquipments.Contains(name))
         {
             singleEquipMap[name] = position;
@@ -42,7 +42,7 @@ public class ApplicationState : MonoBehaviour
         {
             ingredientsMap[name] = position;
         }
-        Debug.Log("done setting location for: " + name + " : " + position.x + " " + position.y + " " + position.z);
+        // Debug.Log("done setting location for: " + name + " : " + position.x + " " + position.y + " " + position.z);
     }
 
     public Vector3 GetLocation(string name)

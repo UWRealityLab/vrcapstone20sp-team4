@@ -128,6 +128,13 @@ public class MainScheduler2 : MonoBehaviour
         }
         dic.Add("ingredients", ingredients);
 
+        // add ingredients measurement
+        List<string> measurement = new List<string>();
+        foreach (Ingredients ingre in cur.ingredients) {
+            measurement.Add(ingre.measurement);
+        }
+        dic.Add("measurement", measurement);
+
         // add equipment
         List<string> equipment = new List<string>();
         foreach (Equipment equip in cur.equipment) {
@@ -188,9 +195,9 @@ public class MainScheduler2 : MonoBehaviour
     public void startTutorial(string name)
     {
         
-        if (!name.ToLower().Contains("avocado"))
+        if (!name.ToLower().Contains("omelette"))
         {
-            Debug.Log("not avocado");
+            Debug.Log("not omelette");
             if (!allTutorials.ContainsKey(name))
             {
                 Debug.LogError("invalid recipe entry");
@@ -201,13 +208,13 @@ public class MainScheduler2 : MonoBehaviour
             Invoke("delayStartTutorial", 3f);
         } else
         {
-            Debug.Log("avocado");
-            startAvocadoTutorial();
+            Debug.Log("omelette");
+            startOmeletteTutorial();
         }
 
     }
 
-    public void startAvocadoTutorial()
+    public void startOmeletteTutorial()
     {
         pipeline.startPipeline(false);
         try {
@@ -228,7 +235,6 @@ public class MainScheduler2 : MonoBehaviour
     {
         try {
             tutorial = getRecipe.RecipeSteps();
-            GetImagesForEachStep();
             tutorialStarts = true;
             resetTimerRecord();
         }
@@ -245,19 +251,6 @@ public class MainScheduler2 : MonoBehaviour
     public Dictionary<string, Dictionary<string, List<string>>> GetAllTutorialPreview()
     { 
         return allTutorials;
-    }
-
-    // construct a list of images of ingredient for the current step(stepIndex)
-    public void GetImagesForEachStep()
-    {
-        // for previous test purposes only
-        List<Ingredients> li = tutorial[1].ingredients;
-        for (int i = 0; i < li.Count; i++) {
-            // https://spoonacular.com/cdn/ingredients_100x100/ranch-dressing.jpg
-            string pathToImage = "https://spoonacular.com/cdn/ingredients_100x100/" + li[i].image;
-            Debug.Log(pathToImage);
-            StartCoroutine(GetTexture(pathToImage));
-        }
     }
 
     public Texture getCurrentStepImage()

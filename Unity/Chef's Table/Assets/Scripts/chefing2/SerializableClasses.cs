@@ -48,17 +48,14 @@ public class PreviewRecipeList
 [Serializable]
 public class Ingredients
 {
-	public int id;
 	public string name;
-	public string image;
+	public string measurement;
 }
 
 [Serializable]
 public class Equipment
 {
-	public int id;
 	public string name;
-	public string image;
 }
 
 [Serializable]
