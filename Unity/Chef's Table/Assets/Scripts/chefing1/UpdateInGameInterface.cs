@@ -93,6 +93,9 @@ public class UpdateInGameInterface : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!GameObject.Find("Scheduler").activeSelf || !mainScheduler.tutorialStarts) {
+            return;
+        }
         Dictionary<string, List<string>> info = mainScheduler.getCurrentStepInfo();
         if (info == null) {
             return;

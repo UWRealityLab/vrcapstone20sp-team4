@@ -13,9 +13,9 @@ public class NearInterfaceButton : MonoBehaviour
     AudioSource timerClip;
     GameObject text;
     GameObject icon;
+    GameObject timerIcon;
     NIThresholdControl NIControl;
     InterfaceManager interfaceManager;
-    changeSimulation changeSimulationScript;
     private bool timerPaused = true;
     private GameObject playButton;
     private Material startButton;
@@ -25,11 +25,11 @@ public class NearInterfaceButton : MonoBehaviour
     {
         scheduler = GameObject.Find("Scheduler").GetComponent<MainScheduler2>();
         interfaceManager = GameObject.Find("InterfaceManager").GetComponent<InterfaceManager>();
-        changeSimulationScript = GameObject.Find("CuttingSimulation").GetComponent<changeSimulation>();
         buttonClip = GameObject.Find("Button_Click").GetComponent<AudioSource>();
         timerClip = GameObject.Find("Timer").GetComponent<AudioSource>();
         GameObject iconText = transform.parent.transform.Find("IconAndText").gameObject;
         icon = iconText.transform.Find("Icon").gameObject;
+        timerIcon = GameObject.Find("InterfaceTimer/PlayButton/IconAndText/Icon");
         NIControl = GameObject.Find("HeadLockCanvas").GetComponent<NIThresholdControl>();
         playButton = GameObject.Find("PlayButton").transform.Find("Start").gameObject;
         startButton = Resources.Load("Mat/ButtonStartMat", typeof(Material)) as Material;
@@ -45,14 +45,7 @@ public class NearInterfaceButton : MonoBehaviour
             if (name == "Start") return;
             if (name == "Exit")
             {
-                if (interfaceManager.isActiveSimulationInterface())
-                {
-                    interfaceManager.exitSimulation();
-                }
-                else
-                {
-                    interfaceManager.endTutorialGeneral();
-                }
+                interfaceManager.endTutorialGeneral();
                 return;
             }
             StartCoroutine(ShowFeedback());
@@ -81,12 +74,14 @@ public class NearInterfaceButton : MonoBehaviour
             // Debug.Log("Next Button, " + name);
             scheduler.toNextStep();
             AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("Next").transform.position);
+            timerIcon.GetComponent<Renderer>().material = startButton;
         }
         else if (name == "Back")
         {
-            //Debug.Log("Back Button, " + name);
+            // Debug.Log("Back Button, " + name);
             scheduler.toPreviousStep();
             AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("Back").transform.position);
+            timerIcon.GetComponent<Renderer>().material = startButton;
         }
         else if (name == "Start")
         {
@@ -137,18 +132,18 @@ public class NearInterfaceButton : MonoBehaviour
         {
             Debug.Log("Next Button, " + name);
             AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("SimuNext").transform.position);
-            changeSimulationScript.changeObject();
+            // changeSimulationScript.changeObject();
         }
         else if (name == "SimuBack")
         {
             //Debug.Log("Back Button, " + name);
-            changeSimulationScript.previousObject();
+            // changeSimulationScript.previousObject();
             AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("SimuBack").transform.position);
         }
         else if (name == "SimuReset")
         {
             //Debug.Log("Reset Button, " + name);
-            changeSimulationScript.resetObject();
+            //changeSimulationScript.resetObject();
             AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("SimuReset").transform.position);
         }
         else if (name == "Exit")
@@ -158,12 +153,12 @@ public class NearInterfaceButton : MonoBehaviour
         else if (name == "SwitchSimulationMode")
         {
             AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("SwitchSimulationMode").transform.position);
-            changeSimulationScript.resetMode();
+            //changeSimulationScript.resetMode();
         }
         else if (name == "AddIngredients")
         {
             AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("AddIngredients").transform.position);
-            changeSimulationScript.addIngredients();
+            //changeSimulationScript.addIngredients();
         }
         else
         {

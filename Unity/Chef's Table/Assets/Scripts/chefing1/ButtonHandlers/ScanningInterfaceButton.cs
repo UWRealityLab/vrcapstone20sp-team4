@@ -1,15 +1,5 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
-using System.Threading;
-using MagicLeap.Core.StarterKit;
-using System.Net;
-using System.Text;
-using UnityEngine.XR.MagicLeap;
-using UnityEngine.Events;
 using System.Linq;
 
 
@@ -19,7 +9,13 @@ public class ScanningInterfaceButton : MonoBehaviour
     InterfaceManager interfaceManager;
     DetectionPipeline pipeline;
     GameObject getRecipeButton;
-    GameObject startScanningButton;
+
+    GameObject ScanScreen;
+    GameObject startScanning;
+    GameObject pauseScanning;
+    GameObject exitButton;
+    GameObject keyBoardSwitch;
+    GameObject VirtualKeyBoard;
 
     private string ingredientListString = "";
 
@@ -30,10 +26,13 @@ public class ScanningInterfaceButton : MonoBehaviour
     void Awake()
     {
         pipeline = GameObject.Find("pipeline").GetComponent<DetectionPipeline>();
-
-        getRecipeButton = GameObject.Find("GetRecipesButton");
-        startScanningButton = GameObject.Find("StartScanningButton");
-
+        ScanScreen = GameObject.Find("ScanScreen");
+        getRecipeButton = GameObject.Find("GetRecipes");
+        startScanning = GameObject.Find("StartScanning");
+        pauseScanning = GameObject.Find("PauseScanning");
+        exitButton = GameObject.Find("Exit");
+        keyBoardSwitch = GameObject.Find("KeyboardSwitch");
+        VirtualKeyBoard = GameObject.Find("VirtualHandKeyboard");
         interfaceManager = GameObject.Find("InterfaceManager").GetComponent<InterfaceManager>();
         buttonClip = GameObject.Find("Button_Click").GetComponent<AudioSource>();
         recipeApi = GameObject.Find("RecipeAPI").GetComponent<GetInstructions>();
@@ -54,31 +53,23 @@ public class ScanningInterfaceButton : MonoBehaviour
         if (name == "TrashButtonScript")
         {
             string whichIngredient = this.transform.parent.parent.gameObject.name;
-            int index = whichIngredient.Last() - '0' - 1;;
+            Debug.Log(whichIngredient);
+            int index = whichIngredient.Last() - '0';
             controller.removeIngredient(index);
             AudioSource.PlayClipAtPoint(buttonClip.clip, this.transform.parent.position);
         }
         else if (name == "StartScanningButton")
         {
-            AudioSource.PlayClipAtPoint(buttonClip.clip, startScanningButton.transform.position);
-            controller.clearMemory();
-            controller.handleResponseStatus();
-            GameObject ing = GameObject.Find("Ingredients");
-            ing.SetActive(true);
-            for (int i = 0; i < ing.transform.childCount; i++)
-            {
-                if (ing.transform.GetChild(i).gameObject.name == "title" || ing.transform.GetChild(i).gameObject.name == "Status")
-                {
-                    ing.transform.GetChild(i).gameObject.SetActive(true);
-                } else
-                {
-                    ing.transform.GetChild(i).gameObject.SetActive(false);
-                }
-                
-            }
-     
+            AudioSource.PlayClipAtPoint(buttonClip.clip, startScanning.transform.position);
+            startScanning.SetActive(false);
+            pauseScanning.SetActive(true);
             pipeline.startPipeline(true);
-            
+        }
+        else if (name == "PauseScanningButton") {
+            AudioSource.PlayClipAtPoint(buttonClip.clip, pauseScanning.transform.position);
+            startScanning.SetActive(true);
+            pauseScanning.SetActive(false);
+            pipeline.startPipeline(false);
         }
         else if (name == "GetRecipesButton")
         {
@@ -93,9 +84,38 @@ public class ScanningInterfaceButton : MonoBehaviour
             AudioSource.PlayClipAtPoint(buttonClip.clip, this.transform.parent.position);
             controller.clearMemory();
         }
+        else if (name == "ExitScript")
+        {
+            AudioSource.PlayClipAtPoint(buttonClip.clip, exitButton.transform.position);
+            interfaceManager.setActiveWelcomeInterface(true);
+            interfaceManager.setActiveScanningInterface(false);
+            pipeline.stopPipeline();
+            
+        }
+        else if (name == "KeyboardSwitchButton")
+        {
+            AudioSource.PlayClipAtPoint(buttonClip.clip, keyBoardSwitch.transform.position);
+            if (VirtualKeyBoard.activeSelf) {
+                // set "scanning component" active
+                keyboardSwitchFunc(false);
+                
+                keyBoardSwitch.transform.Find("IconAndText/Icon").gameObject.GetComponent<Renderer>().material = Resources.Load("Mat/SearchIconMaterial", typeof(Material)) as Material;
+            } else {
+                pipeline.stopPipeline(); // do not scan during keyboard input
+                keyboardSwitchFunc(true);
+                keyBoardSwitch.transform.Find("IconAndText/Icon").gameObject.GetComponent<Renderer>().material = Resources.Load("Mat/CameraIconMaterial", typeof(Material)) as Material;
+            }
+        }
         else
         {
             Debug.Log("Unknown button");
         }
+    }
+
+    public void keyboardSwitchFunc(bool b) {
+        ScanScreen.SetActive(!b);
+        startScanning.SetActive(!b);
+        pauseScanning.SetActive(b);
+        VirtualKeyBoard.SetActive(b);
     }
 }

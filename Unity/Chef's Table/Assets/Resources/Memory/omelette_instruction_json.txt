@@ -124,8 +124,8 @@
             }
          ],
          "length":{
-            "number":1,
-            "unit":"minute(s)"
+            "number":60,
+            "unit":"second(s)"
          }
       },
       {
@@ -147,8 +147,8 @@
             }
          ],
          "length":{
-            "number":1,
-            "unit":"minute(s)"
+            "number":60,
+            "unit":"second(s)"
          }
       },
       {

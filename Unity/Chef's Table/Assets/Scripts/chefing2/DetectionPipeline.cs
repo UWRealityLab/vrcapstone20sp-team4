@@ -38,7 +38,7 @@ public class DetectionPipeline : MonoBehaviour
     private object _cameraLockObject = new object();
     private bool makingSuggestion = false;  // true for recipe suggestion, false for tutorial
     public GameObject scanningInterfaceContainer;
-    private bool STARTCAPTURE = false;
+    private bool STARTCAPTURE = true;
     private void Start()
     {
         rc = GameObject.Find("Raycast").GetComponent<Raycast>();
@@ -151,11 +151,11 @@ public class DetectionPipeline : MonoBehaviour
             {
                 byte[] responseArray = await myWebClient.UploadDataTaskAsync(url_suggest, rawImage);
                 currResponse = Encoding.UTF8.GetString(responseArray);
-                scanningInterfaceContainer.GetComponent<ScanningInterfaceController>().updateIngredientList(currResponse);
+                scanningInterfaceContainer.GetComponent<ScanningInterfaceController>().updateIngredientListByScanning(currResponse);
             } catch (Exception e)
             {
                 Debug.Log(e);
-                scanningInterfaceContainer.GetComponent<ScanningInterfaceController>().updateIngredientList("error");
+                scanningInterfaceContainer.GetComponent<ScanningInterfaceController>().updateIngredientListByScanning("error");
             }
             
         }

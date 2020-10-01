@@ -143,20 +143,8 @@ public class MainScheduler2 : MonoBehaviour
         dic.Add("equipment", equipment);
 
         // add timer
-        float seconds = tutorial[stepIndex].length.number;
+        float seconds = timerRecord[stepIndex];
         string unit = tutorial[stepIndex].length.unit;
-        if (seconds != 0)
-        {
-            if (unit.StartsWith("minute", StringComparison.OrdinalIgnoreCase))
-            {
-                seconds *= 60;
-            }
-            else if (unit.StartsWith("hour", StringComparison.OrdinalIgnoreCase))
-            {
-                seconds += 3600;
-            }
-        }
-       
         dic.Add("timer", new List<string>() { GetTimeSpanWithSec(seconds) });
         dic.Add("recipe", new List<string>() { chosenRecipe });
         dic.Add("StepNum", new List<string>() { (stepIndex + 1) + "" });
@@ -171,6 +159,7 @@ public class MainScheduler2 : MonoBehaviour
             tutorialFinish = true;
         }
         stepIndex++;
+        timerPause = true;
     }
 
     public void toPreviousStep()
@@ -179,6 +168,7 @@ public class MainScheduler2 : MonoBehaviour
         if (stepIndex == 0) return;
         stepIndex--;
         tutorialFinish = false;
+        timerPause = true;
     }
 
     private void resetTimerRecord()
