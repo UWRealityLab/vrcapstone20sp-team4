@@ -97,13 +97,10 @@ public class ScanningInterfaceButton : MonoBehaviour
             AudioSource.PlayClipAtPoint(buttonClip.clip, keyBoardSwitch.transform.position);
             if (VirtualKeyBoard.activeSelf) {
                 // set "scanning component" active
-                keyboardSwitchFunc(false);
-                
-                keyBoardSwitch.transform.Find("IconAndText/Icon").gameObject.GetComponent<Renderer>().material = Resources.Load("Mat/SearchIconMaterial", typeof(Material)) as Material;
+                keyboardSwitchFunc(false);     
             } else {
                 pipeline.stopPipeline(); // do not scan during keyboard input
                 keyboardSwitchFunc(true);
-                keyBoardSwitch.transform.Find("IconAndText/Icon").gameObject.GetComponent<Renderer>().material = Resources.Load("Mat/CameraIconMaterial", typeof(Material)) as Material;
             }
         }
         else
@@ -117,5 +114,10 @@ public class ScanningInterfaceButton : MonoBehaviour
         startScanning.SetActive(!b);
         pauseScanning.SetActive(b);
         VirtualKeyBoard.SetActive(b);
+        if (b) {
+            keyBoardSwitch.transform.Find("IconAndText/Icon").gameObject.GetComponent<Renderer>().material = Resources.Load("Mat/CameraIconMaterial", typeof(Material)) as Material;
+        } else {
+            keyBoardSwitch.transform.Find("IconAndText/Icon").gameObject.GetComponent<Renderer>().material = Resources.Load("Mat/SearchIconMaterial", typeof(Material)) as Material;
+        }
     }
 }
