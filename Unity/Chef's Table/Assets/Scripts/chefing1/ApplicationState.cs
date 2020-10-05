@@ -18,6 +18,14 @@ public class ApplicationState : MonoBehaviour
     {
     }
 
+    public void clearMaps()
+    {
+        singleEquipMap.Clear();
+        multiEquipMap.Clear();
+        ingredientsMap.Clear();
+        Debug.Log(multiEquipMap.Count + " map cleared");
+    }
+
     public bool isIngredients(string name)
     {
         return !singletonEquipments.Contains(name) && !multiEquipments.Contains(name);
