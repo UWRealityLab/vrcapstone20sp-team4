@@ -282,6 +282,9 @@ public class MainScheduler2 : MonoBehaviour
     // for visualizing timers
     private string GetTimeSpanWithSec(float seconds)
     {
+        if (seconds == 0.0) {
+            return "";
+        }
         TimeSpan interval = TimeSpan.FromSeconds(Math.Floor(seconds));
         return interval.ToString();
     }
