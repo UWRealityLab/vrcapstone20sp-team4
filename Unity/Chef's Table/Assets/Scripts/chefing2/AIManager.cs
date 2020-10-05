@@ -14,7 +14,7 @@ public class AIManager : MonoBehaviour
     public float speed = 0.02f;
     public float offsetZ = 1f;
 
-
+    
     void Start()
     {
         AIs = new List<AI>();
