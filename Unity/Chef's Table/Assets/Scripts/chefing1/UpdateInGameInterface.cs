@@ -35,8 +35,8 @@ public class UpdateInGameInterface : MonoBehaviour
     private VideoPlayer videoPlayer;
     private Dictionary<string, VideoClip> actionsCues;
     // private float criticalEquipmentUpdateTimer = 0;
-
-    public GameObject ParticleSystem;
+    private AIManager aiManager;
+    //public GameObject ParticleSystem;
     //private GameObject closeVideoButton;
     private GameObject interfaceScreen;
     //private bool closeVideo = false;
@@ -55,6 +55,7 @@ public class UpdateInGameInterface : MonoBehaviour
         stepNumberNearMenu = GameObject.Find("NearInterface/InstructionCanvas/StepNumber").GetComponent<TextMeshPro>();
         clockNearMenu = GameObject.Find("NearInterface/InterfaceTimer/ClockText").GetComponent<TextMeshPro>();
         interfaceTimer = GameObject.Find("NearInterface/InterfaceTimer").gameObject;
+        aiManager = GameObject.Find("particles").GetComponent<AIManager>();
 
         exitIcon = GameObject.Find("NearInterface/ExitOrComplete/IconAndText/Icon");
         // GameObject iconText = transform.parent.transform.Find("IconAndText").gameObject;
@@ -167,12 +168,11 @@ public class UpdateInGameInterface : MonoBehaviour
                 string utensil = equipment[0];
                 timerLocation = appState.GetLocation(utensil);
                 if (timerLocation != Vector3.zero) {
-                    ParticleSystem.transform.position = timerLocation;
-                    ParticleSystem.SetActive(true);
+                    //ParticleSystem.transform.position = timerLocation;
+                    //ParticleSystem.SetActive(true);
+                    aiManager.addNewAI(timerLocation, 0f);
                     timerLocation = new Vector3(timerLocation.x, timerLocation.y + 0.2f, timerLocation.z);
                     videoPlayer.transform.position = timerLocation;
-                } else {
-                    ParticleSystem.SetActive(false);
                 }
             }
 
@@ -185,6 +185,7 @@ public class UpdateInGameInterface : MonoBehaviour
                     videoPlayer.Play();
                 } else {
                     interfaceScreen.SetActive(false);
+                    videoPlayer.transform.position = new Vector3(0f, -0.15f, 0f);
                 }
             }
             

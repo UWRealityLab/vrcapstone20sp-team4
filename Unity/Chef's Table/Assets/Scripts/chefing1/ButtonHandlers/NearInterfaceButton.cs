@@ -21,8 +21,9 @@ public class NearInterfaceButton : MonoBehaviour
     private GameObject playButton;
     private Material startButton;
     private Material pauseButton;
-    private GameObject particles;
+    //private GameObject particles;
     private ApplicationState appState;
+    private VideoPlayer videoPlayer;
 
     void Awake()
     {
@@ -37,8 +38,9 @@ public class NearInterfaceButton : MonoBehaviour
         playButton = GameObject.Find("PlayButton").transform.Find("Start").gameObject;
         startButton = Resources.Load("Mat/ButtonStartMat", typeof(Material)) as Material;
         pauseButton = Resources.Load("Mat/ButtonPauseMat", typeof(Material)) as Material;
-        particles = GameObject.Find("particles");
+        //particles = GameObject.Find("particles");
         appState = GameObject.Find("ApplicationState").GetComponent<ApplicationState>();
+        videoPlayer = GameObject.Find("NearInterface/GameInterfaceScreen/InterfaceScreen").GetComponent<VideoPlayer>();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -80,10 +82,9 @@ public class NearInterfaceButton : MonoBehaviour
             scheduler.toNextStep();
             AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("Next").transform.position);
             timerIcon.GetComponent<Renderer>().material = startButton;
-            Debug.Log("close particles");
-            particles.SetActive(false);
+            // particles.SetActive(false);
             appState.clearMaps();
-            Debug.Log("close particles");
+            videoPlayer.transform.position = new Vector3(0f, -0.15f, 0f);
         }
         else if (name == "Back")
         {
@@ -91,9 +92,9 @@ public class NearInterfaceButton : MonoBehaviour
             scheduler.toPreviousStep();
             AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("Back").transform.position);
             timerIcon.GetComponent<Renderer>().material = startButton;
-            particles.SetActive(false);
+            // particles.SetActive(false);
             appState.clearMaps();
-            Debug.Log("close particles");
+            videoPlayer.transform.position = new Vector3(0f, -0.15f, 0f);
         }
         else if (name == "Start")
         {

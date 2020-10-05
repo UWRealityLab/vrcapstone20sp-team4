@@ -71,7 +71,7 @@ public class AIManager : MonoBehaviour
         Destroy(A.getGo());
     }
 
-    IEnumerator addNewAI(Vector3 targetPosition, float delay)
+    public IEnumerator addNewAI(Vector3 targetPosition, float delay)
     {
         yield return new WaitForSeconds(delay);
         Vector3 initPosition = mainCam.transform.forward + mainCam.transform.position; // 1 meter in front of the camera
