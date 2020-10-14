@@ -77,7 +77,7 @@ public class KeyBoardButton : MonoBehaviour
                 target.GetComponent<TextMeshPro>().text = "";
             }
             // ewwwww, really bad style. Find a random instance of scanning interface button
-            GameObject.Find("ScanningContainer/KeepInFront/Exit/ExitScript").GetComponent<ScanningInterfaceButton>().keyboardSwitchFunc(false);
+            GameObject.Find("ScanningContainer/Exit/ExitScript").GetComponent<ScanningInterfaceButton>().keyboardSwitchFunc(false);
         } 
         else
         {

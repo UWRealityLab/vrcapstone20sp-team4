@@ -13,6 +13,7 @@ public class ScanningInterfaceButton : MonoBehaviour
     GameObject ScanScreen;
     GameObject startScanning;
     GameObject pauseScanning;
+    GameObject PlaceIngredientsText;
     GameObject exitButton;
     GameObject keyBoardSwitch;
     GameObject VirtualKeyBoard;
@@ -27,6 +28,7 @@ public class ScanningInterfaceButton : MonoBehaviour
     {
         pipeline = GameObject.Find("pipeline").GetComponent<DetectionPipeline>();
         ScanScreen = GameObject.Find("ScanScreen");
+        PlaceIngredientsText = ScanScreen.transform.Find("PlaceIngredientsText").gameObject;
         getRecipeButton = GameObject.Find("GetRecipes");
         startScanning = GameObject.Find("StartScanning");
         pauseScanning = GameObject.Find("PauseScanning");
@@ -64,12 +66,14 @@ public class ScanningInterfaceButton : MonoBehaviour
             startScanning.SetActive(false);
             pauseScanning.SetActive(true);
             pipeline.startPipeline(true);
+            PlaceIngredientsText.SetActive(false);
         }
         else if (name == "PauseScanningButton") {
             AudioSource.PlayClipAtPoint(buttonClip.clip, pauseScanning.transform.position);
             startScanning.SetActive(true);
             pauseScanning.SetActive(false);
-            pipeline.startPipeline(false);
+            pipeline.stopPipeline();
+            PlaceIngredientsText.SetActive(true);
         }
         else if (name == "GetRecipesButton")
         {

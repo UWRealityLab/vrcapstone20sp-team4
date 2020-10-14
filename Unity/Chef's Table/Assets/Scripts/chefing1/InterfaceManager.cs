@@ -89,10 +89,12 @@ public class InterfaceManager : MonoBehaviour
         if (b)
         {
             StartCoroutine(animator.FadeIn(welcomeInterface));
+            //welcomeInterface.SetActive(b);
         }
         else
         {
             StartCoroutine(animator.FadeOut(welcomeInterface));
+            //welcomeInterface.SetActive(b);
         }
     }
 

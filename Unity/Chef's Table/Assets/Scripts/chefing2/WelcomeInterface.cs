@@ -42,6 +42,7 @@ public class WelcomeInterface : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        Debug.Log("welcome clicked");
         if (other.tag == "Hand" && interfaceManager.clickOk())
         {
             interfaceManager.clickButton();
@@ -52,6 +53,7 @@ public class WelcomeInterface : MonoBehaviour
 
     public void clicked()
     {
+        
         if (name == "ScanMyIngredientsButton")
         {
             AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("ScanMyIngredientsButton").transform.position);

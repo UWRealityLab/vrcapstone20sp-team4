@@ -7,7 +7,7 @@ public class AIManager : MonoBehaviour
     // Start is called before the first frame update
     private bool enabled = true;
     public GameObject mainCam;
-    private float horizontalFov = 50;
+    private float horizontalFov = 40;
     private float verticalFov = 20;
     public GameObject AIPrefab;
     private List<AI> AIs;
@@ -65,17 +65,23 @@ public class AIManager : MonoBehaviour
     IEnumerator completionEffect(AI A)
     {
         ParticleSystem ps = A.getGo().GetComponent<ParticleSystem>();
-        ps.startSpeed = 100;
+        ps.startSpeed = 20;
         ps.Emit(200);
         yield return new WaitForSeconds(0.5f);
         Destroy(A.getGo());
     }
 
-    public IEnumerator addNewAI(Vector3 targetPosition, float delay)
+    IEnumerator addAIDelay(AI ai) {
+        yield return new WaitForSeconds(1f);
+        AIs.Add(ai);
+    }
+
+    public void addNewAI(Vector3 targetPosition)
     {
-        yield return new WaitForSeconds(delay);
-        Vector3 initPosition = mainCam.transform.forward + mainCam.transform.position; // 1 meter in front of the camera
-        GameObject instance = Instantiate(AIPrefab, initPosition, Quaternion.identity);
+        Debug.Log("New task assigned for AI");
+        Vector3 initPosition = mainCam.transform.forward * 0.5f + mainCam.transform.position; // 1 meter in front of the camera
+        GameObject instance = Instantiate(AIPrefab, initPosition, Quaternion.identity);  
+        //StartCoroutine(addAIDelay(new AI(targetPosition, instance)));
         AIs.Add(new AI(targetPosition, instance));
     }
 
