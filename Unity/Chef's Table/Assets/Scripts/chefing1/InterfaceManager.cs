@@ -89,7 +89,7 @@ public class InterfaceManager : MonoBehaviour
         if (b)
         {
             StartCoroutine(animator.FadeIn(welcomeInterface));
-            //welcomeInterface.SetActive(b);
+            // set collidar component to true
         }
         else
         {
@@ -218,7 +218,6 @@ public class InterfaceManager : MonoBehaviour
         clickCountDown = Mathf.Max(0, clickCountDown - Time.deltaTime);
         if (startCountDown)
         {
-            Debug.Log("reach here");
             completeRedirectTimer -= Time.deltaTime;
 
             if (completeRedirectTimer < 0)

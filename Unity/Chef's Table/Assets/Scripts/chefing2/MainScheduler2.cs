@@ -183,10 +183,9 @@ public class MainScheduler2 : MonoBehaviour
 
     public void startTutorial(string name)
     {
-        
+        chosenRecipe = name;
         if (!name.ToLower().Contains("omelette"))
         {
-            Debug.Log("not omelette");
             if (!allTutorials.ContainsKey(name))
             {
                 Debug.LogError("invalid recipe entry");

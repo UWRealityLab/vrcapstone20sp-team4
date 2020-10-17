@@ -29,6 +29,7 @@ public class AIManager : MonoBehaviour
             List<AI> toRemove = new List<AI>();
             foreach (AI A in AIs)
             {
+        
                 if (!A.getGo().activeSelf)
                 {
                     A.getGo().SetActive(true);
@@ -42,8 +43,10 @@ public class AIManager : MonoBehaviour
                    transformAI(A);
                 }
                 transformAI(A);
+             
             }
             completeAndDelete(toRemove);
+    
         } else
         {
             foreach (AI A in AIs)
@@ -55,11 +58,17 @@ public class AIManager : MonoBehaviour
 
     private void completeAndDelete(List<AI> toRemove)
     {
+
         foreach (var A in toRemove)
         {
-            AIs.Remove(A);
+            if (AIs.Contains(A)) {
+                AIs.Remove(A);
+            }
+            
             StartCoroutine(completionEffect(A));
         }
+        
+        toRemove.Clear();
     }
 
     IEnumerator completionEffect(AI A)
@@ -71,17 +80,16 @@ public class AIManager : MonoBehaviour
         Destroy(A.getGo());
     }
 
-    IEnumerator addAIDelay(AI ai) {
-        yield return new WaitForSeconds(1f);
-        AIs.Add(ai);
-    }
-
     public void addNewAI(Vector3 targetPosition)
     {
-        Debug.Log("New task assigned for AI");
         Vector3 initPosition = mainCam.transform.forward * 0.5f + mainCam.transform.position; // 1 meter in front of the camera
         GameObject instance = Instantiate(AIPrefab, initPosition, Quaternion.identity);  
         //StartCoroutine(addAIDelay(new AI(targetPosition, instance)));
+        foreach (var AI in AIs) {
+            ParticleSystem ps = AI.getGo().GetComponent<ParticleSystem>();
+            Destroy(AI.getGo());
+        }
+        AIs.Clear();
         AIs.Add(new AI(targetPosition, instance));
     }
 

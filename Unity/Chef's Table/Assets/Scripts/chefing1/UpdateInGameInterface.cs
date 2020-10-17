@@ -14,15 +14,13 @@ public class UpdateInGameInterface : MonoBehaviour
     public GameObject spatialTimer;
     private MainScheduler2 mainScheduler;
     private InterfaceManager interfaceManager;
-    // private VisualCueManager visualCueManager;
-    //private TextMeshProUGUI instructionTextFloatingInterf;
+
     private TextMeshPro instructionTextNearMenu;
     private TextMeshPro detailTextNearMenu;
     private TextMeshPro stepNumberNearMenu;
     private GameObject nearInterface;
-    //private TextMeshProUGUI clockFloatingInterf;
     private TextMeshPro clockNearMenu;
-    //private GameObject gameInterface;
+
     private GameObject exitIcon;
     private GameObject interfaceTimer;
 
@@ -33,18 +31,16 @@ public class UpdateInGameInterface : MonoBehaviour
     private Material lockMat;
     private Material unlockMat;
     GameObject icon;
-    // private GameObject ImagePlane;
 
     private ApplicationState appState;
     public GameObject visualCueDisplayContainer;
     private Dictionary<string, VideoClip> actionsCues;
-    // private float criticalEquipmentUpdateTimer = 0;
     private AIManager aiManager;
-    //public GameObject ParticleSystem;
-    //private GameObject closeVideoButton;
-    //private GameObject interfaceScreen;
-    //private bool closeVideo = false;
+
     private bool locationSetForCurrentStep = false;
+
+    public GameObject NEXT;
+    public GameObject BACK;
 
 
     // Start is called before the first frsame update
@@ -52,7 +48,6 @@ public class UpdateInGameInterface : MonoBehaviour
     {
         mainScheduler = GameObject.Find("Scheduler").GetComponent<MainScheduler2>();
         interfaceManager = GameObject.Find("InterfaceManager").GetComponent<InterfaceManager>();
-        // visualCueManager = GameObject.Find("VisualCueManager").GetComponent<VisualCueManager>();
         nearInterface = GameObject.Find("NearInterface");
         instructionTextNearMenu = GameObject.Find("NearInterface/InstructionCanvas/Instruction").GetComponent<TextMeshPro>();
         detailTextNearMenu = GameObject.Find("NearInterface/InstructionCanvas/Detail").GetComponent<TextMeshPro>();
@@ -62,8 +57,6 @@ public class UpdateInGameInterface : MonoBehaviour
         aiManager = GameObject.Find("AIManager").GetComponent<AIManager>();
 
         exitIcon = GameObject.Find("NearInterface/ExitOrComplete/IconAndText/Icon");
-        // GameObject iconText = transform.parent.transform.Find("IconAndText").gameObject;
-        // icon = iconText.transform.Find("Icon").gameObject;
 
         exitMat = Resources.Load("Mat/ExitButton", typeof(Material)) as Material;
         completeMat = Resources.Load("Mat/CompleteButton", typeof(Material)) as Material;
@@ -78,11 +71,9 @@ public class UpdateInGameInterface : MonoBehaviour
         lockIcons.Add(lockIcon);
         lockMat = Resources.Load("Mat/ButtonLockMat", typeof(Material)) as Material;
         unlockMat = Resources.Load("Mat/ButtonUnlockMat", typeof(Material)) as Material;
-        //closeVideoButton = GameObject.Find("CloseVideoButton").transform.Find("CloseVideo").gameObject;
 
         appState = GameObject.Find("ApplicationState").GetComponent<ApplicationState>();
-        // videoPlayer = GameObject.Find("InterfaceScreen");
-        //interfaceScreen = GameObject.Find("NearInterface/GameInterfaceScreen/InterfaceScreen").gameObject;
+
         actionsCues = new Dictionary<string, VideoClip>();
         uploadVideos();
     }
@@ -117,21 +108,20 @@ public class UpdateInGameInterface : MonoBehaviour
         {
             return;
         }
+       
         Dictionary<string, List<string>> info = mainScheduler.getCurrentStepInfo();
         if (info == null)
         {
             return;
         }
+        int currentStepNum = Int32.Parse(info["StepNum"][0]);
         if (nearInterface.activeSelf)
         {
-            int currentStepNum = Int32.Parse(info["StepNum"][0]);
+            
             if (currentStepNum != prevStepNum)
             {
-                // Debug.Log("next step " + currentStepNum + " " + pNum);
-                // ParticleSystem.SetActive(false);
-                // locationSetForCurrentStep = false;
+   
                 visualCueDisplayContainer.SetActive(true);
-                Debug.Log(appState.getInfo());
                 prevStepNum = currentStepNum;
                 // display step number
                 string stepNumberText = "Step #" + currentStepNum;
@@ -143,6 +133,7 @@ public class UpdateInGameInterface : MonoBehaviour
                 string detailText = "Ingredients:\n";
                 List<string> ingredients = info["ingredients"];
                 List<string> measurement = info["measurement"];
+           
                 if (ingredients.Count == 0)
                 {
                     detailText += "-\n";
@@ -160,7 +151,7 @@ public class UpdateInGameInterface : MonoBehaviour
                     }
                 }
                 detailText += "\n";
-
+      
                 detailText += "Equipment:\n";
                 List<string> equipment = info["equipment"];
                 if (equipment.Count == 0)
@@ -174,7 +165,7 @@ public class UpdateInGameInterface : MonoBehaviour
                         detailText += equipment[i] + "\n";
                     }
                 }
-
+          
                 instructionTextNearMenu.text = instructionText;
                 detailTextNearMenu.text = detailText;
 
@@ -188,17 +179,16 @@ public class UpdateInGameInterface : MonoBehaviour
                     {
                         //ParticleSystem.transform.position = timerLocation;
                         //ParticleSystem.SetActive(true);
-                        Debug.Log("you should see the display");
                         aiManager.addNewAI(timerLocation);
                         timerLocation = new Vector3(timerLocation.x, timerLocation.y + 0.2f, timerLocation.z);
                         visualCueDisplayContainer.transform.position = timerLocation;
                         //visualCueDisplayContainer.transform.LookAt(mainCam.transform.position);
                     } else {
-                        Debug.Log("ingredient not found");
+                        
                     }
                 }
+        
                 
-                Debug.Log("Assigning Video");
                 // display video
                 if (visualCueDisplayContainer.activeSelf)
                 {
@@ -216,17 +206,9 @@ public class UpdateInGameInterface : MonoBehaviour
                         
                     }
                 }
-                Debug.Log("Assigning complete");
             }
-
-
-            /*
-            Renderer temp = ImagePlane.GetComponent<Renderer>();
-            temp.material.mainTexture = mainScheduler.getCurrentStepImage();
-            */
-
-            // TODO: add done and exit switch
-
+   
+            // visualize buttons
             if (mainScheduler.isTutorialDone())
             {
                 exitIcon.GetComponent<Renderer>().material = completeMat;
@@ -234,6 +216,14 @@ public class UpdateInGameInterface : MonoBehaviour
             else
             {
                 exitIcon.GetComponent<Renderer>().material = exitMat;
+            }
+            if (currentStepNum == 1) {
+                BACK.SetActive(false);
+            } else if (mainScheduler.isTutorialDone()) {
+                NEXT.SetActive(false);
+            } else {
+                BACK.SetActive(true);
+                NEXT.SetActive(true);
             }
 
             // set time
@@ -256,49 +246,8 @@ public class UpdateInGameInterface : MonoBehaviour
                 }
                 
             } 
-
-            // update the spatial timer:
-
-            //if (timerLocation != Vector3.zero)
-            //{
-            //    Debug.Log("spaitail timer activated");
-            //    timer.SetActive(true);
-            //    timer.transform.position = timerLocation;
-            //    timer.transform.FindChild("Canvas/Text").GetComponent<Text>().text = info["timer"][0];
-            //} else
-            //{
-            //    timer.SetActive(false);
-            //}
+       
         }
-        /*
-        if (gameInterface.activeSelf) {
-            instructionTextFloatingInterf.text = info["description"][0];
-            clockFloatingInterf.text = info["timer"][0];
-        }*/
 
     }
-
-    // private void OnTriggerEnter(Collider other)
-    // {
-    //     if (other.tag == "Hand" && interfaceManager.clickOk())
-    //     {
-    //         interfaceManager.clickButton();
-    //         GetComponent<Button>().onClick.Invoke();
-    //         if (name == "CloseVideo")
-    //         {
-    //             interfaceScreen.SetActive(false);
-    //         }
-    //     }
-    // }
-    // public void clicked()
-    // {
-    //     if (name == "CloseVideo")
-    //     {
-    //         interfaceScreen.SetActive(false);
-    //     }
-    //     else
-    //     {
-    //         Debug.Log("unknown button");
-    //     }
-    // }
 }
