@@ -1,5 +1,4 @@
-﻿
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
@@ -97,7 +96,7 @@ public class ScanningInterfaceController : MonoBehaviour
         int limit = Math.Min(6, ingredientsName.Count);
         for (int i = 0; i < limit; i++)
         {
-            string label = ingredientsName[i];
+            string label = ingredientsName[i].ToLower();
             if (currentLabels.Contains(label))
             {
                 createNotifications(label + " already exists");
@@ -147,6 +146,7 @@ public class ScanningInterfaceController : MonoBehaviour
     public void updateIngredientListByScanning(string response)
     {
         string res = "{\"detections\": " + response + " }";
+        Debug.Log(res);
         ListOfDetections listOfDetections;
         try
         {

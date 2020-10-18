@@ -21,7 +21,7 @@ public class DetectionPipeline : MonoBehaviour
 
     private Thread _captureThread = null;
 
-    private float timer = 3;
+    private float timer = 0;
 
     private string currResponse = "";
     private int time_stamp = 0;
@@ -38,7 +38,7 @@ public class DetectionPipeline : MonoBehaviour
     private object _cameraLockObject = new object();
     private bool makingSuggestion = false;  // true for recipe suggestion, false for tutorial
     public GameObject scanningInterfaceContainer;
-    private bool STARTCAPTURE = true;
+    private bool STARTCAPTURE = false;
     private void Start()
     {
         rc = GameObject.Find("Raycast").GetComponent<Raycast>();
@@ -74,6 +74,7 @@ public class DetectionPipeline : MonoBehaviour
     {
         this.makingSuggestion = suggestionMode;
         this.STARTCAPTURE = true;
+        timer = 0;
     }
 
     public void stopPipeline()
@@ -123,7 +124,10 @@ public class DetectionPipeline : MonoBehaviour
             rays[detection.label] = center;
         }
         rc.setCpoition(stamp2Copy[stamp].transform.position);
-        Destroy(stamp2Copy[stamp]);
+        if (stamp2Copy[stamp] != null) {
+            Destroy(stamp2Copy[stamp]);
+        }
+        
         stamp2Copy.Remove(stamp);
         rc.makeRayCast2(rays, true);
 
@@ -141,7 +145,7 @@ public class DetectionPipeline : MonoBehaviour
 
     private async void UploadFile(byte[] rawImage, int stamp)
     {
-        Debug.Log("sending to cloud");
+        //Debug.Log("sending to cloud");
         WebClient myWebClient = new WebClient();
         myWebClient.Headers.Add("Content-Type", "binary/octet-stream");
         myWebClient.Encoding = Encoding.UTF8;
@@ -154,7 +158,6 @@ public class DetectionPipeline : MonoBehaviour
                 scanningInterfaceContainer.GetComponent<ScanningInterfaceController>().updateIngredientListByScanning(currResponse);
             } catch (Exception e)
             {
-                Debug.Log(e);
                 scanningInterfaceContainer.GetComponent<ScanningInterfaceController>().updateIngredientListByScanning("error");
             }
             

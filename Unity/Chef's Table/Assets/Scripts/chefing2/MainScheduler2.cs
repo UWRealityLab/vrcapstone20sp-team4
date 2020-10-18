@@ -114,7 +114,6 @@ public class MainScheduler2 : MonoBehaviour
         if (!tutorialStarts || stepIndex >= tutorial.Count) return null;
         Instruction cur = tutorial[stepIndex];
         Dictionary<string, List<string>> dic = new Dictionary<string, List<string>>();
-
         // add action
         dic.Add("action", new List<string>() { cur.action });
 
@@ -184,10 +183,9 @@ public class MainScheduler2 : MonoBehaviour
 
     public void startTutorial(string name)
     {
-        
+        chosenRecipe = name;
         if (!name.ToLower().Contains("omelette"))
         {
-            Debug.Log("not omelette");
             if (!allTutorials.ContainsKey(name))
             {
                 Debug.LogError("invalid recipe entry");

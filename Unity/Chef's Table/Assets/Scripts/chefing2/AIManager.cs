@@ -7,14 +7,14 @@ public class AIManager : MonoBehaviour
     // Start is called before the first frame update
     private bool enabled = true;
     public GameObject mainCam;
-    private float horizontalFov = 50;
+    private float horizontalFov = 40;
     private float verticalFov = 20;
     public GameObject AIPrefab;
     private List<AI> AIs;
     public float speed = 0.02f;
     public float offsetZ = 1f;
 
-
+    
     void Start()
     {
         AIs = new List<AI>();
@@ -29,6 +29,7 @@ public class AIManager : MonoBehaviour
             List<AI> toRemove = new List<AI>();
             foreach (AI A in AIs)
             {
+        
                 if (!A.getGo().activeSelf)
                 {
                     A.getGo().SetActive(true);
@@ -42,8 +43,10 @@ public class AIManager : MonoBehaviour
                    transformAI(A);
                 }
                 transformAI(A);
+             
             }
             completeAndDelete(toRemove);
+    
         } else
         {
             foreach (AI A in AIs)
@@ -55,27 +58,38 @@ public class AIManager : MonoBehaviour
 
     private void completeAndDelete(List<AI> toRemove)
     {
+
         foreach (var A in toRemove)
         {
-            AIs.Remove(A);
+            if (AIs.Contains(A)) {
+                AIs.Remove(A);
+            }
+            
             StartCoroutine(completionEffect(A));
         }
+        
+        toRemove.Clear();
     }
 
     IEnumerator completionEffect(AI A)
     {
         ParticleSystem ps = A.getGo().GetComponent<ParticleSystem>();
-        ps.startSpeed = 100;
+        ps.startSpeed = 20;
         ps.Emit(200);
         yield return new WaitForSeconds(0.5f);
         Destroy(A.getGo());
     }
 
-    public IEnumerator addNewAI(Vector3 targetPosition, float delay)
+    public void addNewAI(Vector3 targetPosition)
     {
-        yield return new WaitForSeconds(delay);
-        Vector3 initPosition = mainCam.transform.forward + mainCam.transform.position; // 1 meter in front of the camera
-        GameObject instance = Instantiate(AIPrefab, initPosition, Quaternion.identity);
+        Vector3 initPosition = mainCam.transform.forward * 0.5f + mainCam.transform.position; // 1 meter in front of the camera
+        GameObject instance = Instantiate(AIPrefab, initPosition, Quaternion.identity);  
+        //StartCoroutine(addAIDelay(new AI(targetPosition, instance)));
+        foreach (var AI in AIs) {
+            ParticleSystem ps = AI.getGo().GetComponent<ParticleSystem>();
+            Destroy(AI.getGo());
+        }
+        AIs.Clear();
         AIs.Add(new AI(targetPosition, instance));
     }
 

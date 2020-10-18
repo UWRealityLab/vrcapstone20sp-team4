@@ -97,6 +97,10 @@ public class UIFadingAnimation : MonoBehaviour
             Vector3 originalScale = obj.transform.localScale;
             obj.transform.localScale = new Vector3(0, 0, 0);
             obj.SetActive(true);
+            if (obj.name == "WelcomeInterface") {
+                obj.transform.Find("ScanMyIngredients/ScanMyIngredientsButton").GetComponent<BoxCollider>().enabled = true;
+                obj.transform.Find("BrowseRecipeLibrary/BrowseRecipeButton").GetComponent<BoxCollider>().enabled = true;
+            }
             float fadeTimer = 1.0f;
             while (fadeTimer > 0f)
             {

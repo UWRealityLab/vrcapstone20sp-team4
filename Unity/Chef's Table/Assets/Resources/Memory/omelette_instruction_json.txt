@@ -2,8 +2,17 @@
    "name":"Omelette in a Bowl",
    "steps":[
       {
-         "action":"cutting",
+         "action":"none",
          "number":1,
+         "step":"(Optional) Walk around your kitchen slowly. Let the headset scan you kitchen",
+         "ingredients":[
+         ],
+         "equipment":[
+         ]
+      },
+      {
+         "action":"cutting",
+         "number":2,
          "step":"Chop 1/2 of a red bell pepper, dice 2 slices of ham, and chop the spinach.",
          "ingredients":[
             {
@@ -27,7 +36,7 @@
       },
       {
          "action":"coating",
-         "number":2,
+         "number":3,
          "step":"Coat the inside of a large, microwave-safe bowl with olive oil.",
          "ingredients":[
             {
@@ -43,7 +52,7 @@
       },
       {
          "action":"cracking",
-         "number":3,
+         "number":4,
          "step":"Crack 2 eggs into the bowl, add 1 tablespoon of milk, and beat together with a fork.",
          "ingredients":[
             {
@@ -69,7 +78,7 @@
       },
       {
          "action":"",
-         "number":4,
+         "number":5,
          "step":"Add grated cheese, chopped red bell pepper, ham, and spinach to the bowl.",
          "ingredients":[
             {
@@ -97,7 +106,7 @@
       },
       {
          "action":"mixing",
-         "number":5,
+         "number":6,
          "step":"Add a sprinkle of salt and pepper. Stir with a fork until mixed well.",
          "ingredients":[
             {
@@ -113,7 +122,7 @@
       },
       {
          "action":"microwaving",
-         "number":6,
+         "number":7,
          "step":"Put the bowl into the microwave for 1 minute.",
          "ingredients":[
             
@@ -130,7 +139,7 @@
       },
       {
          "action":"microwaving",
-         "number":7,
+         "number":8,
          "step":"Take the bowl out. Use a fork to stir it and then put it back into the microwave for 1 more minute.",
          "ingredients":[
             
@@ -153,7 +162,7 @@
       },
       {
          "action":"",
-         "number":8,
+         "number":9,
          "step":"Take the bowl out. Omelette is complete.",
          "ingredients":[
             

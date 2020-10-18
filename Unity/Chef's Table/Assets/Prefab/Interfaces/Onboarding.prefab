@@ -99,6 +99,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: OnboardingPreview
       objectReference: {fileID: 0}
+    - target: {fileID: 1639915058289609276, guid: 8a257863f28d37847ba937cef09933d5,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1639915058289609277, guid: 8a257863f28d37847ba937cef09933d5,
         type: 3}
       propertyPath: m_LocalPosition.x

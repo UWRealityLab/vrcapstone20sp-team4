@@ -9,31 +9,18 @@ public class ApplicationState : MonoBehaviour
 {
 
     private int timeStamp = 0;
-    private List<string> singletonEquipments = new List<string>() { "microwave oven", "gas stove", "oven", "frying pan", "cutting board", "knife" };
-    private List<string> multiEquipments = new List<string>() { "bottle", "bowl", "plate" };
+    private List<string> singletonEquipments = new List<string>() { "microwave", "fork", "bowl", "spoon", "knife" };
     private Dictionary<string, Vector3> singleEquipMap = new Dictionary<string, Vector3>();
-    private Dictionary<string, Vector3> multiEquipMap = new Dictionary<string, Vector3>();
-    private Dictionary<string, Vector3> ingredientsMap = new Dictionary<string, Vector3>();
     void Start()
     {
     }
 
-    public void clearMaps()
-    {
-        singleEquipMap.Clear();
-        multiEquipMap.Clear();
-        ingredientsMap.Clear();
-        Debug.Log(multiEquipMap.Count + " map cleared");
-    }
 
-    public bool isIngredients(string name)
-    {
-        return !singletonEquipments.Contains(name) && !multiEquipments.Contains(name);
-    }
-    
+
+
     public bool contains(string name)
     {
-        return singleEquipMap.ContainsKey(name) || multiEquipMap.ContainsKey(name) || ingredientsMap.ContainsKey(name);
+        return singleEquipMap.ContainsKey(name);
     }
 
     public void setLocation(string name, Vector3 position)
@@ -42,13 +29,11 @@ public class ApplicationState : MonoBehaviour
         // Debug.Log("set location for: " + name);
         if (singletonEquipments.Contains(name))
         {
+            if (!singleEquipMap.ContainsKey(name)) {
+                Debug.Log(name + " detected");
+            }
+            
             singleEquipMap[name] = position;
-        } else if (multiEquipments.Contains(name))
-        {
-            multiEquipMap[name] = position;
-        } else
-        {
-            ingredientsMap[name] = position;
         }
         // Debug.Log("done setting location for: " + name + " : " + position.x + " " + position.y + " " + position.z);
     }
@@ -57,18 +42,22 @@ public class ApplicationState : MonoBehaviour
     {
         if (singleEquipMap.ContainsKey(name)) {
             return singleEquipMap[name];
-        } else if (multiEquipMap.ContainsKey(name)) {
-            return multiEquipMap[name];
         } else {
             return Vector3.zero;
         }
     }
 
-    public void Clear()
-    {
-        singleEquipMap.Clear();
-        multiEquipMap.Clear();
-        ingredientsMap.Clear();
+    public string getInfo() {
+        string res = "";
+        foreach (string s in singleEquipMap.Keys) {
+            res += s + " ";
+        }
+        return res + "currently stored";
     }
+
+    // public void Clear()
+    // {
+    //     singleEquipMap.Clear();
+    // }
 
 }

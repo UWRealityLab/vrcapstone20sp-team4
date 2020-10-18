@@ -17,13 +17,16 @@ public class NearInterfaceButton : MonoBehaviour
     GameObject timerIcon;
     NIThresholdControl NIControl;
     InterfaceManager interfaceManager;
+    
+    public GameObject visualCueDisplayContainer;
+
     private bool timerPaused = true;
     private GameObject playButton;
     private Material startButton;
     private Material pauseButton;
     //private GameObject particles;
     private ApplicationState appState;
-    private VideoPlayer videoPlayer;
+   // private VideoPlayer videoPlayer;
 
     void Awake()
     {
@@ -40,7 +43,12 @@ public class NearInterfaceButton : MonoBehaviour
         pauseButton = Resources.Load("Mat/ButtonPauseMat", typeof(Material)) as Material;
         //particles = GameObject.Find("particles");
         appState = GameObject.Find("ApplicationState").GetComponent<ApplicationState>();
-        videoPlayer = GameObject.Find("NearInterface/GameInterfaceScreen/InterfaceScreen").GetComponent<VideoPlayer>();
+        //videoPlayer = GameObject.Find("NearInterface/GameInterfaceScreen/InterfaceScreen").GetComponent<VideoPlayer>();
+        // visualCueDisplayContainer = GameObject.Find("visualCueDisplayContainer");
+        if (visualCueDisplayContainer != null) {
+            visualCueDisplayContainer.SetActive(false);
+        }
+        
     }
 
     private void OnTriggerEnter(Collider other)
@@ -83,8 +91,8 @@ public class NearInterfaceButton : MonoBehaviour
             AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("Next").transform.position);
             timerIcon.GetComponent<Renderer>().material = startButton;
             // particles.SetActive(false);
-            appState.clearMaps();
-            videoPlayer.transform.position = new Vector3(0f, -0.15f, 0f);
+            //appState.clearMaps();
+            //videoPlayer.transform.position = new Vector3(0f, -0.15f, 0f);
         }
         else if (name == "Back")
         {
@@ -93,8 +101,8 @@ public class NearInterfaceButton : MonoBehaviour
             AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("Back").transform.position);
             timerIcon.GetComponent<Renderer>().material = startButton;
             // particles.SetActive(false);
-            appState.clearMaps();
-            videoPlayer.transform.position = new Vector3(0f, -0.15f, 0f);
+            //appState.clearMaps();
+            //videoPlayer.transform.position = new Vector3(0f, -0.15f, 0f);
         }
         else if (name == "Start")
         {
@@ -122,18 +130,6 @@ public class NearInterfaceButton : MonoBehaviour
             AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("Pause").transform.position);
             timerClip.Stop();
         }
-          /*
-          else if (name == "Plus")
-          {
-              scheduler.addToTimer();
-              AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("Plus").transform.position);
-          }
-          else if (name == "Minus")
-          {
-              scheduler.subtractFromTimer();
-              AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("Minus").transform.position);
-          }
-          */
           else if (name == "Lock")
         {
             NIControl.changeLock();
@@ -172,6 +168,9 @@ public class NearInterfaceButton : MonoBehaviour
         {
             AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("AddIngredients").transform.position);
             //changeSimulationScript.addIngredients();
+        } else if (name == "CloseVideo") {
+            visualCueDisplayContainer.SetActive(false);
+            AudioSource.PlayClipAtPoint(buttonClip.clip, transform.position);
         }
         else
         {

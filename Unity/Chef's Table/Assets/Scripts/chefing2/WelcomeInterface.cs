@@ -11,14 +11,18 @@ public class WelcomeInterface : MonoBehaviour
     InterfaceManager interfaceManager;
     GameObject icon;
 
+    RecipeMemory rm;
+
     private void Awake()
     {
         NIControl = GameObject.Find("HeadLockCanvas").GetComponent<NIThresholdControl>();
         buttonClip = GameObject.Find("Button_Click").GetComponent<AudioSource>();
         interfaceManager = GameObject.Find("InterfaceManager").GetComponent<InterfaceManager>();
+        rm = GameObject.Find("RecipeMemory").GetComponent<RecipeMemory>();
         if (name == "BrowseRecipeButton" || name == "ScanMyIngredientsButton" || name == "WelcomeInterface") return;
         GameObject iconText = transform.parent.transform.Find("IconAndText").gameObject;
         icon = iconText.transform.Find("Icon").gameObject;
+        
     }
 
     private IEnumerator ShowFeedback()
@@ -52,6 +56,7 @@ public class WelcomeInterface : MonoBehaviour
 
     public void clicked()
     {
+        
         if (name == "ScanMyIngredientsButton")
         {
             AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("ScanMyIngredientsButton").transform.position);
@@ -68,6 +73,7 @@ public class WelcomeInterface : MonoBehaviour
             interfaceManager.setActiveScanningInterface(false);
             interfaceManager.setActiveWelcomeInterface(false);
             interfaceManager.setActiveOnboardingInterface(true);
+            rm.updateOnboardingWithMemory();
         }
         else if (name == "Lock")
         {

@@ -167,7 +167,7 @@ Animator:
   m_GameObject: {fileID: 566966988844753595}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 7d60d68adecb1d348804112bab849817, type: 2}
+  m_Controller: {fileID: 9100000, guid: 529184ffb8b94cf4cac7e6b50b97128e, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -265,7 +265,7 @@ MeshRenderer:
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: d16e889b24bb6ab4f9cbd143209359c6, type: 2}
+  - {fileID: 2100000, guid: 468d5a413a2424c4591dd70055aef762, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -426,6 +426,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []

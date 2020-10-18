@@ -30,7 +30,7 @@ public class Raycast : MonoBehaviour
     {
         if (detectionQueue.Count > 0 && debug)
         {
-            Debug.Log("constraints violated, leftover job: " + detectionQueue.Count);
+            // Debug.Log("constraints violated, leftover job: " + detectionQueue.Count);
         }
         detectionQueue.Clear();
         this.cPosition = cPosition;
@@ -78,7 +78,7 @@ public class Raycast : MonoBehaviour
         {
             detectionQueue.Enqueue(new container(detection.Key, detection.Value));
         }
-        if (debugMode) Debug.Log("raycast request made: " + detectionQueue.Count);
+        if (debugMode) //Debug.Log("raycast request made: " + detectionQueue.Count);
         prevDone = true;
         
 
@@ -93,6 +93,7 @@ public class Raycast : MonoBehaviour
     private void updateObjects(Vector3 point, Vector3 normal)
     {
         As.setLocation(currClass, point);
+        // Debug.Log("Raycast completed for " + currClass);
         if (debug)
         {
             /*
