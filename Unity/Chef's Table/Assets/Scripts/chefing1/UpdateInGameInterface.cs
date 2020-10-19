@@ -30,18 +30,11 @@ public class UpdateInGameInterface : MonoBehaviour
     private List<GameObject> lockIcons;
     private Material lockMat;
     private Material unlockMat;
-    GameObject icon;
 
     private ApplicationState appState;
     public GameObject visualCueDisplayContainer;
     private Dictionary<string, VideoClip> actionsCues;
     private AIManager aiManager;
-
-    private bool locationSetForCurrentStep = false;
-
-    public GameObject NEXT;
-    public GameObject BACK;
-
 
     // Start is called before the first frsame update
     void Awake()
@@ -93,12 +86,6 @@ public class UpdateInGameInterface : MonoBehaviour
         actionsCues["cracking"] = Resources.Load<VideoClip>("actions/egg_cracking");
         actionsCues["mixing"] = Resources.Load<VideoClip>("actions/mixing");
         actionsCues["microwaving"] = Resources.Load<VideoClip>("actions/microwaving");
-        /*
-        actionsCues["heat"] = Resources.Load<VideoClip>("actions/heating");
-        actionsCues["slice"] = Resources.Load<VideoClip>("actions/slicing");
-        actionsCues["spread"] = Resources.Load<VideoClip>("actions/spread");
-        actionsCues["sprinkle"] = Resources.Load<VideoClip>("actions/sprinkle");
-        */
     }
 
     // Update is called once per frame
@@ -115,6 +102,7 @@ public class UpdateInGameInterface : MonoBehaviour
             return;
         }
         int currentStepNum = Int32.Parse(info["StepNum"][0]);
+        int lastStepNum = Int32.Parse(info["lastStepNum"][0]);
         if (nearInterface.activeSelf)
         {
             
@@ -187,7 +175,6 @@ public class UpdateInGameInterface : MonoBehaviour
                         
                     }
                 }
-        
                 
                 // display video
                 if (visualCueDisplayContainer.activeSelf)
@@ -207,23 +194,12 @@ public class UpdateInGameInterface : MonoBehaviour
                     }
                 }
             }
-   
-            // visualize buttons
-            if (mainScheduler.isTutorialDone())
-            {
+
+            // exit/complete button
+            if (mainScheduler.isTutorialDone()) {
                 exitIcon.GetComponent<Renderer>().material = completeMat;
-            }
-            else
-            {
-                exitIcon.GetComponent<Renderer>().material = exitMat;
-            }
-            if (currentStepNum == 1) {
-                BACK.SetActive(false);
-            } else if (mainScheduler.isTutorialDone()) {
-                NEXT.SetActive(false);
             } else {
-                BACK.SetActive(true);
-                NEXT.SetActive(true);
+                exitIcon.GetComponent<Renderer>().material = exitMat;
             }
 
             // set time
@@ -244,10 +220,7 @@ public class UpdateInGameInterface : MonoBehaviour
                     }
                     spatialTimer.transform.Find("Time").gameObject.GetComponent<TextMeshPro>().text = info["timer"][0];
                 }
-                
             } 
-       
         }
-
     }
 }
