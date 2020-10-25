@@ -133,8 +133,5 @@ public class InterfaceController : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.V)) {
-            loadPreview("breakfast burrito");
-        }
     }
 }

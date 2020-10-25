@@ -25,6 +25,8 @@ public class InterfaceManager : MonoBehaviour
     private float completeRedirectTimer = 10;
     private float clickCountDown = 0.05f;
 
+    
+
     private void Awake()
     {
         //scanningIngredientNamesDisplay = GameObject.Find("Ingredients");
@@ -43,6 +45,7 @@ public class InterfaceManager : MonoBehaviour
         headLockCanvas = GameObject.Find("HeadLockCanvas");
         
     }
+
 
     public bool clickOk()
     {

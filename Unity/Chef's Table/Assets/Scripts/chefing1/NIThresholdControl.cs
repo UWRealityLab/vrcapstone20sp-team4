@@ -11,21 +11,34 @@ public class NIThresholdControl : MonoBehaviour
     public float viewPortTimer = 5f;
     public float viewPortAngel = 120;
     public bool Lock = false;
+
+    private Material lockMat;
+    private Material unlockMat;
+
+    private List<GameObject> lockIcons;
     
     void Start()
     {
+        lockIcons = new List<GameObject>();
+
+        lockIcons.Add(GameObject.Find("HeadLockCanvas/NearInterface/Lock/IconAndText/Icon"));
+        lockIcons.Add(GameObject.Find("HeadLockCanvas/WelcomeInterface/Lock/IconAndText/Icon"));
+        lockIcons.Add(GameObject.Find("HeadLockCanvas/Onboarding/OnboardingInterface/Lock/IconAndText/Icon"));
+        lockMat = Resources.Load("Mat/ButtonLockMat", typeof(Material)) as Material;
+        unlockMat = Resources.Load("Mat/ButtonUnlockMat", typeof(Material)) as Material;
         Invoke("init", 1);
     }
 
     void init()
     {
 
-        transform.position = new Vector3(transform.position.x, mainCam.transform.position.y, transform.position.z);
+        transform.position = mainCam.transform.position + mainCam.transform.forward*0.5f;
     }
 
     // Update is called once per frame
     void Update()
     {
+        updateLock();
         if (Lock) { return; }
         Vector3 camPos = mainCam.transform.position;
         Vector3 cam2Target = new Vector3(transform.position.x - camPos.x, 0, transform.position.z - camPos.z);
@@ -50,6 +63,17 @@ public class NIThresholdControl : MonoBehaviour
             }
         }
         transform.LookAt(mainCam.transform);
+    }
+
+    public void updateLock()
+    {
+        Material mat = Lock ? lockMat : unlockMat;
+        for (int i = 0; i < lockIcons.Count; i++)
+        {
+            if (lockIcons[i].activeSelf) {
+                lockIcons[i].GetComponent<Renderer>().material = mat;
+            }    
+        }
     }
 
     private bool inViewPortNow()

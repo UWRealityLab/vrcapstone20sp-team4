@@ -27,9 +27,9 @@ public class UpdateInGameInterface : MonoBehaviour
     private Material exitMat;
     private Material completeMat;
     private int prevStepNum;
-    private List<GameObject> lockIcons;
-    private Material lockMat;
-    private Material unlockMat;
+    // private List<GameObject> lockIcons;
+    // private Material lockMat;
+    // private Material unlockMat;
     GameObject icon;
 
     private ApplicationState appState;
@@ -61,16 +61,15 @@ public class UpdateInGameInterface : MonoBehaviour
         exitMat = Resources.Load("Mat/ExitButton", typeof(Material)) as Material;
         completeMat = Resources.Load("Mat/CompleteButton", typeof(Material)) as Material;
         prevStepNum = 0;
-        lockIcons = new List<GameObject>();
-        GameObject lockIcon;
-        lockIcon = GameObject.Find("HeadLockCanvas/SimulationInterface/Lock/IconAndText/Icon");
-        lockIcons.Add(lockIcon);
-        lockIcon = GameObject.Find("HeadLockCanvas/NearInterface/Lock/IconAndText/Icon");
-        lockIcons.Add(lockIcon);
-        lockIcon = GameObject.Find("HeadLockCanvas/Onboarding/OnboardingInterface/Lock/IconAndText/Icon");
-        lockIcons.Add(lockIcon);
-        lockMat = Resources.Load("Mat/ButtonLockMat", typeof(Material)) as Material;
-        unlockMat = Resources.Load("Mat/ButtonUnlockMat", typeof(Material)) as Material;
+        // lockIcons = new List<GameObject>();
+        // GameObject lockIcon;
+        // lockIcon = GameObject.Find("HeadLockCanvas/SimulationInterface/Lock/IconAndText/Icon");
+        // lockIcons.Add(lockIcon);
+        // lockIcon = GameObject.Find("HeadLockCanvas/NearInterface/Lock/IconAndText/Icon");
+        // lockIcons.Add(lockIcon);
+        // lockIcon = GameObject.Find("HeadLockCanvas/Onboarding/OnboardingInterface/Lock/IconAndText/Icon");
+        // lockIcons.Add(lockIcon);
+        
 
         appState = GameObject.Find("ApplicationState").GetComponent<ApplicationState>();
 
@@ -78,14 +77,14 @@ public class UpdateInGameInterface : MonoBehaviour
         uploadVideos();
     }
 
-    public void updateLock(bool islocked)
-    {
-        Material mat = islocked ? lockMat : unlockMat;
-        for (int i = 0; i < lockIcons.Count; i++)
-        {
-            lockIcons[i].GetComponent<Renderer>().material = mat;
-        }
-    }
+    // public void updateLock(bool islocked)
+    // {
+    //     Material mat = islocked ? lockMat : unlockMat;
+    //     for (int i = 0; i < lockIcons.Count; i++)
+    //     {
+    //         lockIcons[i].GetComponent<Renderer>().material = mat;
+    //     }
+    // }
 
     private void uploadVideos()
     {
@@ -224,6 +223,8 @@ public class UpdateInGameInterface : MonoBehaviour
             } else {
                 BACK.SetActive(true);
                 NEXT.SetActive(true);
+                BACK.transform.Find("Back").gameObject.GetComponent<BoxCollider>().enabled = true;
+                NEXT.transform.Find("Next").gameObject.GetComponent<BoxCollider>().enabled = true;
             }
 
             // set time

@@ -27,21 +27,15 @@ public class WelcomeInterface : MonoBehaviour
 
     private IEnumerator ShowFeedback()
     {
-        /*
-        if (name != "Lock")
-        {
-            icon.GetComponent<Renderer>().material.SetColor("_Color", Color.red);
-        }
-        */
+        
+        icon.GetComponent<Renderer>().material.SetColor("_Color", Color.red);
+        
         GetComponent<Collider>().enabled = false;
         yield return new WaitForSeconds(1.0f);
         GetComponent<Collider>().enabled = true;
-        /*
-        if (name != "Lock")
-        {
-            icon.GetComponent<Renderer>().material.SetColor("_Color", Color.white);
-        }
-        */
+        
+        icon.GetComponent<Renderer>().material.SetColor("_Color", Color.white);
+        
     }
 
     private void OnTriggerEnter(Collider other)
@@ -83,6 +77,8 @@ public class WelcomeInterface : MonoBehaviour
             uii.updateLock(NIControl.getLock());
             AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("Lock").transform.position);
             */
+            NIControl.changeLock();
+            AudioSource.PlayClipAtPoint(buttonClip.clip, this.transform.position);
         }
     }
 }

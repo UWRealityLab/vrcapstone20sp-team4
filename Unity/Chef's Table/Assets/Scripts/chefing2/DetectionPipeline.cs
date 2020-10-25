@@ -123,13 +123,14 @@ public class DetectionPipeline : MonoBehaviour
             Vector3 center = getRaycastPointWorldSpace((x1 + x2) / 2f, 1080 - ((y1 + y2) / 2f), stamp);
             rays[detection.label] = center;
         }
-        rc.setCpoition(stamp2Copy[stamp].transform.position);
+        //rc.setCpoition(stamp2Copy[stamp].transform.position);
+        rc.makeRayCast2(rays, true, stamp2Copy[stamp].transform.position);
         if (stamp2Copy[stamp] != null) {
             Destroy(stamp2Copy[stamp]);
         }
         
         stamp2Copy.Remove(stamp);
-        rc.makeRayCast2(rays, true);
+        
 
     }
 

@@ -130,45 +130,16 @@ public class NearInterfaceButton : MonoBehaviour
             AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("Pause").transform.position);
             timerClip.Stop();
         }
-          else if (name == "Lock")
+        else if (name == "Lock")
         {
             NIControl.changeLock();
-            UpdateInGameInterface uii = GameObject.Find("InGameInterface").GetComponent<UpdateInGameInterface>();
-            uii.updateLock(NIControl.getLock());
             AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("Lock").transform.position);
-        }
-        else if (name == "SimuNext")
-        {
-            Debug.Log("Next Button, " + name);
-            AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("SimuNext").transform.position);
-            // changeSimulationScript.changeObject();
-        }
-        else if (name == "SimuBack")
-        {
-            //Debug.Log("Back Button, " + name);
-            // changeSimulationScript.previousObject();
-            AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("SimuBack").transform.position);
-        }
-        else if (name == "SimuReset")
-        {
-            //Debug.Log("Reset Button, " + name);
-            //changeSimulationScript.resetObject();
-            AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("SimuReset").transform.position);
         }
         else if (name == "Exit")
         {
             AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("Exit").transform.position);
         }
-        else if (name == "SwitchSimulationMode")
-        {
-            AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("SwitchSimulationMode").transform.position);
-            //changeSimulationScript.resetMode();
-        }
-        else if (name == "AddIngredients")
-        {
-            AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("AddIngredients").transform.position);
-            //changeSimulationScript.addIngredients();
-        } else if (name == "CloseVideo") {
+        else if (name == "CloseVideo") {
             visualCueDisplayContainer.SetActive(false);
             AudioSource.PlayClipAtPoint(buttonClip.clip, transform.position);
         }

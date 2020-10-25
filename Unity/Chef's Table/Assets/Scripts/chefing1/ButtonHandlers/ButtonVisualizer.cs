@@ -24,7 +24,7 @@ public class ButtonVisualizer : MonoBehaviour
             }
             else
             {
-                GetComponent<Renderer>().material = highlightMat;
+                transform.Find("FrontPlate").GetComponent<Renderer>().material = highlightMat;
             }
             //Debug.Log("OnTriggerEnter: ButtonViz");
             //frontPlate.SetActive(true);
@@ -42,9 +42,13 @@ public class ButtonVisualizer : MonoBehaviour
             }
             else
             {
-                GetComponent<Renderer>().material = normalMat;
+                transform.Find("FrontPlate").GetComponent<Renderer>().material = normalMat;
                 //frontPlate.SetActive(false);
             }
         }
+    }
+
+    void OnDisable() {
+        transform.Find("FrontPlate").GetComponent<Renderer>().material = normalMat;
     }
 }
