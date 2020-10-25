@@ -39,6 +39,9 @@ public class MainScheduler2 : MonoBehaviour
     RecipeMemory getMemory;
     DetectionPipeline pipeline;
 
+    public GameObject NEXT;
+    public GameObject BACK;
+
     private List<Texture> imagesCurrentStep = new List<Texture>();
 
     // store the preview info
@@ -52,6 +55,8 @@ public class MainScheduler2 : MonoBehaviour
         memory = GameObject.Find("RecipeMemory");
         getMemory = memory.GetComponent<RecipeMemory>();
         pipeline = GameObject.Find("pipeline").GetComponent<DetectionPipeline>();
+        BACK = GameObject.Find("HeadLockCanvas/NearInterface/BACK");
+        NEXT = GameObject.Find("HeadLockCanvas/NearInterface/NEXT");
     }
 
 
@@ -143,10 +148,11 @@ public class MainScheduler2 : MonoBehaviour
 
         // add timer
         float seconds = timerRecord[stepIndex];
-        string unit = tutorial[stepIndex].length.unit;
+        // string unit = tutorial[stepIndex].length.unit;
         dic.Add("timer", new List<string>() { GetTimeSpanWithSec(seconds) });
         dic.Add("recipe", new List<string>() { chosenRecipe });
         dic.Add("StepNum", new List<string>() { (stepIndex + 1) + "" });
+        dic.Add("lastStepNum", new List<string>() { tutorial.Count + ""});
         return dic;
     }
 
@@ -154,8 +160,13 @@ public class MainScheduler2 : MonoBehaviour
     public void toNextStep()
     {
         // Debug.Log("to next received");
-        if (stepIndex + 1 >= timerRecord.Count) {
+        if (stepIndex + 2 >= tutorial.Count) {
             tutorialFinish = true;
+            Debug.Log("finish");
+            NEXT.SetActive(false);
+        } else {
+            NEXT.SetActive(true);
+            BACK.SetActive(true);
         }
         stepIndex++;
         timerPause = true;
@@ -165,6 +176,12 @@ public class MainScheduler2 : MonoBehaviour
     {
         resetTimerRecord();
         if (stepIndex == 0) return;
+        if (stepIndex - 1 == 0) {
+            BACK.SetActive(false);
+        } else {
+            NEXT.SetActive(true);
+            BACK.SetActive(true);
+        }
         stepIndex--;
         tutorialFinish = false;
         timerPause = true;
@@ -183,6 +200,8 @@ public class MainScheduler2 : MonoBehaviour
 
     public void startTutorial(string name)
     {
+        NEXT.SetActive(true);
+        BACK.SetActive(false);
         chosenRecipe = name;
         if (!name.ToLower().Contains("omelette"))
         {

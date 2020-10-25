@@ -86,23 +86,17 @@ public class NearInterfaceButton : MonoBehaviour
     {
         if (name == "Next")
         {
-            // Debug.Log("Next Button, " + name);
+            Debug.Log("Next Button");
             scheduler.toNextStep();
             AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("Next").transform.position);
             timerIcon.GetComponent<Renderer>().material = startButton;
-            // particles.SetActive(false);
-            //appState.clearMaps();
-            //videoPlayer.transform.position = new Vector3(0f, -0.15f, 0f);
         }
         else if (name == "Back")
         {
-            // Debug.Log("Back Button, " + name);
+            Debug.Log("Back Button");
             scheduler.toPreviousStep();
             AudioSource.PlayClipAtPoint(buttonClip.clip, GameObject.Find("Back").transform.position);
             timerIcon.GetComponent<Renderer>().material = startButton;
-            // particles.SetActive(false);
-            //appState.clearMaps();
-            //videoPlayer.transform.position = new Vector3(0f, -0.15f, 0f);
         }
         else if (name == "Start")
         {

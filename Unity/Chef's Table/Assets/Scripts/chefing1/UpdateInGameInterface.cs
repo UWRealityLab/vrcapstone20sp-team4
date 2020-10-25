@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.Video;
 using System;
+using Random = System.Random;
 
 public class UpdateInGameInterface : MonoBehaviour
 {
@@ -27,21 +28,21 @@ public class UpdateInGameInterface : MonoBehaviour
     private Material exitMat;
     private Material completeMat;
     private int prevStepNum;
-    // private List<GameObject> lockIcons;
-    // private Material lockMat;
-    // private Material unlockMat;
-    GameObject icon;
+    private List<GameObject> lockIcons;
+    private Material lockMat;
+    private Material unlockMat;
 
     private ApplicationState appState;
     public GameObject visualCueDisplayContainer;
-    private Dictionary<string, VideoClip> actionsCues;
+    // private Dictionary<string, VideoClip> actionsCues;
+    private Dictionary<string, Sprite[]> actionsCues;
     private AIManager aiManager;
-
-    private bool locationSetForCurrentStep = false;
-
-    public GameObject NEXT;
-    public GameObject BACK;
-
+    private SpriteRenderer spriteRenderer;
+    private Sprite[] cuttingSpriteArray;
+    private Sprite[] crackingSpriteArray;
+    private Sprite[] mixingSpriteArray;
+    private Sprite[] microwavingSpriteArray;
+    private Random r;
 
     // Start is called before the first frsame update
     void Awake()
@@ -72,9 +73,10 @@ public class UpdateInGameInterface : MonoBehaviour
         
 
         appState = GameObject.Find("ApplicationState").GetComponent<ApplicationState>();
+        r = new Random();
 
-        actionsCues = new Dictionary<string, VideoClip>();
-        uploadVideos();
+        actionsCues = new Dictionary<string, Sprite[]>();
+        loadSprites();
     }
 
     // public void updateLock(bool islocked)
@@ -86,18 +88,17 @@ public class UpdateInGameInterface : MonoBehaviour
     //     }
     // }
 
-    private void uploadVideos()
+    private void loadSprites()
     {
-        actionsCues["cutting"] = Resources.Load<VideoClip>("actions/cutting");
-        actionsCues["cracking"] = Resources.Load<VideoClip>("actions/egg_cracking");
-        actionsCues["mixing"] = Resources.Load<VideoClip>("actions/mixing");
-        actionsCues["microwaving"] = Resources.Load<VideoClip>("actions/microwaving");
-        /*
-        actionsCues["heat"] = Resources.Load<VideoClip>("actions/heating");
-        actionsCues["slice"] = Resources.Load<VideoClip>("actions/slicing");
-        actionsCues["spread"] = Resources.Load<VideoClip>("actions/spread");
-        actionsCues["sprinkle"] = Resources.Load<VideoClip>("actions/sprinkle");
-        */
+        cuttingSpriteArray = Resources.LoadAll<Sprite>("cutting");
+        crackingSpriteArray = Resources.LoadAll<Sprite>("cracking");
+        mixingSpriteArray = Resources.LoadAll<Sprite>("mixing");
+        microwavingSpriteArray = Resources.LoadAll<Sprite>("microwaving");
+
+        actionsCues["cutting"] = cuttingSpriteArray;
+        actionsCues["cracking"] = crackingSpriteArray;
+        actionsCues["mixing"] = mixingSpriteArray;
+        actionsCues["microwaving"] = microwavingSpriteArray;
     }
 
     // Update is called once per frame
@@ -113,15 +114,18 @@ public class UpdateInGameInterface : MonoBehaviour
         {
             return;
         }
+
         int currentStepNum = Int32.Parse(info["StepNum"][0]);
         if (nearInterface.activeSelf)
         {
-            
+            string action = info["action"][0];
+
             if (currentStepNum != prevStepNum)
             {
    
                 visualCueDisplayContainer.SetActive(true);
                 prevStepNum = currentStepNum;
+
                 // display step number
                 string stepNumberText = "Step #" + currentStepNum;
                 stepNumberNearMenu.text = stepNumberText;
@@ -176,57 +180,82 @@ public class UpdateInGameInterface : MonoBehaviour
                     timerLocation = appState.GetLocation(utensil);
                     if (timerLocation != Vector3.zero)
                     {
-                        //ParticleSystem.transform.position = timerLocation;
-                        //ParticleSystem.SetActive(true);
                         aiManager.addNewAI(timerLocation);
                         timerLocation = new Vector3(timerLocation.x, timerLocation.y + 0.2f, timerLocation.z);
                         visualCueDisplayContainer.transform.position = timerLocation;
-                        //visualCueDisplayContainer.transform.LookAt(mainCam.transform.position);
+                        
+                        Debug.Log("get location for " + utensil);
                     } else {
                         
                     }
                 }
-        
+
+                // display gif
+                /*
+                Texture2D[] frames;
+                float framesPerSecond = 10.0f;
+
+                int index;
+                float time = Time.time * framesPerSecond;
+                index = index % frames.Length;
+                renderer.material.mainTexture = frames[index];
+                */
+
+                // display gif
                 
+                if (actionsCues.ContainsKey(action)) {
+                    visualCueDisplayContainer.SetActive(true);
+                    Debug.Log("display animation");
+                } else {
+                    visualCueDisplayContainer.SetActive(false);
+                }
+                
+
                 // display video
+                /*
                 if (visualCueDisplayContainer.activeSelf)
                 {
                     string action = info["action"][0];
                     if (actionsCues.ContainsKey(action))
                     {
+                        visualCueDisplayContainer.SetActive(true);
+                        Debug.Log("display animation");
+                        
                         VideoClip video = actionsCues[action];
                         visualCueDisplayContainer.transform.Find("VisualCueDisplay").gameObject.GetComponent<VideoPlayer>().clip = video;
                         visualCueDisplayContainer.transform.Find("VisualCueDisplay").gameObject.GetComponent<VideoPlayer>().Play();
+                        Debug.Log("play video"); 
+                        Debug.Log("play video"); 
                     }
                     else
                     {
                         visualCueDisplayContainer.transform.position = new Vector3(0f, -0.15f, 0f);
                         visualCueDisplayContainer.SetActive(false);
-                        
                     }
                 }
-            }
-   
-            // visualize buttons
-            if (mainScheduler.isTutorialDone())
-            {
-                exitIcon.GetComponent<Renderer>().material = completeMat;
-            }
-            else
-            {
-                exitIcon.GetComponent<Renderer>().material = exitMat;
-            }
-            if (currentStepNum == 1) {
-                BACK.SetActive(false);
-            } else if (mainScheduler.isTutorialDone()) {
-                NEXT.SetActive(false);
-            } else {
-                BACK.SetActive(true);
-                NEXT.SetActive(true);
-                BACK.transform.Find("Back").gameObject.GetComponent<BoxCollider>().enabled = true;
-                NEXT.transform.Find("Next").gameObject.GetComponent<BoxCollider>().enabled = true;
+                */
             }
 
+            // gif animation
+            // int framePerSecond = 6;
+            if (visualCueDisplayContainer.activeSelf) {
+                spriteRenderer = GameObject.Find("VisualCueDisplayContainer/Animation").GetComponent<SpriteRenderer>();
+                // int index = (int)(framePerSecond * Time.time);
+                // int index = (int)((Time.deltaTime * 100) % cuttingSpriteArray.Length);
+                // Debug.Log(index);
+                // index = index % cuttingSpriteArray.Length;
+                Sprite[] sprites = actionsCues[action];
+                int index = r.Next(0, sprites.Length);
+                spriteRenderer.sprite = sprites[index];
+            }
+
+            // exit/complete button
+            if (mainScheduler.isTutorialDone()) {
+                exitIcon.GetComponent<Renderer>().material = completeMat;
+            } else {
+                exitIcon.GetComponent<Renderer>().material = exitMat;
+            }
+            
             // set time
             if (info["timer"][0] == "")
             {
@@ -239,16 +268,21 @@ public class UpdateInGameInterface : MonoBehaviour
             {
                 interfaceTimer.SetActive(true);
                 clockNearMenu.text = info["timer"][0];
+                if (!spatialTimer.activeSelf) {
+                    spatialTimer.SetActive(true);
+                }
+                spatialTimer.transform.Find("Time").gameObject.GetComponent<TextMeshPro>().text = info["timer"][0];
+                /*
                 if (visualCueDisplayContainer.activeSelf) {
                     if (!spatialTimer.activeSelf) {
                         spatialTimer.SetActive(true);
                     }
                     spatialTimer.transform.Find("Time").gameObject.GetComponent<TextMeshPro>().text = info["timer"][0];
                 }
-                
+                */
             } 
-       
-        }
 
+        }
     }
+
 }
