@@ -44,6 +44,9 @@ public class UpdateInGameInterface : MonoBehaviour
     private Sprite[] microwavingSpriteArray;
     private Random r;
 
+    private int framesPerFrame = 5;
+    private int playFrame = 0;
+
     // Start is called before the first frsame update
     void Awake()
     {
@@ -104,6 +107,7 @@ public class UpdateInGameInterface : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        playFrame += 1;
         if (!GameObject.Find("Scheduler").activeSelf || !mainScheduler.tutorialStarts)
         {
             return;
@@ -239,14 +243,21 @@ public class UpdateInGameInterface : MonoBehaviour
             // gif animation
             // int framePerSecond = 6;
             if (visualCueDisplayContainer.activeSelf) {
-                spriteRenderer = GameObject.Find("VisualCueDisplayContainer/Animation").GetComponent<SpriteRenderer>();
+                if (playFrame % framesPerFrame == 0) {
+                    spriteRenderer = GameObject.Find("VisualCueDisplayContainer/Animation").GetComponent<SpriteRenderer>();
+                    int temp1 = playFrame / framesPerFrame;
+                    int temp2 = temp1 % actionsCues[action].Length;
+                    spriteRenderer.sprite = actionsCues[action][temp2];
+                }
+                
                 // int index = (int)(framePerSecond * Time.time);
                 // int index = (int)((Time.deltaTime * 100) % cuttingSpriteArray.Length);
                 // Debug.Log(index);
                 // index = index % cuttingSpriteArray.Length;
-                Sprite[] sprites = actionsCues[action];
-                int index = r.Next(0, sprites.Length);
-                spriteRenderer.sprite = sprites[index];
+                
+                // Sprite[] sprites = actionsCues[action];
+                // int index = r.Next(0, sprites.Length);
+                
             }
 
             // exit/complete button

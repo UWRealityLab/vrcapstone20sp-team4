@@ -67,7 +67,8 @@ public class WelcomeInterface : MonoBehaviour
             interfaceManager.setActiveScanningInterface(false);
             interfaceManager.setActiveWelcomeInterface(false);
             interfaceManager.setActiveOnboardingInterface(true);
-            rm.updateOnboardingWithMemory();
+            StartCoroutine(rm.updateOnboardingWithMemory());
+            
         }
         else if (name == "Lock")
         {

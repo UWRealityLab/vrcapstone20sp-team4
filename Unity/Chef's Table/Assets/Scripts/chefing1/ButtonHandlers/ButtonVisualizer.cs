@@ -48,7 +48,14 @@ public class ButtonVisualizer : MonoBehaviour
         }
     }
 
-    void OnDisable() {
-        transform.Find("FrontPlate").GetComponent<Renderer>().material = normalMat;
-    }
+    // void OnDisable() {
+    //     if (tag == "RecipePlate")
+    //     {
+    //         GameObject frontPlate = transform.Find("FrontPlate").gameObject;
+    //         frontPlate.GetComponent<Renderer>().material = normalMat;
+    //     } else {
+    //         transform.Find("FrontPlate").GetComponent<Renderer>().material = normalMat;
+    //     }
+        
+    // }
 }

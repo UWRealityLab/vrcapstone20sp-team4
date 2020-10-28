@@ -41,6 +41,7 @@ public class Raycast : MonoBehaviour
         if (prevDone && detectionQueue.Count > 0)
         {
             prevDone = false;
+            Debug.Log("Set to false");
             container con = detectionQueue.Dequeue();
             currClass = con.name;
             Vector3 rcPoint = con.point;
@@ -93,17 +94,19 @@ public class Raycast : MonoBehaviour
     private void updateObjects(Vector3 point, Vector3 normal)
     {
         As.setLocation(currClass, point);
-        // Debug.Log("Raycast completed for " + currClass);
-        if (debug)
-        {
-            
-            GameObject debugObject = Instantiate(debugPrefab, point, Quaternion.identity);
-            debugObject.transform.LookAt(cPosition);
-            debugObject.transform.FindChild("Canvas").FindChild("Text").gameObject.GetComponent<Text>().text = currClass;
-            Destroy(debugObject, 3f); 
-            
-        }
+        Debug.Log("Set to true");
         prevDone = true;
+        // Debug.Log("Raycast completed for " + currClass);
+        // if (debug)
+        // {
+            
+        //     GameObject debugObject = Instantiate(debugPrefab, point, Quaternion.identity);
+        //     debugObject.transform.LookAt(cPosition);
+        //     debugObject.transform.FindChild("Canvas").FindChild("Text").gameObject.GetComponent<Text>().text = currClass;
+        //     Destroy(debugObject, 3f); 
+            
+        // }
+        
     }
 
     // Use a callback to know when to run the NormalMaker() coroutine.
