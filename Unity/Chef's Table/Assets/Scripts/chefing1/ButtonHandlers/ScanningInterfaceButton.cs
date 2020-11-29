@@ -24,8 +24,14 @@ public class ScanningInterfaceButton : MonoBehaviour
 
     private ScanningInterfaceController controller;
 
+    void Start() {
+        
+    }
+
     void Awake()
     {
+        interfaceManager = GameObject.Find("InterfaceManager").GetComponent<InterfaceManager>();
+        controller = GameObject.Find("ScanningContainer").GetComponent<ScanningInterfaceController>();
         pipeline = GameObject.Find("pipeline").GetComponent<DetectionPipeline>();
         ScanScreen = GameObject.Find("ScanScreen");
         PlaceIngredientsText = ScanScreen.transform.Find("PlaceIngredientsText").gameObject;
@@ -35,14 +41,14 @@ public class ScanningInterfaceButton : MonoBehaviour
         exitButton = GameObject.Find("Exit");
         keyBoardSwitch = GameObject.Find("KeyboardSwitch");
         VirtualKeyBoard = GameObject.Find("VirtualHandKeyboard");
-        interfaceManager = GameObject.Find("InterfaceManager").GetComponent<InterfaceManager>();
         buttonClip = GameObject.Find("Button_Click").GetComponent<AudioSource>();
         recipeApi = GameObject.Find("RecipeAPI").GetComponent<GetInstructions>();
-        controller = GameObject.Find("ScanningContainer").GetComponent<ScanningInterfaceController>();
+        
     }
 
     private void OnTriggerEnter(Collider other)
     {
+
         if (other.tag == "Hand" && interfaceManager.clickOk())
         {
             gameObject.GetComponent<Button>().onClick.Invoke();
@@ -54,6 +60,7 @@ public class ScanningInterfaceButton : MonoBehaviour
     {
         if (name == "TrashButtonScript")
         {
+            Debug.Log(0);
             string whichIngredient = this.transform.parent.parent.gameObject.name;
             Debug.Log(whichIngredient);
             int index = whichIngredient.Last() - '0';
@@ -80,7 +87,7 @@ public class ScanningInterfaceButton : MonoBehaviour
             AudioSource.PlayClipAtPoint(buttonClip.clip, getRecipeButton.transform.position);
             ingredientListString = string.Join(",", controller.array());
             recipeApi.GetIngredientsList(ingredientListString);
-            interfaceManager.setActiveOnboardingInterface(true);
+            interfaceManager.setActiveOnboardingInterface(true, true);
             interfaceManager.setActiveScanningInterface(false);
             pipeline.stopPipeline();
         } 

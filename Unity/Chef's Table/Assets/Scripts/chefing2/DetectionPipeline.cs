@@ -45,6 +45,7 @@ public class DetectionPipeline : MonoBehaviour
         //mainScheduler = GameObject.Find("MainScheduler").GetComponent<MainScheduler2>();
     }
 
+    // a capture request and possible raycast request are made very time step
     void Update()
     {
         if (STARTCAPTURE)
@@ -60,7 +61,6 @@ public class DetectionPipeline : MonoBehaviour
                 {
                     findDetectedObjects();
                 }
-                
             }
 
         } else
@@ -70,6 +70,8 @@ public class DetectionPipeline : MonoBehaviour
 
     }
 
+    // start the pipeline
+    // suggestionMode: suggestion or tutorial
     public void startPipeline(bool suggestionMode)
     {
         this.makingSuggestion = suggestionMode;
@@ -77,11 +79,14 @@ public class DetectionPipeline : MonoBehaviour
         timer = 0;
     }
 
+    // stop the pipeline
     public void stopPipeline()
     {
         this.makingSuggestion = false;
         this.STARTCAPTURE = false;
     }
+
+    // reset to the initial state
     private void resetState()
     {
         timer = 3;
@@ -137,16 +142,15 @@ public class DetectionPipeline : MonoBehaviour
     // calculate reference point to do raycast from a point on the image
     public Vector3 getRaycastPointWorldSpace(float u, float v, int time_stamp)
     {
-        // Debug.Log("getraycastPointerWorldSpace");
         float z = 1;
         float x = (u - Cx) / Fx;
         float y = (v - Cy) / Fy;
         return stamp2Copy[time_stamp].transform.TransformPoint(new Vector3(x, y, z));
     }
 
+    // upload a captured camera to the cloud
     private async void UploadFile(byte[] rawImage, int stamp)
     {
-        //Debug.Log("sending to cloud");
         WebClient myWebClient = new WebClient();
         myWebClient.Headers.Add("Content-Type", "binary/octet-stream");
         myWebClient.Encoding = Encoding.UTF8;
@@ -161,7 +165,6 @@ public class DetectionPipeline : MonoBehaviour
             {
                 scanningInterfaceContainer.GetComponent<ScanningInterfaceController>().updateIngredientListByScanning("error");
             }
-            
         }
         else
         {
@@ -172,7 +175,7 @@ public class DetectionPipeline : MonoBehaviour
         }
     }
 
-
+    // helper classes for parsing a detection result
     [Serializable]
     public class DetectionList
     {
@@ -189,6 +192,8 @@ public class DetectionPipeline : MonoBehaviour
         public float confidence;
     }
 
+
+    // rest of this script handles image capture
     void Awake()
     {
         // Before enabling the Camera, the scene must wait until the privilege has been granted.

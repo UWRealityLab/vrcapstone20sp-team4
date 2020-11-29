@@ -20,7 +20,7 @@ public class AIManager : MonoBehaviour
         AIs = new List<AI>();
     }
 
-    // Update is called once per frame
+    // update current AI positions very frame
     void Update()
     {
         
@@ -56,6 +56,7 @@ public class AIManager : MonoBehaviour
         }
     }
 
+    // destroy an AI when it finishes a task
     private void completeAndDelete(List<AI> toRemove)
     {
 
@@ -71,6 +72,7 @@ public class AIManager : MonoBehaviour
         toRemove.Clear();
     }
 
+    // visual effect when an AI is deleted
     IEnumerator completionEffect(AI A)
     {
         ParticleSystem ps = A.getGo().GetComponent<ParticleSystem>();
@@ -80,6 +82,7 @@ public class AIManager : MonoBehaviour
         Destroy(A.getGo());
     }
 
+    // init a new AI with a task
     public void addNewAI(Vector3 targetPosition)
     {
         Vector3 initPosition = mainCam.transform.forward * 0.5f + mainCam.transform.position; // 1 meter in front of the camera
@@ -93,6 +96,7 @@ public class AIManager : MonoBehaviour
         AIs.Add(new AI(targetPosition, instance));
     }
 
+    // basic function for moving an AI
     private void transformAI(AI A)
     {
         GameObject go = A.getGo();
@@ -100,6 +104,7 @@ public class AIManager : MonoBehaviour
         go.transform.Translate(velocity * speed, Space.World);
     }
 
+    // helper function calculates direction of the AI
     private Vector3 currentVelocity(AI A)
     {
         GameObject go = A.getGo();
@@ -141,6 +146,7 @@ public class AIManager : MonoBehaviour
         }
     }
 
+    // helper function to verify if the AI can be seen
     private bool inViewPort(GameObject go, ref bool inHorizontalViewPort)
     {
         Vector3 cam2Go = mainCam.transform.InverseTransformPoint(go.transform.position);
@@ -150,6 +156,7 @@ public class AIManager : MonoBehaviour
         return horizontalAngle < horizontalFov / 2 && verticalAngle < verticalFov / 2;
     }
     
+    // the AI class
     public class AI
     {
         private Vector3 position;

@@ -35,33 +35,6 @@ public class InterfaceController : MonoBehaviour
                 temp += ingredient + "\r\n";
             }
             ingreText.text = temp;
-
-            /*
-            string temp = "";
-            TextMeshPro usedText = recipePreview.transform.Find("UsedIngredientsCanvas").Find("Names").GetComponent<TextMeshPro>();
-            List<string> usedList = allTutorials[name]["used"];
-            if (usedList.Count == 0) {
-                usedText.text = "-\r\n";
-            } else {
-                foreach (string ingredient in usedList) {
-                    temp += ingredient + "\r\n";
-                }
-                usedText.text = temp;
-            }
-
-            temp = "";
-            TextMeshPro missedText = recipePreview.transform.Find("MissedIngredientsCanvas").Find("Names").GetComponent<TextMeshPro>();
-            List<string> missedList = allTutorials[name]["missed"];
-            if (missedList.Count == 0) {
-                missedText.text = "-\r\n";
-            } else {
-                foreach (string ingredient in missedList) {
-                    temp += ingredient + "\r\n";
-                }
-                missedText.text = temp;
-            }
-            */
-
             TextMeshPro recipeName = recipePreview.transform.Find("Canvas").Find("RecipeName").GetComponent<TextMeshPro>();
             recipeName.text = name;
 
@@ -72,14 +45,13 @@ public class InterfaceController : MonoBehaviour
 
     public void loadOnboarding()
     {
-        Invoke("loadOnboardingDelay", 3.0f);
+        Invoke("loadOnboardingDelay", 1.0f);
     }
     public void loadOnboardingDelay() {
         schedulerScript.PreviewAllTutorial();
         allTutorials = schedulerScript.GetAllTutorialPreview();
         recipe_names = new List<string>(allTutorials.Keys);
-        // Debug.Log(recipe_names.Count + " & ");
-        for (int i = 0; i < recipe_names.Count; i++)
+        for (int i = 0; i < recipe_names.Count && i < 6; i++)
         {
             GameObject recipePlate = onboardingInterface.transform.Find("RecipePlate" + i).gameObject;
            
@@ -103,21 +75,6 @@ public class InterfaceController : MonoBehaviour
         recipePreview = onboarding.transform.Find("OnboardingPreview").gameObject;
     }
 
-    //void Awake()
-    //{
-    //    Debug.Log("ingetface fontroller awake");
-    //    schedulerScript.PreviewAllTutorial();
-    //    allTutorials = schedulerScript.GetAllTutorialPreview();
-    //    recipe_names = new List<string>(allTutorials.Keys);
-    //    for (int i = 0; i < recipe_names.Count; i++)
-    //    {
-    //        GameObject recipePlate = onboardingInterface.transform.Find("RecipePlate" + i).gameObject;
-    //        TextMeshPro name = recipePlate.GetComponentInChildren<TextMeshPro>();
-    //        name.text = recipe_names[i];
-    //        string pathToImage = allTutorials[name.text]["info"][2];
-    //        StartCoroutine(GetTexture(pathToImage, recipePlate));
-    //    }
-    //}
 
     IEnumerator GetTexture(string url, GameObject obj)
     {

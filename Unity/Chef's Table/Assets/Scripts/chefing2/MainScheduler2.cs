@@ -290,9 +290,7 @@ public class MainScheduler2 : MonoBehaviour
             {
                 totalTime += Time.deltaTime;
             }
-            
         }
-
     }
 
 

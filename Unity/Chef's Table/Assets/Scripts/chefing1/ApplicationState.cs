@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Video;
 
-// This class is for keeping and updating important states info 
-// that other program will want to acquire
+// This class stores the object tracking information for the tutorial
+
 public class ApplicationState : MonoBehaviour
 {
 
@@ -15,18 +15,16 @@ public class ApplicationState : MonoBehaviour
     {
     }
 
-
-
-
+    // contains an object
     public bool contains(string name)
     {
         return singleEquipMap.ContainsKey(name);
     }
 
+    // set an object location
     public void setLocation(string name, Vector3 position)
     {
         name = name.ToLower();
-        // Debug.Log("set location for: " + name);
         if (singletonEquipments.Contains(name))
         {
             if (!singleEquipMap.ContainsKey(name)) {
@@ -35,9 +33,9 @@ public class ApplicationState : MonoBehaviour
             
             singleEquipMap[name] = position;
         }
-        // Debug.Log("done setting location for: " + name + " : " + position.x + " " + position.y + " " + position.z);
     }
 
+    // look up an object
     public Vector3 GetLocation(string name)
     {
         if (singleEquipMap.ContainsKey(name)) {
@@ -47,6 +45,7 @@ public class ApplicationState : MonoBehaviour
         }
     }
 
+    // a helper function similar to toString()
     public string getInfo() {
         string res = "";
         foreach (string s in singleEquipMap.Keys) {
@@ -55,9 +54,5 @@ public class ApplicationState : MonoBehaviour
         return res + "currently stored";
     }
 
-    // public void Clear()
-    // {
-    //     singleEquipMap.Clear();
-    // }
 
 }

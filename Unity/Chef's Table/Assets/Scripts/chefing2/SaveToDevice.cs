@@ -4,6 +4,7 @@ using UnityEngine;
 using System.IO;
 using UnityEngine.UI;
 
+// for saving an online recipe, this function will be implemented in future
 public class SaveToDevice : MonoBehaviour
 {
     private string record = "/documents/C2/record.txt";

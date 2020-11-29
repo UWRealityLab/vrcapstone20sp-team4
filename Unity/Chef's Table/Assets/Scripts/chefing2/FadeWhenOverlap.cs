@@ -25,6 +25,7 @@ public class FadeWhenOverlap : MonoBehaviour
         wasOverlapping = overlapping;
     }
 
+    // check overlaps
     public bool isOverlapping() {
         Vector3 viewVector = mainCam.transform.forward;
         Vector3 toAnother = another.transform.position - mainCam.transform.position;
@@ -33,6 +34,7 @@ public class FadeWhenOverlap : MonoBehaviour
         return angle < 25;
     }
 
+    // shrink or expand
     private void changeScale(bool overlapping) {
         Vector3 scale = this.transform.localScale;
         if (overlapping) {        
@@ -40,7 +42,6 @@ public class FadeWhenOverlap : MonoBehaviour
         } else {
             scale.Set((1 - timer) * 1, (1 - timer) * 1, (1 - timer) * 1);
         }
-        Debug.Log(scale);
         this.transform.localScale = scale;
     }
 }

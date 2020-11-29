@@ -4,6 +4,8 @@ using UnityEngine;
 using TMPro;
 using System.Threading.Tasks;
 
+// this script controls entering and exiting different stage of the program
+
 public class InterfaceManager : MonoBehaviour
 {
     GameObject nearInterface;
@@ -79,10 +81,8 @@ public class InterfaceManager : MonoBehaviour
         }
         else
         {
-            //if (ObjectDetection.activeSelf) ObjectDetection.SetActive(false);
             StartCoroutine(animator.FadeOut(nearInterface));
         }
-        //nearInterface.SetActive(b);
         completeRedirectTimer = 10;
     }
 
@@ -101,7 +101,7 @@ public class InterfaceManager : MonoBehaviour
         }
     }
 
-    public void setActiveOnboardingInterface(bool b)
+    public void setActiveOnboardingInterface(bool b, bool reloadOnboarding=false)
     {
         
         if (b)
@@ -110,7 +110,10 @@ public class InterfaceManager : MonoBehaviour
             onboardingInterface.SetActive(true);
             
             onboardingPreview.SetActive(false);
-            onboarding.GetComponent<InterfaceController>().loadOnboarding();
+            if (reloadOnboarding) {
+                onboarding.GetComponent<InterfaceController>().loadOnboarding();
+            }
+            
             StartCoroutine(animator.FadeIn(onboarding));
         }
         else

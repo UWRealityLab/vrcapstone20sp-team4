@@ -26,7 +26,7 @@ public class RecipeMemory : MonoBehaviour
         onboarding = GameObject.Find("Onboarding");
         onboardingInterface = onboarding.transform.Find("OnboardingInterface").gameObject;
         recipePreview = onboarding.transform.Find("OnboardingPreview").gameObject;
-        StartCoroutine(updateOnboardingWithMemory());
+        //StartCoroutine(updateOnboardingWithMemory());
         
     }
 

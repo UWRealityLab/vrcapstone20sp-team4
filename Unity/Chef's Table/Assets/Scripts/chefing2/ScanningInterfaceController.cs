@@ -5,6 +5,7 @@ using System;
 using UnityEngine.UI;
 using TMPro;
 
+// union of helper method that enables manipulation of the scanning interface
 public class ScanningInterfaceController : MonoBehaviour
 {
     private HashSet<string> ignore = new HashSet<string>();
@@ -24,6 +25,8 @@ public class ScanningInterfaceController : MonoBehaviour
             }
         }
     }
+
+    // return current ingredient
     public string[] array()
     {
         String[] stringArray = new String[currentLabels.Count];
@@ -38,6 +41,8 @@ public class ScanningInterfaceController : MonoBehaviour
             notificationIndex = 0;
         }
     }
+
+    // create an notification on the interface when an action is made
     private void createNotifications(string text)
     {
         GameObject notificationContainer = Instantiate(notificationPrefab, Vector3.zero, Quaternion.identity);
@@ -50,6 +55,7 @@ public class ScanningInterfaceController : MonoBehaviour
         StartCoroutine("registerDisposer");
     }
 
+    // destroy a notification
     private IEnumerator registerDisposer()
     {
         yield return new WaitForSeconds(4.01f);
@@ -57,6 +63,7 @@ public class ScanningInterfaceController : MonoBehaviour
         Destroy(notificationContainer);
     }
 
+    // delete an existing ingredient
     public void removeIngredient(int index)
     {
         GameObject go = ingredients[index];
@@ -72,6 +79,7 @@ public class ScanningInterfaceController : MonoBehaviour
         }
     }
 
+    // reset state
     public void clearMemory()
     {
         for (int i = 0; i < 6; i++)
@@ -82,7 +90,7 @@ public class ScanningInterfaceController : MonoBehaviour
         currentLabels.Clear();
     }
 
-    // TODO:
+    // load icons from the database
     private Sprite loadIngredientIcon(string name) {
         Sprite icon = Resources.Load<Sprite>("Image/IngredientIcons/" + name);
         if (icon == null) {
@@ -91,6 +99,7 @@ public class ScanningInterfaceController : MonoBehaviour
         return icon;
     }
 
+    // add an ingredient
     public void addIngredient(List<string> ingredientsName)
     {
         int limit = Math.Min(6, ingredientsName.Count);
@@ -139,10 +148,13 @@ public class ScanningInterfaceController : MonoBehaviour
         isPaused = false;
     }
 
+    // add ingredient through virtual keyboard input
     public void updateIngredientListByInput(List<string> ingredientsName)
     {
         addIngredient(ingredientsName);
     }
+
+    // add ingredient through detection pipeline
     public void updateIngredientListByScanning(string response)
     {
         string res = "{\"detections\": " + response + " }";
@@ -159,6 +171,7 @@ public class ScanningInterfaceController : MonoBehaviour
         addIngredient(listOfDetections.detections);
     }
 
+    // helper class for parsing the pipeline response
     [Serializable]
     public class ListOfDetections
     {

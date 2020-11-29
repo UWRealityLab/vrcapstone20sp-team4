@@ -1,10 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Xml;
 using System;
 using UnityEngine;
-using System.Threading;
 
+// legacy code, no longer used
 public class MainScheduler : MonoBehaviour
 {
     // Start is called before the first frame update

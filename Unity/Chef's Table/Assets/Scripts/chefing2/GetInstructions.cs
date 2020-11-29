@@ -23,30 +23,8 @@ public class GetInstructions : MonoBehaviour
     int time = 0;
 
     // Start is called before the first frame update
-    void Start()
-    {
-        // button = GameObject.Find("ScanningInterface").GetComponent<ScanningInterfaceButton>();
-        // Debug.Log("start: " + Ingredients);
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        /*
-        if (!previewed) {
-            time++;
-            ingredientsCheckCountdown -= 0.1f;
-            if (ingredientsCheckCountdown <= 0) {
-                Ingredients = button.getIngredients();
-                Debug.Log(Ingredients);
-                if (Ingredients.Length > 0) {
-                    previewed = true;
-                    HandlePreviews();
-                }
-            }
-        }
-        */
-    }
+
 
     public Boolean GetIngredientsList(string list)
     {
@@ -60,15 +38,19 @@ public class GetInstructions : MonoBehaviour
 
     public async void HandlePreviews()
     {
+        Debug.Log(12);
         if (ingredientList.Length > 0) {
             RecipeList = (await GetRecipes()).result;
         }
+        Debug.Log(13);
         GetPreviewList();
+        Debug.Log(14);
     }
 
     // Get the preview info for all recipes
     private void GetPreviewList()
     {
+        allPreviews.Clear();
         if (RecipeList != null) {
             for (int i = 0; i < RECIPE_NUMBER; i++) {
                 PreviewRecipe recipe = RecipeList[i];

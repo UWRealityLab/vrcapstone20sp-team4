@@ -17,8 +17,6 @@ public class Raycast : MonoBehaviour
     private Queue<container> detectionQueue = new Queue<container>();
     ApplicationState As;
     public GameObject debugPrefab;
-    // [Range(0, 1)] public float x_ = 0.5f;
-    // [Range(0, 1)] public float y_ = 0.5f;
 
     private void Start()
     {
@@ -26,16 +24,14 @@ public class Raycast : MonoBehaviour
         cPosition = Vector3.zero;
     }
 
+    // reset a camera position
     public void setCpoition(Vector3 cPosition)
     {
-        if (detectionQueue.Count > 0 && debug)
-        {
-            // Debug.Log("constraints violated, leftover job: " + detectionQueue.Count);
-        }
         detectionQueue.Clear();
         this.cPosition = cPosition;
     }
 
+    // make raycast request sequentially if any has been issued by the pipeline
     private void Update()
     {
         if (prevDone && detectionQueue.Count > 0)
@@ -58,6 +54,7 @@ public class Raycast : MonoBehaviour
         }
     }
 
+    // a helper class contains target name and position
     public class container
     {
         public string name;
@@ -69,6 +66,8 @@ public class Raycast : MonoBehaviour
             this.point = point;
         }
     }
+
+    // for pipeline to call to make request
     public void makeRayCast2(Dictionary<string, Vector3> detections, bool debugMode, Vector3 cPosition) 
     {
         if (!MLRaycast.IsStarted)
@@ -76,6 +75,7 @@ public class Raycast : MonoBehaviour
             MLRaycast.Start();
         }
         if (!prevDone || detectionQueue.Count != 0) {
+            prevDone = true;
             return;
         }
         this.cPosition = cPosition;
@@ -91,21 +91,21 @@ public class Raycast : MonoBehaviour
         MLRaycast.Stop();
     }
 
+    // when a hit is observed, show visual effect, update the state
     private void updateObjects(Vector3 point, Vector3 normal)
     {
         As.setLocation(currClass, point);
-        Debug.Log("Set to true");
         prevDone = true;
         // Debug.Log("Raycast completed for " + currClass);
-        // if (debug)
-        // {
+        if (debug)
+        {
             
-        //     GameObject debugObject = Instantiate(debugPrefab, point, Quaternion.identity);
-        //     debugObject.transform.LookAt(cPosition);
-        //     debugObject.transform.FindChild("Canvas").FindChild("Text").gameObject.GetComponent<Text>().text = currClass;
-        //     Destroy(debugObject, 3f); 
+            GameObject debugObject = Instantiate(debugPrefab, point, Quaternion.identity);
+            debugObject.transform.LookAt(cPosition);
+            debugObject.transform.FindChild("Canvas").FindChild("Text").gameObject.GetComponent<Text>().text = currClass;
+            Destroy(debugObject, 3f); 
             
-        // }
+        }
         
     }
 

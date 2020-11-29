@@ -44,7 +44,7 @@ public class UpdateInGameInterface : MonoBehaviour
     private Sprite[] microwavingSpriteArray;
     private Random r;
 
-    private int framesPerFrame = 5;
+    private int framesPerFrame = 10;
     private int playFrame = 0;
 
     // Start is called before the first frsame update
@@ -73,7 +73,7 @@ public class UpdateInGameInterface : MonoBehaviour
         // lockIcons.Add(lockIcon);
         // lockIcon = GameObject.Find("HeadLockCanvas/Onboarding/OnboardingInterface/Lock/IconAndText/Icon");
         // lockIcons.Add(lockIcon);
-        
+
 
         appState = GameObject.Find("ApplicationState").GetComponent<ApplicationState>();
         r = new Random();
@@ -112,7 +112,7 @@ public class UpdateInGameInterface : MonoBehaviour
         {
             return;
         }
-       
+
         Dictionary<string, List<string>> info = mainScheduler.getCurrentStepInfo();
         if (info == null)
         {
@@ -126,8 +126,9 @@ public class UpdateInGameInterface : MonoBehaviour
 
             if (currentStepNum != prevStepNum)
             {
-   
-                visualCueDisplayContainer.SetActive(true);
+                Debug.Log("set false");
+                visualCueDisplayContainer.SetActive(false);
+                
                 prevStepNum = currentStepNum;
 
                 // display step number
@@ -140,7 +141,7 @@ public class UpdateInGameInterface : MonoBehaviour
                 string detailText = "Ingredients:\n";
                 List<string> ingredients = info["ingredients"];
                 List<string> measurement = info["measurement"];
-           
+
                 if (ingredients.Count == 0)
                 {
                     detailText += "-\n";
@@ -158,7 +159,7 @@ public class UpdateInGameInterface : MonoBehaviour
                     }
                 }
                 detailText += "\n";
-      
+
                 detailText += "Equipment:\n";
                 List<string> equipment = info["equipment"];
                 if (equipment.Count == 0)
@@ -172,7 +173,7 @@ public class UpdateInGameInterface : MonoBehaviour
                         detailText += equipment[i] + "\n";
                     }
                 }
-          
+
                 instructionTextNearMenu.text = instructionText;
                 detailTextNearMenu.text = detailText;
 
@@ -180,17 +181,17 @@ public class UpdateInGameInterface : MonoBehaviour
                 Vector3 timerLocation;
                 if (equipment.Count > 0)
                 {
+                    Debug.Log("counts not zero");
                     string utensil = equipment[0];
                     timerLocation = appState.GetLocation(utensil);
                     if (timerLocation != Vector3.zero)
                     {
+                        visualCueDisplayContainer.SetActive(true);
                         aiManager.addNewAI(timerLocation);
                         timerLocation = new Vector3(timerLocation.x, timerLocation.y + 0.2f, timerLocation.z);
                         visualCueDisplayContainer.transform.position = timerLocation;
-                        
+
                         Debug.Log("get location for " + utensil);
-                    } else {
-                        
                     }
                 }
 
@@ -206,14 +207,7 @@ public class UpdateInGameInterface : MonoBehaviour
                 */
 
                 // display gif
-                
-                if (actionsCues.ContainsKey(action)) {
-                    visualCueDisplayContainer.SetActive(true);
-                    Debug.Log("display animation");
-                } else {
-                    visualCueDisplayContainer.SetActive(false);
-                }
-                
+
 
                 // display video
                 /*
@@ -242,36 +236,48 @@ public class UpdateInGameInterface : MonoBehaviour
 
             // gif animation
             // int framePerSecond = 6;
-            if (visualCueDisplayContainer.activeSelf) {
-                if (playFrame % framesPerFrame == 0) {
-                    spriteRenderer = GameObject.Find("VisualCueDisplayContainer/Animation").GetComponent<SpriteRenderer>();
-                    int temp1 = playFrame / framesPerFrame;
-                    int temp2 = temp1 % actionsCues[action].Length;
-                    spriteRenderer.sprite = actionsCues[action][temp2];
+            if (actionsCues.ContainsKey(action))
+            {
+                if (visualCueDisplayContainer.activeSelf)
+                {
+                    if (playFrame % framesPerFrame == 0)
+                    {
+                        spriteRenderer = GameObject.Find("VisualCueDisplayContainer/Animation").GetComponent<SpriteRenderer>();
+                        int temp1 = playFrame / framesPerFrame;
+                        int temp2 = temp1 % actionsCues[action].Length;
+                        spriteRenderer.sprite = actionsCues[action][temp2];
+                    }
+
+                    // int index = (int)(framePerSecond * Time.time);
+                    // int index = (int)((Time.deltaTime * 100) % cuttingSpriteArray.Length);
+                    // Debug.Log(index);
+                    // index = index % cuttingSpriteArray.Length;
+
+                    // Sprite[] sprites = actionsCues[action];
+                    // int index = r.Next(0, sprites.Length);
+
                 }
-                
-                // int index = (int)(framePerSecond * Time.time);
-                // int index = (int)((Time.deltaTime * 100) % cuttingSpriteArray.Length);
-                // Debug.Log(index);
-                // index = index % cuttingSpriteArray.Length;
-                
-                // Sprite[] sprites = actionsCues[action];
-                // int index = r.Next(0, sprites.Length);
-                
+            } else {
+                visualCueDisplayContainer.SetActive(false);
             }
 
+
             // exit/complete button
-            if (mainScheduler.isTutorialDone()) {
+            if (mainScheduler.isTutorialDone())
+            {
                 exitIcon.GetComponent<Renderer>().material = completeMat;
-            } else {
+            }
+            else
+            {
                 exitIcon.GetComponent<Renderer>().material = exitMat;
             }
-            
+
             // set time
             if (info["timer"][0] == "")
             {
                 interfaceTimer.SetActive(false);
-                if (spatialTimer.activeSelf) {
+                if (spatialTimer.activeSelf)
+                {
                     spatialTimer.SetActive(false);
                 }
             }
@@ -279,7 +285,8 @@ public class UpdateInGameInterface : MonoBehaviour
             {
                 interfaceTimer.SetActive(true);
                 clockNearMenu.text = info["timer"][0];
-                if (!spatialTimer.activeSelf) {
+                if (!spatialTimer.activeSelf)
+                {
                     spatialTimer.SetActive(true);
                 }
                 spatialTimer.transform.Find("Time").gameObject.GetComponent<TextMeshPro>().text = info["timer"][0];
@@ -291,7 +298,7 @@ public class UpdateInGameInterface : MonoBehaviour
                     spatialTimer.transform.Find("Time").gameObject.GetComponent<TextMeshPro>().text = info["timer"][0];
                 }
                 */
-            } 
+            }
 
         }
     }

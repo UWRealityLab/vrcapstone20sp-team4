@@ -66,7 +66,7 @@ public class WelcomeInterface : MonoBehaviour
             interfaceManager.setActiveNearInterface(false);
             interfaceManager.setActiveScanningInterface(false);
             interfaceManager.setActiveWelcomeInterface(false);
-            interfaceManager.setActiveOnboardingInterface(true);
+            interfaceManager.setActiveOnboardingInterface(true, false);
             StartCoroutine(rm.updateOnboardingWithMemory());
             
         }
