@@ -16,6 +16,9 @@ public class NIThresholdControl : MonoBehaviour
     private Material unlockMat;
 
     private List<GameObject> lockIcons;
+
+    private bool goToPositionFlag = false;
+    private Vector3 target;
     
     void Start()
     {
@@ -38,30 +41,38 @@ public class NIThresholdControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        updateLock();
+        //updateLock();
         if (Lock) { return; }
-        Vector3 camPos = mainCam.transform.position;
-        Vector3 cam2Target = new Vector3(transform.position.x - camPos.x, 0, transform.position.z - camPos.z);
-        if (cam2Target.magnitude > radius)
-        {
-            transform.position = camPos + radius / cam2Target.magnitude * cam2Target; // adjust only position
-        }
-        if (autoAdjustToViewPort)
-        {
-            if (!inViewPortNow())
+        if (!goToPositionFlag) {
+            Vector3 camPos = mainCam.transform.position;
+            Vector3 cam2Target = new Vector3(transform.position.x - camPos.x, 0, transform.position.z - camPos.z);
+            if (cam2Target.magnitude > radius)
             {
-                viewPortTimer -= Time.deltaTime;
-                if (viewPortTimer < 0)
+                transform.position = camPos + radius / cam2Target.magnitude * cam2Target; // adjust only position
+            }
+            if (autoAdjustToViewPort)
+            {
+                if (!inViewPortNow())
                 {
-                    viewPortAutoAdjust();
+                    viewPortTimer -= Time.deltaTime;
+                    if (viewPortTimer < 0)
+                    {
+                        viewPortAutoAdjust();
+                        viewPortTimer = 5f;
+                    }
+                }
+                else
+                {
                     viewPortTimer = 5f;
                 }
             }
-            else
-            {
-                viewPortTimer = 5f;
+        } else {         
+            transform.position = Vector3.MoveTowards(transform.position, target, 0.02f);
+            if (Vector3.Distance(target, transform.position) < 0.1f) {
+                goToPositionFlag = false;
             }
         }
+        
         transform.LookAt(mainCam.transform);
     }
 
@@ -106,5 +117,14 @@ public class NIThresholdControl : MonoBehaviour
     public bool getLock()
     {
         return Lock;
+    }
+
+
+    public void goToPosition(Vector3 position) {
+        if (!goToPositionFlag) {
+            this.goToPositionFlag = true;
+            target = position;
+        }
+        
     }
 }

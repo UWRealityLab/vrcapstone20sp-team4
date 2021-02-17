@@ -9,14 +9,13 @@ using System.Collections;
 public class RecipeMemory : MonoBehaviour
 {
     private GameObject onboarding;
-    private GameObject onboardingInterface;
-    private GameObject recipePreview;
+    public GameObject onboardingInterface;
+    public GameObject recipePreview;
 
     private string default_recipe_name = "Omelette in a Bowl";
 
     public List<Instruction> steps = null;
     private Dictionary<string, List<string>> recipeDict = null;
-
     // Start is called before the first frame update
     void Start()
     {
@@ -24,8 +23,8 @@ public class RecipeMemory : MonoBehaviour
         recipeDict = new Dictionary<string, List<string>>();
 
         onboarding = GameObject.Find("Onboarding");
-        onboardingInterface = onboarding.transform.Find("OnboardingInterface").gameObject;
-        recipePreview = onboarding.transform.Find("OnboardingPreview").gameObject;
+        //onboardingInterface = onboarding.transform.Find("OnboardingInterface").gameObject;
+        //recipePreview = onboarding.transform.Find("OnboardingPreview").gameObject;
         //StartCoroutine(updateOnboardingWithMemory());
         
     }

@@ -126,7 +126,6 @@ public class UpdateInGameInterface : MonoBehaviour
 
             if (currentStepNum != prevStepNum)
             {
-                Debug.Log("set false");
                 visualCueDisplayContainer.SetActive(false);
                 
                 prevStepNum = currentStepNum;

@@ -158,7 +158,6 @@ public class ScanningInterfaceController : MonoBehaviour
     public void updateIngredientListByScanning(string response)
     {
         string res = "{\"detections\": " + response + " }";
-        Debug.Log(res);
         ListOfDetections listOfDetections;
         try
         {
@@ -166,6 +165,7 @@ public class ScanningInterfaceController : MonoBehaviour
         }
         catch (Exception e)
         {
+            Debug.Log(response);
             return;
         }
         addIngredient(listOfDetections.detections);

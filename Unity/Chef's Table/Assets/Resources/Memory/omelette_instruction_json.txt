@@ -1,20 +1,109 @@
 {
-   "name":"Omelette in a Bowl",
-   "steps":[
+   "name":"Guacamole Omelette in a Bowl",
+   "steps": [
       {
          "action":"none",
          "number":1,
-         "step":"(Optional) Walk around your kitchen slowly. Let the headset scan you kitchen",
-         "ingredients":[
+         "step":"(Optional) Walk around your kitchen slowly. Let the headset scan your kitchen",
+         "ingredients": [
          ],
-         "equipment":[
+         "equipment": [
+         ]
+      },
+      {
+         "action":"peeling",
+         "number":2,
+         "step":"Cut the avocado lengthwise, separate the halves, remove the seed, and peel each half.",
+         "ingredients": [
+            {
+               "name":"avocado",
+               "measurement":"one"
+            }
+         ],
+         "equipment": [
+            {
+               "name":"knife"
+            }
+         ]
+      },
+      {
+         "action":"mashing",
+         "number":3,
+         "step":"Put the peeled avocado into a medium bowl. Use a fork to mash it in the bowl.",
+         "ingredients": [
+         ],
+         "equipment": [
+            {
+               "name":"bowl"
+            },
+            {
+               "name":"fork"
+            }
          ]
       },
       {
          "action":"cutting",
-         "number":2,
+         "number":4,
+         "step":"Dice 1/4 cup of an onion, mince 1/4 of a garlic, chop 1/2 tablespoon of fresh cilantro and dice 1 tomato.",
+         "ingredients": [
+            {
+               "name":"onion",
+               "measurement":"one"
+            },
+            {
+               "name":"cilantro",
+               "measurement":""
+            },
+            {
+               "name":"tomato",
+               "measurement":"one"
+            },
+            {
+               "name":"garlic",
+               "measurement":"one"
+            }
+         ],
+         "equipment": [
+         ]
+      },
+      {
+         "action":"",
+         "number":5,
+         "step":"Add 1/4 teaspoon of salt and ingredients from previous step onto the mashed avocado, then squeeze juice of half a lime onto it.",
+         "ingredients": [
+            {
+               "name":"lime",
+               "measurement":"half"
+            },
+            {
+               "name":"salt",
+               "measurement":"quarter of teaspoon"
+            }
+         ],
+         "equipment": [
+         ]
+      },
+      {
+         "action":"mixing",
+         "number":6,
+         "step":"Use a fork to mix the mashed avocado with other ingredients for one minute. Guacamole is complete. Put it aside for later use.",
+         "ingredients": [
+         ],
+         "equipment": [
+            {
+               "name":"fork"
+            }
+         ],
+         "length":{
+            "number":60,
+            "unit":"second(s)"
+         }
+      },
+      {
+         "action":"cutting",
+         "number":7,
          "step":"Chop 1/2 of a red bell pepper, dice 2 slices of ham, and chop the spinach.",
-         "ingredients":[
+         "ingredients": [
             {
                "name":"red bell pepper",
                "measurement":"half"
@@ -28,7 +117,7 @@
                "measurement":""
             }
          ],
-         "equipment":[
+         "equipment": [
             {
                "name":"knife"
             }
@@ -36,15 +125,15 @@
       },
       {
          "action":"coating",
-         "number":3,
+         "number":8,
          "step":"Coat the inside of a large, microwave-safe bowl with olive oil.",
-         "ingredients":[
+         "ingredients": [
             {
                "name":"cooking oil",
                "measurement":""
             }
          ],
-         "equipment":[
+         "equipment": [
             {
                "name":"bowl"
             }
@@ -52,9 +141,9 @@
       },
       {
          "action":"cracking",
-         "number":4,
+         "number":9,
          "step":"Crack 2 eggs into the bowl, add 1 tablespoon of milk, and beat together with a fork.",
-         "ingredients":[
+         "ingredients": [
             {
                "name":"egg",
                "measurement":"two"
@@ -64,7 +153,7 @@
                "measurement":"one tablespoon"
             }
          ],
-         "equipment":[
+         "equipment": [
             {
                "name":"bowl"
             },
@@ -78,9 +167,9 @@
       },
       {
          "action":"",
-         "number":5,
-         "step":"Add grated cheese, chopped red bell pepper, ham, and spinach to the bowl.",
-         "ingredients":[
+         "number":10,
+         "step":"Add grated cheese, chopped red bell pepper, ham, and spinach to the bowl. Stir with a fork until mixed well",
+         "ingredients": [
             {
                "name":"red bell pepper",
                "measurement":"half"
@@ -98,7 +187,7 @@
                "measurement":""
             }
          ],
-         "equipment":[
+         "equipment": [
             {
                "name":"bowl"
             }
@@ -106,15 +195,15 @@
       },
       {
          "action":"mixing",
-         "number":6,
-         "step":"Add a sprinkle of salt and pepper. Stir with a fork until mixed well.",
-         "ingredients":[
+         "number":11,
+         "step":"Add a sprinkle of salt. Stir with a fork until mixed well.",
+         "ingredients": [
             {
-               "name":"salt and pepper",
+               "name":"salt",
                "measurement":"a sprinkle"
             }
          ],
-         "equipment":[
+         "equipment": [
             {
                "name":"fork"
             }
@@ -122,14 +211,14 @@
       },
       {
          "action":"microwaving",
-         "number":7,
+         "number":12,
          "step":"Put the bowl into the microwave for 1 minute.",
-         "ingredients":[
+         "ingredients": [
             
          ],
-         "equipment":[
+         "equipment": [
             {
-               "name":"microwave"
+               "name":"microwave oven"
             }
          ],
          "length":{
@@ -139,14 +228,14 @@
       },
       {
          "action":"microwaving",
-         "number":8,
-         "step":"Take the bowl out. Use a fork to stir it and then put it back into the microwave for 1 more minute.",
-         "ingredients":[
+         "number":13,
+         "step":"Take the bowl out. Use a fork to stir it and then put it back into the microwave for 1 more minute, then take the bowl out.",
+         "ingredients": [
             
          ],
-         "equipment":[
+         "equipment": [
             {
-               "name":"microwave"
+               "name":"microwave oven"
             },
             {
                "name":"bowl"
@@ -162,15 +251,11 @@
       },
       {
          "action":"",
-         "number":9,
-         "step":"Take the bowl out. Omelette is complete.",
-         "ingredients":[
-            
+         "number":14,
+         "step":"Omelette is complete. Serve with guacamole.",
+         "ingredients": [
          ],
-         "equipment":[
-            {
-               "name":"microwave"
-            }
+         "equipment": [
          ]
       }
    ]

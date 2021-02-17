@@ -27,7 +27,7 @@ public class InterfaceManager : MonoBehaviour
     private float completeRedirectTimer = 10;
     private float clickCountDown = 0.05f;
 
-    
+    private string state = "home"; // home, onboarding, scanning, tutorial
 
     private void Awake()
     {
@@ -45,9 +45,12 @@ public class InterfaceManager : MonoBehaviour
         ms = GameObject.Find("Scheduler").GetComponent<MainScheduler2>();
         summary = GameObject.Find("summary");
         headLockCanvas = GameObject.Find("HeadLockCanvas");
-        
+        this.state = "home";
     }
 
+    public string getState() {
+        return state;
+    }
 
     public bool clickOk()
     {
@@ -78,6 +81,7 @@ public class InterfaceManager : MonoBehaviour
             ObjectDetection.SetActive(true);
             await Task.Delay(3000);
             StartCoroutine(animator.FadeIn(nearInterface));
+            state = "tutorial";
         }
         else
         {
@@ -93,6 +97,7 @@ public class InterfaceManager : MonoBehaviour
         {
             StartCoroutine(animator.FadeIn(welcomeInterface));
             // set collidar component to true
+            state = "home";
         }
         else
         {
@@ -113,7 +118,7 @@ public class InterfaceManager : MonoBehaviour
             if (reloadOnboarding) {
                 onboarding.GetComponent<InterfaceController>().loadOnboarding();
             }
-            
+            state = "onboarding";
             StartCoroutine(animator.FadeIn(onboarding));
         }
         else
@@ -143,9 +148,11 @@ public class InterfaceManager : MonoBehaviour
             scanningInterface.SetActive(true);
             beginScan.SetActive(true);
             beginScan.transform.Find("PauseScanning").gameObject.SetActive(false);
+            beginScan.transform.Find("StartScanning").gameObject.SetActive(true);
             scanningActive.SetActive(true);
             VirtualHandKeyboard.SetActive(false);
             StartCoroutine(animator.FadeIn(scanningInterface));
+            state = "scanning";
         }
         else
         {

@@ -18,9 +18,13 @@ public class Raycast : MonoBehaviour
     ApplicationState As;
     public GameObject debugPrefab;
 
+    public GameObject mainScheduler;
+    private MainScheduler2 mainScheduler2;
+
     private void Start()
     {
         As = GameObject.Find("ApplicationState").GetComponent<ApplicationState>();
+        mainScheduler2 = mainScheduler.GetComponent<MainScheduler2>();
         cPosition = Vector3.zero;
     }
 
@@ -97,7 +101,7 @@ public class Raycast : MonoBehaviour
         As.setLocation(currClass, point);
         prevDone = true;
         // Debug.Log("Raycast completed for " + currClass);
-        if (debug)
+        if (debug && mainScheduler2.stepIndex == 0)
         {
             
             GameObject debugObject = Instantiate(debugPrefab, point, Quaternion.identity);

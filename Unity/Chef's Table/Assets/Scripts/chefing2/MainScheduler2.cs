@@ -14,7 +14,7 @@ public class MainScheduler2 : MonoBehaviour
     // for bookkeeping and manipulation
 
     private List<Instruction> tutorial; // tutorial will be read only
-    private int stepIndex = 0;
+    public int stepIndex = 0;
     private List<float> timerRecord = new List<float>();
     private bool timerPause = true;
     private int totalStepNum = 0;
@@ -30,6 +30,8 @@ public class MainScheduler2 : MonoBehaviour
     public bool tutorialStarts = false; // indicate if a user has choosen a tutorial
     public bool tutorialFinish = false;
 
+    private bool alarmOk = true;
+
     private ApplicationState As;
     // for instructions from the API
     GameObject recipeAPI;
@@ -39,8 +41,11 @@ public class MainScheduler2 : MonoBehaviour
     RecipeMemory getMemory;
     DetectionPipeline pipeline;
 
-    public GameObject NEXT;
-    public GameObject BACK;
+    private GameObject NEXT;
+    private GameObject BACK;
+
+    public GameObject TimerAudio;
+
 
     private List<Texture> imagesCurrentStep = new List<Texture>();
 
@@ -284,7 +289,10 @@ public class MainScheduler2 : MonoBehaviour
         if (tutorialStarts) {
             if (!timerPause) {
                 timerRecord[stepIndex] = Math.Max(timerRecord[stepIndex] - Time.deltaTime, 0);
-
+                if (timerRecord[stepIndex] == 0f && alarmOk) {
+                    StartCoroutine(playAlarm());
+                    
+                }
             }
             if (!tutorialFinish)
             {
@@ -293,6 +301,13 @@ public class MainScheduler2 : MonoBehaviour
         }
     }
 
+    IEnumerator playAlarm()
+    {
+        alarmOk = false;
+        AudioSource.PlayClipAtPoint(TimerAudio.GetComponent<AudioSource>().clip, GameObject.Find("HeadLockCanvas").transform.position);
+        yield return new WaitForSeconds(2);
+        alarmOk = true;
+    }
 
     // for visualizing timers
     private string GetTimeSpanWithSec(float seconds)

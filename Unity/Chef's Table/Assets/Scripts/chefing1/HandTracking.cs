@@ -42,6 +42,9 @@ namespace MagicLeap
         private Material movingPointNormalMat;
         private Material movingPointHighlightMat;
 
+        public List<GameObject> Interfaces;
+
+
         private MLHandTracking.Hand Hand
         {
             get
@@ -78,6 +81,17 @@ namespace MagicLeap
             //offset = haloObjectPos - headLockCanvasPos + new Vector3(0, 0.06f, -0.035f);
             movingPointNormalMat = Resources.Load("Mat/Wireframe", typeof(Material)) as Material;
             movingPointHighlightMat = Resources.Load("Mat/MovingPointHighlightMat", typeof(Material)) as Material;
+        }
+
+        public bool farFromInterface() {
+
+            bool far = true;
+            foreach(GameObject go in Interfaces) {
+                if (Vector3.Distance(transform.position, go.transform.position) < 0.5f) {
+                    far = false;
+                }
+            }
+            return far;
         }
 
         // Clean up.
@@ -138,21 +152,9 @@ namespace MagicLeap
                 }
                 else if (GetGesture(Hand, MLHandTracking.HandKeyPose.Thumb))
                 {
-                    /*
-                    if (thumbPoseChanged == true)
-                    {
-
-                        if (!raycast.activeSelf)
-                        {
-                            raycast.SetActive(true);
-                        }
-                        else
-                        {
-                            raycast.SetActive(false);
-                        }
-                        pose = HandPoses.Thumb;
-                        thumbPoseChanged = false;
-                    }*/
+                
+                    NIThresholdControl control = Interfaces[0].transform.parent.gameObject.GetComponent<NIThresholdControl>();
+                    control.goToPosition(transform.position);
                 }
                 
                 else if (GetGesture(Hand, MLHandTracking.HandKeyPose.OpenHand))
@@ -199,9 +201,9 @@ namespace MagicLeap
                     pose = HandPoses.Pinch;
                     if (canIGrab)
                     {
-                        selectedGameObject.transform.localPosition = transform.position + offset;
-                        // This is so that the object wont leave our hand while we're dragging it.
-                        gameObject.GetComponent<SphereCollider>().radius = 0.04f;
+                        // selectedGameObject.transform.localPosition = transform.position + offset;
+                        // // This is so that the object wont leave our hand while we're dragging it.
+                        // gameObject.GetComponent<SphereCollider>().radius = 0.04f;
                     }
                 } else {
                     prevPosition = null;
@@ -215,12 +217,13 @@ namespace MagicLeap
                     }
                 }
                 _indexFinger.position = Hand.Index.KeyPoints[2].Position;
-                _indexFinger.gameObject.SetActive(Hand.IsVisible);
-
+                if (interfaceManager.getState().Equals("tutorial") && farFromInterface()) {
+                    _indexFinger.gameObject.SetActive(false);
+                } else {
+                    _indexFinger.gameObject.SetActive(Hand.IsVisible);
+                }
                 _thumb.gameObject.SetActive(false);
                 _middle.gameObject.SetActive(false);
-
-
                 //indexTip.transform.position = Hand.Index.KeyPoints[2].Position;
                 //indexTip.SetActive(Hand.IsVisible);
             }

@@ -30,8 +30,8 @@ public class DetectionPipeline : MonoBehaviour
     private float Fx = 1400f;
     private float Fy = 1399.5f;
     public Transform ctransform;
-    private string url_tutorial = "http://35.233.198.97:5000/predict";
-    private string url_suggest = "http://35.233.198.97:5000/get_ingredients";
+    private string url_tutorial = "http://oasis.cs.washington.edu:5000/predict";
+    private string url_suggest = "http://oasis.cs.washington.edu:5000/get_ingredients";
     private Raycast rc;
     public GameObject copy_prefab;
     private Dictionary<int, GameObject> stamp2Copy = new Dictionary<int, GameObject>();
@@ -108,7 +108,7 @@ public class DetectionPipeline : MonoBehaviour
         }
         catch (Exception e)
         {
-            Debug.Log(e);
+           // Debug.Log(e);
             return;
         }
         Dictionary<string, Vector3> rays = new Dictionary<string, Vector3>();
