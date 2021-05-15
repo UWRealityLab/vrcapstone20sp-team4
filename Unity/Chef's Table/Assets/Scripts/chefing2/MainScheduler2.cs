@@ -1,10 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Xml;
+using System.Collections.Specialized;  
 using System;
 using UnityEngine;
 using UnityEngine.Networking;
-using System.Threading;
+using System.Threading.Tasks;
+using System.Net;
+
 
 public class MainScheduler2 : MonoBehaviour
 {
@@ -25,7 +27,8 @@ public class MainScheduler2 : MonoBehaviour
 
     private int debug_print = 10;
 
-
+    private Dictionary<string, List<Sprite>> epicKitchenVideos = new Dictionary<string, List<Sprite>>();
+    private string epicKitchenURL = "http://oasis.cs.washington.edu:5000/get_images";
     // global states
     public bool tutorialStarts = false; // indicate if a user has choosen a tutorial
     public bool tutorialFinish = false;
@@ -223,7 +226,7 @@ public class MainScheduler2 : MonoBehaviour
             Debug.Log("omelette");
             startOmeletteTutorial();
         }
-
+        loadAllActionVideos();
     }
 
     public void startOmeletteTutorial()
@@ -319,5 +322,43 @@ public class MainScheduler2 : MonoBehaviour
         return interval.ToString();
     }
 
+    public List<Sprite> getVideo(string action) {
+        return epicKitchenVideos[action];
+    }
+
+    void loadAllActionVideos() {
+        Task.Run( async () => {
+            foreach (Instruction ins in tutorial) {
+                if (ins.action != null && ins.action.Length != 0 && !epicKitchenVideos.ContainsKey(ins.action)) {
+                    List<Sprite> video = new List<Sprite>();
+                    NameValueCollection values = new NameValueCollection();
+                    values.Add("action", ins.action);
+                    using (WebClient client = new WebClient())
+                    {
+                        client.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
+                        byte[] result = await client.UploadValuesTaskAsync(epicKitchenURL, "POST", values);
+                        string ResultAuthTicket = System.Text.Encoding.UTF8.GetString(result);
+                        Response res = JsonUtility.FromJson<Response>(ResultAuthTicket);
+                        if (res.pic.Count > 0) {
+                            foreach (string frame in res.pic) {
+                                byte[] imageBytes = System.Convert.FromBase64String(frame);
+                                Texture2D texture = new Texture2D(456, 256);
+                                texture.LoadImage(imageBytes);
+                                Sprite sprite = Sprite.Create(texture, new Rect(0,0,texture.width, texture.height), new Vector2(0.5f, 0.5f));
+                                video.Add(sprite);
+                            }
+                            epicKitchenVideos.Add(ins.action, video);
+                            Debug.Log(ins.action + " loaded");
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    [Serializable]
+    private class Response {
+        public List<string> pic;
+    }
 
 }

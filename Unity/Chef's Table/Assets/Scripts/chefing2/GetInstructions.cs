@@ -38,13 +38,10 @@ public class GetInstructions : MonoBehaviour
 
     public async void HandlePreviews()
     {
-        Debug.Log(12);
         if (ingredientList.Length > 0) {
             RecipeList = (await GetRecipes()).result;
         }
-        Debug.Log(13);
         GetPreviewList();
-        Debug.Log(14);
     }
 
     // Get the preview info for all recipes
