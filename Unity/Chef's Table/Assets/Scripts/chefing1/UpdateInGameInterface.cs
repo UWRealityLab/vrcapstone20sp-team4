@@ -104,21 +104,26 @@ public class UpdateInGameInterface : MonoBehaviour
         actionsCues["microwaving"] = microwavingSpriteArray;
     }
 
-    void FixedUpdate() {
+    void FixedUpdate()
+    {
         playFrame += 1;
-        if (nearInterface.activeSelf) {
+        if (nearInterface.activeSelf)
+        {
             Dictionary<string, List<string>> info = mainScheduler.getCurrentStepInfo();
             string action = info["action"][0];
-            if (actionsCues.ContainsKey(action))
+            List<Sprite> video = mainScheduler.getVideo(action);
+
+            if (video != null)
             {
                 if (visualCueDisplayContainer.activeSelf)
                 {
-                    List<Sprite> video = mainScheduler.getVideo(action);
                     spriteRenderer = GameObject.Find("VisualCueDisplayContainer/Animation").GetComponent<SpriteRenderer>();
                     int temp2 = playFrame % video.Count;
                     spriteRenderer.sprite = video[temp2];
                 }
-            } else {
+            }
+            else
+            {
                 visualCueDisplayContainer.SetActive(false);
             }
         }
@@ -129,7 +134,7 @@ public class UpdateInGameInterface : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
         if (!GameObject.Find("Scheduler").activeSelf || !mainScheduler.tutorialStarts)
         {
             return;
@@ -148,179 +153,126 @@ public class UpdateInGameInterface : MonoBehaviour
 
             if (currentStepNum != prevStepNum)
             {
-                visualCueDisplayContainer.SetActive(false);
-                playFrame =0;
+
+                playFrame = 0;
                 prevStepNum = currentStepNum;
 
-                // display step number
-                string stepNumberText = "Step #" + currentStepNum;
-                stepNumberNearMenu.text = stepNumberText;
+                
+                updateSpaitialVisualCue(info);
+                // find location of the main equipment
 
-                // display instruction text
-                string instructionText = info["description"][0];
+            }
+            updateNearInterface(info, currentStepNum);
+            updateTimers(info);
+        }
+    }
 
-                string detailText = "Ingredients:\n";
-                List<string> ingredients = info["ingredients"];
-                List<string> measurement = info["measurement"];
+    private void updateTimers(Dictionary<string, List<string>> info)
+    {
+        // set time
+        if (info["timer"][0] == "")
+        {
+            interfaceTimer.SetActive(false);
+            if (spatialTimer.activeSelf)
+            {
+                spatialTimer.SetActive(false);
+            }
+        }
+        else
+        {
+            interfaceTimer.SetActive(true);
+            clockNearMenu.text = info["timer"][0];
+            if (!spatialTimer.activeSelf)
+            {
+                spatialTimer.SetActive(true);
+            }
+            spatialTimer.transform.Find("Time").gameObject.GetComponent<TextMeshPro>().text = info["timer"][0];
+        }
+    }
 
-                if (ingredients.Count == 0)
+    private void updateSpaitialVisualCue(Dictionary<string, List<string>> info)
+    {
+        List<string> equipment = info["equipment"];
+        Vector3 timerLocation;
+        if (equipment.Count > 0)
+        {
+            string utensil = equipment[0];
+            timerLocation = appState.GetLocation(utensil);
+            if (timerLocation != Vector3.zero)
+            {
+                visualCueDisplayContainer.SetActive(true);
+                aiManager.addNewAI(timerLocation);
+                timerLocation = new Vector3(timerLocation.x, timerLocation.y + 0.2f, timerLocation.z);
+                visualCueDisplayContainer.transform.position = timerLocation;
+                Debug.Log("get location for " + utensil);
+            }
+            else
+            {
+                visualCueDisplayContainer.SetActive(false);
+            }
+        }
+
+    }
+    private void updateNearInterface(Dictionary<string, List<string>> info, int currentStepNum)
+    {
+        // display step number
+        string stepNumberText = "Step #" + currentStepNum;
+        stepNumberNearMenu.text = stepNumberText;
+
+        // display instruction text
+        string instructionText = info["description"][0];
+
+        string detailText = "Ingredients:\n";
+        List<string> ingredients = info["ingredients"];
+        List<string> measurement = info["measurement"];
+
+        if (ingredients.Count == 0)
+        {
+            detailText += "-\n";
+        }
+        else
+        {
+            for (int i = 0; i < ingredients.Count; i++)
+            {
+                detailText += ingredients[i];
+                if (measurement[i].Length != 0)
                 {
-                    detailText += "-\n";
-                }
-                else
-                {
-                    for (int i = 0; i < ingredients.Count; i++)
-                    {
-                        detailText += ingredients[i];
-                        if (measurement[i].Length != 0)
-                        {
-                            detailText += " - " + measurement[i];
-                        }
-                        detailText += "\n";
-                    }
+                    detailText += " - " + measurement[i];
                 }
                 detailText += "\n";
-
-                detailText += "Equipment:\n";
-                List<string> equipment = info["equipment"];
-                if (equipment.Count == 0)
-                {
-                    detailText += "-\n";
-                }
-                else
-                {
-                    for (int i = 0; i < equipment.Count; i++)
-                    {
-                        detailText += equipment[i] + "\n";
-                    }
-                }
-
-                instructionTextNearMenu.text = instructionText;
-                detailTextNearMenu.text = detailText;
-
-                // find location of the main equipment
-                Vector3 timerLocation;
-                if (equipment.Count > 0)
-                {
-                    Debug.Log("counts not zero");
-                    string utensil = equipment[0];
-                    timerLocation = appState.GetLocation(utensil);
-                    if (timerLocation != Vector3.zero)
-                    {
-                        visualCueDisplayContainer.SetActive(true);
-                        aiManager.addNewAI(timerLocation);
-                        timerLocation = new Vector3(timerLocation.x, timerLocation.y + 0.2f, timerLocation.z);
-                        visualCueDisplayContainer.transform.position = timerLocation;
-
-                        Debug.Log("get location for " + utensil);
-                    }
-                }
-
-                // display gif
-                /*
-                Texture2D[] frames;
-                float framesPerSecond = 10.0f;
-
-                int index;
-                float time = Time.time * framesPerSecond;
-                index = index % frames.Length;
-                renderer.material.mainTexture = frames[index];
-                */
-
-                // display gif
-
-
-                // display video
-                /*
-                if (visualCueDisplayContainer.activeSelf)
-                {
-                    string action = info["action"][0];
-                    if (actionsCues.ContainsKey(action))
-                    {
-                        visualCueDisplayContainer.SetActive(true);
-                        Debug.Log("display animation");
-                        
-                        VideoClip video = actionsCues[action];
-                        visualCueDisplayContainer.transform.Find("VisualCueDisplay").gameObject.GetComponent<VideoPlayer>().clip = video;
-                        visualCueDisplayContainer.transform.Find("VisualCueDisplay").gameObject.GetComponent<VideoPlayer>().Play();
-                        Debug.Log("play video"); 
-                        Debug.Log("play video"); 
-                    }
-                    else
-                    {
-                        visualCueDisplayContainer.transform.position = new Vector3(0f, -0.15f, 0f);
-                        visualCueDisplayContainer.SetActive(false);
-                    }
-                }
-                */
             }
+        }
+        detailText += "\n";
 
-            // gif animation
-            // int framePerSecond = 6;
-            // if (actionsCues.ContainsKey(action))
-            // {
-            //     if (visualCueDisplayContainer.activeSelf)
-            //     {
-            //         if (playFrame % framesPerFrame == 0)
-            //         {
-            //             spriteRenderer = GameObject.Find("VisualCueDisplayContainer/Animation").GetComponent<SpriteRenderer>();
-            //             int temp1 = playFrame / framesPerFrame;
-            //             int temp2 = temp1 % actionsCues[action].Length;
-            //             spriteRenderer.sprite = actionsCues[action][temp2];
-            //         }
-
-            //         // int index = (int)(framePerSecond * Time.time);
-            //         // int index = (int)((Time.deltaTime * 100) % cuttingSpriteArray.Length);
-            //         // Debug.Log(index);
-            //         // index = index % cuttingSpriteArray.Length;
-
-            //         // Sprite[] sprites = actionsCues[action];
-            //         // int index = r.Next(0, sprites.Length);
-
-            //     }
-            // } else {
-            //     visualCueDisplayContainer.SetActive(false);
-            // }
-
-
-            // exit/complete button
-            if (mainScheduler.isTutorialDone())
+        detailText += "Equipment:\n";
+        List<string> equipment = info["equipment"];
+        if (equipment.Count == 0)
+        {
+            detailText += "-\n";
+        }
+        else
+        {
+            for (int i = 0; i < equipment.Count; i++)
             {
-                exitIcon.GetComponent<Renderer>().material = completeMat;
+                detailText += equipment[i] + "\n";
             }
-            else
-            {
-                exitIcon.GetComponent<Renderer>().material = exitMat;
-            }
+        }
 
-            // set time
-            if (info["timer"][0] == "")
-            {
-                interfaceTimer.SetActive(false);
-                if (spatialTimer.activeSelf)
-                {
-                    spatialTimer.SetActive(false);
-                }
-            }
-            else
-            {
-                interfaceTimer.SetActive(true);
-                clockNearMenu.text = info["timer"][0];
-                if (!spatialTimer.activeSelf)
-                {
-                    spatialTimer.SetActive(true);
-                }
-                spatialTimer.transform.Find("Time").gameObject.GetComponent<TextMeshPro>().text = info["timer"][0];
-                /*
-                if (visualCueDisplayContainer.activeSelf) {
-                    if (!spatiadlTimer.activeSelf) {
-                        spatialTimer.SetActive(true);
-                    }
-                    spatialTimer.transform.Find("Time").gameObject.GetComponent<TextMeshPro>().text = info["timer"][0];
-                }
-                */
-            }
+        instructionTextNearMenu.text = instructionText;
+        detailTextNearMenu.text = detailText;
+        if (currentStepNum == 1) {
+            instructionTextNearMenu.text += "\n" + mainScheduler.getEpicKitchenStatus();
+        }
 
+
+        // exit/complete button
+        if (mainScheduler.isTutorialDone())
+        {
+            exitIcon.GetComponent<Renderer>().material = completeMat;
+        }
+        else
+        {
+            exitIcon.GetComponent<Renderer>().material = exitMat;
         }
     }
 

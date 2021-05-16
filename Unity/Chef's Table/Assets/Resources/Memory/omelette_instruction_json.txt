@@ -11,7 +11,7 @@
          ]
       },
       {
-         "action":"peeling",
+         "action":"spoon avocado",
          "number":2,
          "step":"Cut the avocado lengthwise, separate the halves, remove the seed, and peel each half.",
          "ingredients": [
@@ -27,7 +27,7 @@
          ]
       },
       {
-         "action":"mashing",
+         "action":"mash avocado",
          "number":3,
          "step":"Put the peeled avocado into a medium bowl. Use a fork to mash it in the bowl.",
          "ingredients": [
@@ -42,7 +42,7 @@
          ]
       },
       {
-         "action":"cutting",
+         "action":"cut onion",
          "number":4,
          "step":"Dice 1/4 cup of an onion, mince 1/4 of a garlic, chop 1/2 tablespoon of fresh cilantro and dice 1 tomato.",
          "ingredients": [
@@ -64,6 +64,9 @@
             }
          ],
          "equipment": [
+            {
+               "name":"knife"
+            }
          ]
       },
       {
@@ -84,7 +87,7 @@
          ]
       },
       {
-         "action":"mixing",
+         "action":"",
          "number":6,
          "step":"Use a fork to mix the mashed avocado with other ingredients for one minute. Guacamole is complete. Put it aside for later use.",
          "ingredients": [
@@ -100,7 +103,7 @@
          }
       },
       {
-         "action":"cutting",
+         "action":"cut bell pepper",
          "number":7,
          "step":"Chop 1/2 of a red bell pepper, dice 2 slices of ham, and chop the spinach.",
          "ingredients": [
@@ -124,7 +127,7 @@
          ]
       },
       {
-         "action":"coating",
+         "action":"coat oil",
          "number":8,
          "step":"Coat the inside of a large, microwave-safe bowl with olive oil.",
          "ingredients": [
@@ -140,7 +143,7 @@
          ]
       },
       {
-         "action":"cracking",
+         "action":"crack eggs",
          "number":9,
          "step":"Crack 2 eggs into the bowl, add 1 tablespoon of milk, and beat together with a fork.",
          "ingredients": [
@@ -166,7 +169,7 @@
          ]
       },
       {
-         "action":"",
+         "action":"stir eggs into mixture",
          "number":10,
          "step":"Add grated cheese, chopped red bell pepper, ham, and spinach to the bowl. Stir with a fork until mixed well",
          "ingredients": [
@@ -194,7 +197,7 @@
          ]
       },
       {
-         "action":"mixing",
+         "action":"add salt to mixture",
          "number":11,
          "step":"Add a sprinkle of salt. Stir with a fork until mixed well.",
          "ingredients": [
@@ -210,7 +213,7 @@
          ]
       },
       {
-         "action":"microwaving",
+         "action":"place bowl in microwave",
          "number":12,
          "step":"Put the bowl into the microwave for 1 minute.",
          "ingredients": [
@@ -227,7 +230,7 @@
          }
       },
       {
-         "action":"microwaving",
+         "action":"place bowl in microwave",
          "number":13,
          "step":"Take the bowl out. Use a fork to stir it and then put it back into the microwave for 1 more minute, then take the bowl out.",
          "ingredients": [

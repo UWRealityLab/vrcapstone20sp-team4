@@ -6,8 +6,9 @@ public class NIThresholdControl : MonoBehaviour
 {
     // Start is called before the first frame update
     public GameObject mainCam;
-    public float radius;
-    public bool autoAdjustToViewPort = true;
+    public float radius = 0.7f;
+    public float minRadius = 0.3f;
+    public bool autoAdjustToViewPort = false;
     public float viewPortTimer = 5f;
     public float viewPortAngel = 120;
     public bool Lock = false;
@@ -41,7 +42,7 @@ public class NIThresholdControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //updateLock();
+        updateLock();
         if (Lock) { return; }
         if (!goToPositionFlag) {
             Vector3 camPos = mainCam.transform.position;
@@ -49,23 +50,25 @@ public class NIThresholdControl : MonoBehaviour
             if (cam2Target.magnitude > radius)
             {
                 transform.position = camPos + radius / cam2Target.magnitude * cam2Target; // adjust only position
+            } else if (cam2Target.magnitude < minRadius) {
+                transform.position = camPos + minRadius / cam2Target.magnitude * cam2Target;
             }
-            if (autoAdjustToViewPort)
-            {
-                if (!inViewPortNow())
-                {
-                    viewPortTimer -= Time.deltaTime;
-                    if (viewPortTimer < 0)
-                    {
-                        viewPortAutoAdjust();
-                        viewPortTimer = 5f;
-                    }
-                }
-                else
-                {
-                    viewPortTimer = 5f;
-                }
-            }
+            // if (autoAdjustToViewPort)
+            // {
+            //     if (!inViewPortNow())
+            //     {
+            //         viewPortTimer -= Time.deltaTime;
+            //         if (viewPortTimer < 0)
+            //         {
+            //             viewPortAutoAdjust();
+            //             viewPortTimer = 5f;
+            //         }
+            //     }
+            //     else
+            //     {
+            //         viewPortTimer = 5f;
+            //     }
+            // }
         } else {         
             transform.position = Vector3.MoveTowards(transform.position, target, 0.02f);
             if (Vector3.Distance(target, transform.position) < 0.1f) {

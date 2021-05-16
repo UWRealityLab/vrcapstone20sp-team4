@@ -27,8 +27,12 @@ public class MainScheduler2 : MonoBehaviour
 
     private int debug_print = 10;
 
-    private Dictionary<string, List<Sprite>> epicKitchenVideos = new Dictionary<string, List<Sprite>>();
+    Dictionary<string, List<Sprite>> epicKitchenVideos = new Dictionary<string, List<Sprite>>();
+    Dictionary<string, List<byte[]>> byteVideos = new Dictionary<string, List<byte[]>>();
     private string epicKitchenURL = "http://oasis.cs.washington.edu:5000/get_images";
+    private bool epicKitchenRequestDone = false;
+    private string frontEndMessage = "";
+    private bool epicKitchenLoadingDone = false;
     // global states
     public bool tutorialStarts = false; // indicate if a user has choosen a tutorial
     public bool tutorialFinish = false;
@@ -308,7 +312,7 @@ public class MainScheduler2 : MonoBehaviour
     {
         alarmOk = false;
         AudioSource.PlayClipAtPoint(TimerAudio.GetComponent<AudioSource>().clip, GameObject.Find("HeadLockCanvas").transform.position);
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(5);
         alarmOk = true;
     }
 
@@ -323,14 +327,28 @@ public class MainScheduler2 : MonoBehaviour
     }
 
     public List<Sprite> getVideo(string action) {
-        return epicKitchenVideos[action];
+        if (epicKitchenVideos.ContainsKey(action)) {
+            return epicKitchenVideos[action];
+        } else {
+            return null;
+        }        
     }
 
+    public string getEpicKitchenStatus() {
+        return frontEndMessage;
+    }
+    public bool epicKitchenDone() {
+        return epicKitchenLoadingDone;
+    }
     void loadAllActionVideos() {
+        epicKitchenLoadingDone = false;
+        frontEndMessage = "start requesting";
         Task.Run( async () => {
+            int i = 0;
             foreach (Instruction ins in tutorial) {
-                if (ins.action != null && ins.action.Length != 0 && !epicKitchenVideos.ContainsKey(ins.action)) {
-                    List<Sprite> video = new List<Sprite>();
+                i++;
+                if (ins.action != null && ins.action.Length != 0 && !byteVideos.ContainsKey(ins.action)) {
+                    List<byte[]> video = new List<byte[]>();
                     NameValueCollection values = new NameValueCollection();
                     values.Add("action", ins.action);
                     using (WebClient client = new WebClient())
@@ -342,18 +360,43 @@ public class MainScheduler2 : MonoBehaviour
                         if (res.pic.Count > 0) {
                             foreach (string frame in res.pic) {
                                 byte[] imageBytes = System.Convert.FromBase64String(frame);
-                                Texture2D texture = new Texture2D(456, 256);
-                                texture.LoadImage(imageBytes);
-                                Sprite sprite = Sprite.Create(texture, new Rect(0,0,texture.width, texture.height), new Vector2(0.5f, 0.5f));
-                                video.Add(sprite);
+                                video.Add(imageBytes);
                             }
-                            epicKitchenVideos.Add(ins.action, video);
-                            Debug.Log(ins.action + " loaded");
+
+                            byteVideos.Add(ins.action, video);  
                         }
                     }
                 }
+                frontEndMessage = ins.action + " loaded (" + i + "/" + tutorial.Count + ")";
             }
+            epicKitchenRequestDone = true;
+            frontEndMessage = "requesting complete";
         });
+        StartCoroutine(toSprites());
+    }
+
+    IEnumerator toSprites() {
+        while(!epicKitchenRequestDone) {
+            yield return null;
+        }
+        frontEndMessage = "Converting format...";
+        int i =0;
+        foreach (string action in byteVideos.Keys) {
+            i++;
+            frontEndMessage = "Sprite conversion" + " (" + i + "/" + byteVideos.Keys.Count + ")";
+            List<Sprite> videoSprite = new List<Sprite>();
+            foreach (byte[] frame in byteVideos[action]) {
+                Texture2D texture = new Texture2D(456, 256);
+                texture.LoadImage(frame);
+                Sprite sprite = Sprite.Create(texture, new Rect(0,0,texture.width, texture.height), new Vector2(0.5f, 0.5f));
+                videoSprite.Add(sprite);
+                yield return null;
+            }
+            epicKitchenVideos[action] = videoSprite;
+        }  
+        epicKitchenLoadingDone = true;
+        byteVideos.Clear();
+        frontEndMessage = "All video loaded";
     }
 
     [Serializable]
